@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<extension name="camelize">
+  <function name="camelize">
+    <proto>string camelize(string underscored)</proto>
+    <code>
+<?data
+  char *s, *d;
+  int n, flag = 0;
+
+  s = underscored;
+  d = emalloc(underscored_len);
+
+  for (n = 0; n < underscored_len; n++) {
+    while (*s == '_') {
+      s++;
+    } else {
+    }
+  } 
+
+  
+?>  
+    </code>
+  </function>
+</extension>

@@ -1,0 +1,4 @@
+void foo(float i = 42.5);
+void foo(float i = 42e3);
+void foo(float i = 42.5e+3);
+void foo(float i = 42.5e-3);

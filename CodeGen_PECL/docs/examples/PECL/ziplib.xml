@@ -1,0 +1,404 @@
+<!DOCTYPE extension SYSTEM "extension.dtd">
+<extension name="ziplib" version="1.0.0"> 
+
+  <summary>libzip extension</summary>
+
+  <description>
+   Replacement for ext/zip with read/write support
+  </description>
+
+  <license>PHP</license>  
+
+  <maintainers>
+   <maintainer>
+    <user>hholzgraefe</user>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@php.net</email> 
+    <role>lead</role>
+   </maintainer>
+  </maintainers>
+
+  <release>
+   <version>0.0</version>
+   <date>2005-06-23</date>
+   <state>alpha</state>
+   <notes>
+    first experiment
+   </notes>
+  </release>  
+
+
+  <deps language="c" platform="all">
+   <with defaults='/usr:/usr/local' testfile='include/zip.h'>libzip installation prefix</with>
+   <header name="zip.h" />
+   <lib name="zip" function="zip_add" />
+   <file name="test.zip"/>
+  </deps>
+
+  <function role="internal" name="MINIT">
+    <code>
+<![CDATA[
+]]>
+    </code>
+  </function>  
+
+  <function role="internal" name="MSHUTDOWN">
+    <code>
+<![CDATA[
+]]>
+    </code>
+  </function>  
+  
+  <function role="internal" name="RINIT">
+    <code>
+<![CDATA[
+]]>
+    </code>
+  </function>  
+
+  <function role="internal" name="RSHUTDOWN">
+    <code>
+<![CDATA[
+]]>
+    </code>
+  </function>  
+
+  <code role="header" position="bottom">
+<![CDATA[
+struct libzip_res
+{
+  struct zip *zip;
+  int         num_files, current_file;
+};
+
+struct libzip_entry
+{
+	int             index;
+    struct zip_stat stat;
+    struct zip_file *fp;    
+};
+]]>
+  </code>
+  
+  <resource name="ZipHandle" payload="struct libzip_res" alloc="yes">
+   <description>A ZIP file handle</description>
+   <destruct>
+<![CDATA[
+    zip_close(resource->zip);
+]]>
+   </destruct>
+  </resource>
+
+
+
+  <function role="public" name="zip_open">
+    <summary>Open a ZIP file archive</summary>
+    <description>...</description>
+    <proto>resource ZipHandle zip_open(string path)</proto>
+    <code>
+<![CDATA[
+    int error;
+
+    return_res->zip = zip_open(path, 0, &error);
+    
+    if (!return_res->zip) RETURN_FALSE;
+
+    return_res->num_files    = zip_get_num_files(return_res->zip);
+    return_res->current_file = 0;
+]]>
+    </code>
+    <test>
+     <code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+
+echo is_resource($zip) ? "OK" : "Failure";
+]]>
+     </code>
+    </test>
+  </function>
+
+
+
+  <function name="zip_close">
+   <proto>void zip_close(resource ZipHandle archive)</proto>
+   <summary>Close a ZIP archive</summary>
+   <code>
+     FREE_RESOURCE(archive); 
+   </code>
+    <test><code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+if (!is_resource($zip)) die("Failure");
+zip_close($zip);
+echo "OK";
+]]>
+    </code></test>
+  </function>
+
+  <resource name="ZipEntry" payload="struct libzip_entry" alloc="yes">
+   <description>A ZIP file entry</description>
+   <destruct>
+    if (resource->fp) {
+      zip_fclose(resource->fp);
+    }
+   </destruct>
+  </resource>
+
+  <function role="public" name="zip_read">
+   <proto>resource ZipEntry zip_read(resource ZipHandle zip)</proto>
+   <summary>ls</summary>
+   <code>
+<![CDATA[
+     if (res_zip->current_file == res_zip->num_files) {
+       RETURN_FALSE;
+     }
+
+     return_res->index = res_zip->current_file++;
+
+     if (zip_stat_index(res_zip->zip, return_res->index, 0, &(return_res->stat))) {
+         RETURN_FALSE;
+     }
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+if (!is_resource($zip)) die("Failure");
+$entries = 0;
+while ($entry = zip_read($zip)) {
+  $entries++;
+}
+zip_close($zip);
+echo "$entries entries";
+]]>
+   </code>
+   <result>
+4 entries
+   </result>
+  </test>
+  </function>
+
+  <function role='public' name='zip_entry_name'>
+   <proto>string zip_entry_name(resource ZipEntry entry)</proto>
+   <summary>get name</summary>
+   <code>
+<![CDATA[
+	RETURN_STRING(res_entry->stat.name, 1);
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+if (!is_resource($zip)) die("Failure");
+$entries = 0;
+while ($entry = zip_read($zip)) {
+  echo zip_entry_name($entry)."\n";
+}
+zip_close($zip);
+]]>
+   </code>
+   <result>
+foo
+bar
+foobar/
+foobar/baz
+   </result>
+ </test>
+  </function>
+
+  <function role='public' name='zip_entry_filesize'>
+   <proto>int zip_entry_filesize(resource ZipEntry entry)</proto>
+   <summary>get size</summary>
+   <code>
+<![CDATA[
+	RETURN_LONG(res_entry->stat.size);
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+if (!is_resource($zip)) die("Failure");
+$entries = 0;
+while ($entry = zip_read($zip)) {
+  echo zip_entry_filesize($entry)."\n";
+}
+zip_close($zip);
+]]>
+   </code>
+   <result>
+5
+4
+0
+27
+   </result>
+ </test>
+  </function>
+
+  <function role='public' name='zip_entry_compressedsize'>
+   <proto>int zip_entry_compressedsize(resource ZipEntry entry)</proto>
+   <summary></summary>
+   <code>
+<![CDATA[
+    RETURN_LONG(res_entry->stat.comp_size);
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+if (!is_resource($zip)) die("Failure");
+$entries = 0;
+while ($entry = zip_read($zip)) {
+  echo zip_entry_compressedsize($entry)."\n";
+}
+zip_close($zip);
+]]>
+   </code>
+   <result>
+5
+4
+0
+24
+   </result>
+   </test>
+  </function>
+
+  <function role='public' name='zip_entry_compressionmethod'>
+   <proto>string zip_entry_compressionmethod(resource ZipEntry entry)</proto>
+   <summary>get compression method</summary>
+   <code>
+<![CDATA[
+	switch (res_entry->stat.comp_method) {
+        case ZIP_CM_STORE:
+			RETURN_STRING("stored", 1);
+        case ZIP_CM_SHRINK:
+			RETURN_STRING("shrunk", 1);
+		case ZIP_CM_REDUCE_1:
+		case ZIP_CM_REDUCE_2:
+		case ZIP_CM_REDUCE_3:
+		case ZIP_CM_REDUCE_4:
+			RETURN_STRING("reduced", 1);
+		case ZIP_CM_IMPLODE:
+			RETURN_STRING("imploded", 1);
+		case ZIP_CM_DEFLATE:
+			RETURN_STRING("deflated", 1);
+		case ZIP_CM_DEFLATE64:
+			RETURN_STRING("deflatedX", 1);
+		case ZIP_CM_PKWARE_IMPLODE:
+			RETURN_STRING("implodedX", 1);
+		default: 
+			RETURN_STRING("zipped", 1);
+	}	
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip = zip_open(dirname(__FILE__)."/../test.zip");
+if (!is_resource($zip)) die("Failure");
+$entries = 0;
+while ($entry = zip_read($zip)) {
+  echo zip_entry_compressionmethod($entry)."\n";
+}
+zip_close($zip);
+]]>
+   </code>
+   <result>
+stored
+stored
+stored
+deflated
+   </result>
+  </test>
+  </function>
+
+  <function role='public' name='zip_entry_open'>
+   <proto>bool zip_entry_open(resource ZipHandle zip, resource ZipEntry entry [, string mode='r'])</proto>
+   <summary>open zip entry</summary>
+   <code>
+<![CDATA[
+		if (res_entry->fp) {
+		  zip_fclose(res_entry->fp);
+		}
+
+		res_entry->fp = zip_fopen_index(res_zip->zip, res_entry->index, 0);
+
+		RETURN_BOOL(res_entry->fp != NULL);
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip    = zip_open(dirname(__FILE__)."/../test.zip");
+$entry  = zip_read($zip);
+echo zip_entry_open($zip, $entry, "r") ? "OK" : "Failure";
+zip_entry_close($entry);
+zip_close($zip);
+]]>
+   </code>
+   <result>
+OK
+   </result>
+ </test>
+  </function>
+
+  <function role='public' name='zip_entry_close'>
+   <proto>void zip_entry_close(resource ZipEntry entry)</proto>
+   <summary>close zip entry</summary>
+   <code>
+<![CDATA[
+		if (res_entry->fp) {
+		  zip_fclose(res_entry->fp);
+		  res_entry->fp = NULL;
+		}
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip    = zip_open(dirname(__FILE__)."/../test.zip");
+$entry  = zip_read($zip);
+zip_entry_open($zip, $entry, "r") or die("Failure");
+zip_entry_close($entry);
+zip_close($zip);
+echo "OK";
+]]>
+   </code>
+</test>
+  </function>
+
+  <function role='public' name='zip_entry_read'>
+   <proto>string zip_entry_read(resource ZipEntry entry [, int length = 1024])</proto>
+   <summary>read from a zip entry</summary>
+   <code>
+<![CDATA[
+		char *buf;
+
+		if (!res_entry->fp) {
+		  RETURN_FALSE;
+		}
+
+		buf  = ecalloc(1, length);
+		
+		length = zip_fread(res_entry->fp, buf, length);
+
+		if (length < 0) {
+		  RETURN_FALSE;
+		} else {
+		  RETURN_STRINGL(buf, length, 0);
+		}
+]]>
+   </code>
+   <test><code>
+<![CDATA[
+$zip    = zip_open(dirname(__FILE__)."/../test.zip");
+$entry  = zip_read($zip);
+if (!zip_entry_open($zip, $entry, "r")) die("Failure");
+echo zip_entry_read($entry);
+zip_close($zip);
+]]>
+   </code>
+   <result>
+foo
+   </result>
+</test>
+  </function>
+
+</extension>

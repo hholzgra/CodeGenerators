@@ -1,0 +1,5 @@
+- implement "make install" target to install into installations plugin dir
+  probably requires configure assistance
+
+- debug crash of dna1 plugin
+

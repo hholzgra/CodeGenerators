@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>CodeGen_MySQL_Plugin</name>
+ <channel>pear.php.net</channel>
+ <summary>Tool to generate MySQL Pugins from an XML description</summary>
+ <description>CodeGen_MySQL_Pluginis a code generator for MySQL Plugins
+extensions similar to PECL_Gen for PHP. 
+It reads in configuration options, function prototypes and code fragments
+from an XML description file and generates a complete ready-to-compile
+plugin project.
+ </description>
+ <lead>
+  <name>Hartmut Holzgraefe</name>
+  <user>hholzgra</user>
+  <email>hartmut@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2007-04-20</date>
+ <time>12:30:00</time>
+ <version>
+  <release>0.1.1dev</release>
+  <api>0.1.1dev</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.php.net/license">PHP</license>
+ <notes>
+  - added test support
+  - #include generation now working
+ </notes>
+ <contents>
+  <dir name="/">
+   <dir name="MySQL">
+    <dir name="Plugin">
+     <dir name="Element">
+      <file baseinstalldir="CodeGen" name="Daemon.php" role="php" />
+      <file baseinstalldir="CodeGen" name="Fulltext.php" role="php" />
+      <file baseinstalldir="CodeGen" name="InformationSchema.php" role="php" />
+      <file baseinstalldir="CodeGen" name="StatusVariable.php" role="php" />
+      <file baseinstalldir="CodeGen" name="Storage.php" role="php" />
+      <file baseinstalldir="CodeGen" name="Test.php" role="php" />
+     </dir> <!-- //MySQL/Plugin/Element -->
+     <file baseinstalldir="CodeGen" name="Element.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Extension.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file baseinstalldir="CodeGen" name="ExtensionParser.php" role="php" />
+    </dir> <!-- //MySQL/Plugin -->
+   </dir> <!-- //MySQL -->
+   <file baseinstalldir="/" name="mysql-plugin-gen" role="script">
+    <tasks:replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+   </file>
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.2</min>
+   </package>
+   <package>
+    <name>CodeGen</name>
+    <channel>pear.php.net</channel>
+    <min>1.0.3</min>
+   </package>
+   <package>
+    <name>CodeGen_MySQL</name>
+    <channel>pear.php.net</channel>
+    <min>0.1.3dev</min>
+   </package>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <date>2007-04-18</date>
+   <time>18:17:58</time>
+   <version>
+    <release>0.1.0dev</release>
+    <api>0.1.0dev</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>initial package release</notes>
+  </release>
+ </changelog>
+</package>

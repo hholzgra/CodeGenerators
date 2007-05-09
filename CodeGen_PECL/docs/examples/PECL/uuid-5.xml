@@ -1,0 +1,75 @@
+<?xml version="1.0" ?>
+
+<!-- 
+
+lets add some descriptive information
+
+still no real real functionality 
+
+-->
+
+<extension name="uuid" version="1.0.0">
+
+ <summary>UUID extension</summary>
+
+ <description>
+  A wrapper around libuuid from the ext2utils project.
+ </description>
+
+ <license>LGPL</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2006-06-24</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+ <deps language="c" platform="unix">
+  <with>
+   <header name="uuid/uuid.h"/>
+   <lib name="uuid"/>
+  </with>
+ </deps>
+
+ <function name="uuid_is_valid">
+  <proto>bool uuid_is_valid(string uuid)</proto>
+
+  <summary>Check whether a given UUID string is a valid UUID</summary>
+
+  <description>
+   add some text here
+  </description>
+
+  <code>
+   uuid_t u; 
+   RETURN_BOOL(0 == uuid_parse(uuid, u));
+  </code>
+
+  <test>
+   <code>
+var_dump(uuid_is_valid("1b4e28ba-2fa1-11d2-883f-b9a761bde3fb"));
+var_dump(uuid_is_valid("ffffffff-ffff-ffff-ffff-ffffffffffff"));
+var_dump(uuid_is_valid("foobar"));
+   </code>
+   <result>
+bool(true)
+bool(true)
+bool(false)
+   </result>
+  </test>
+
+ </function>
+
+</extension>

@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<plugin name="minimal">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.1</version>
+    <date>2004-05-25</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+  <deps>
+   <src/>
+  </deps>
+
+ <fulltext name="dummy">
+  <summary>minimal example plugin</summary>
+
+  <statusvar type="int"      name="_int"      init="42"/>
+  <statusvar type="long"     name="_long"     init="-1"/>
+  <statusvar type="longlong" name="_llong"    init="12000000000LL"/>
+  <statusvar type="char"     name="_char"     init="'q'"/>
+  <statusvar type="char_ptr" name="_char_ptr" init='"hello world!"'/>
+  <statusvar type="array" name="dummy">
+   <statusvar type="int" name="foo" init="23"/>
+   <statusvar type="int" name="bar" init="42"/>
+  </statusvar>
+
+  <parser>
+   <code>
+<![CDATA[
+    char *doc;
+    int result;
+   
+    doc  = strndup(param->doc, param->length);
+    result = param->mysql_parse(param, param->doc, param->length);
+    free(doc);
+ 
+    return result;
+]]>
+   </code>
+  </parser>
+ </fulltext>
+
+</plugin>

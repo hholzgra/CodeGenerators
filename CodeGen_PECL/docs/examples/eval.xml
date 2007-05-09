@@ -1,0 +1,163 @@
+<?xml version="1.0"?>
+<extension name="eval" version="1.1.0">
+ <deps>
+  <with>
+   <lib name="eval"/>
+   <header name="eval.h"/>
+  </with>
+ </deps>
+
+ <code role="header">
+struct eval_data {
+  int last_error;
+};
+ </code>
+
+ <resource name="eval_context" payload="struct eval_data"/>
+ 
+ <function name="eval_create">
+  <proto>resource eval_context eval_create(void)</proto>
+  <code>
+<?data
+    return_res->last_error = 0;
+?>
+  </code>
+ </function>
+
+ <function name="eval_free">
+  <proto>void eval_free(resource eval_context context)</proto>
+  <code>
+    FREE_RESOURCE(context_res);
+  </code>
+ </function>
+
+
+ <function name="eval_info">
+  <proto>float eval_eval(resource eval_context context, string expression)</proto>
+  <code>
+<?data
+    double result;
+
+    context->last_error = eval(expression, &result);
+    if (context->last_error) {
+      RETURN_FALSE;
+    } else {
+      RETURN_DOUBLE(result);
+    } 
+?> 
+  </code>
+  <test>
+   <code>
+    $eval = eval_create();
+    echo eval_eval($eval, "1+0.5");
+   </code>
+   <result>
+    1.5
+   </result>
+  </test>
+ </function>
+
+ <function name="eval_errno">
+  <proto>int eval_errno(resource eval_context context)</proto>
+  <code>
+   RETURN_LONG(context->last_error);
+  </code>
+  <test>
+   <code>
+    $eval = eval_create();
+    eval_eval($eval, "1+0.5");
+    echo eval_errno($eval)."\n";
+    eval_eval($eval, "1+-x");
+    echo eval_errno($eval)."\n";
+   </code>
+   <result>
+0
+3
+   </result>
+  </test>
+ </function>
+
+ <function name="eval_error">
+  <proto>string eval_error(resource eval_context context)</proto>
+  <code>
+   RETURN_STRING(eval_error(context->last_error), 1);
+  </code>
+  <test>
+   <code>
+    $eval = eval_create();
+    eval_eval($eval, "1+0.5");
+    echo eval_error($eval)."\n";
+    eval_eval($eval, "1+-x");
+    echo eval_error($eval)."\n";
+   </code>
+   <result>
+No Error
+Unkown Name
+   </result>
+  </test>
+ </function>
+
+ <function name="eval_version">
+  <proto>string eval_version(void)</proto>
+  <code>
+<?data
+  int version, revision, buildno;
+  char buffer[256];
+
+  eval_info(&version, &revision, &buildno, NULL, 0, NULL, 0, NULL, 0);
+
+  sprintf(buffer, "%d.%d.%d", version, revision, buildno);
+
+  RETURN_STRING(buffer, 1);
+?>
+  </code>
+  <test>
+   <code>echo eval_version();</code>
+   <result mode="format">%d.%d.%d</result>
+  </test>
+ </function>
+
+ <function name="eval_set_var">
+  <proto>bool eval_set_var(resource eval_context context, string name, float value)</proto>
+  <code>
+<?data
+  context->last_error = eval_set_var(name, value);
+  RETURN_BOOL(context->last_error);
+?>
+  </code>
+  <test>
+   <code>
+$eval = eval_create();
+eval_set_var($eval, "foo", 1);
+eval_set_var($eval, "bar", 2);
+echo eval_eval($eval, "foo + bar");
+   </code>
+   <result>3</result>
+  </test>
+ </function>
+
+ <function name="eval_get_var">
+  <proto>double eval_get_var(resource eval_context context, string name)</proto>
+  <code>
+<?data
+  double result;
+  context->last_error = eval_get_var(name, &result);
+  if (context->last_error) {
+    RETURN_FALSE;
+  } else {
+    RETURN_DOUBLE(result);
+  }
+?>
+  </code>
+  <test>
+   <code>
+$eval = eval_create();
+eval_set_var($eval, "foo", 1);
+eval_set_var($eval, "bar", 0);
+eval_eval($eval, "bar = foo + 1");
+echo eval_get_var($eval, "bar");
+   </code>
+   <result>2</result>
+  </test>
+ </function>
+</extension>

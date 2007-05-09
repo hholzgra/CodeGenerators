@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<extension name="bug8277" version="0.9">
+ <function name="bug8277" return="string" type="aggregate">
+  <param name="count" type="int"/>
+  <param name="str1"  type="string"/>
+  <param name="str2"  type="string"/>
+  <param name="str3"  type="string"/>
+ </function>
+</extension>

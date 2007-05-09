@@ -1,0 +1,5 @@
+<extension name="constant">
+  <function name="const_check">
+    <param name="arg" type="int"/>
+  </function>
+</extension>

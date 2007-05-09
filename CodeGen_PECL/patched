@@ -1,0 +1,384 @@
+
+FILE: PECL/Extension.php
+--------------------------------------------------------------------------------
+FOUND 295 ERROR(S) AND 84 WARNING(S) AFFECTING 358 LINE(S)
+--------------------------------------------------------------------------------
+[LINE 256] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 262] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 265] ERROR: Line indented incorrectly. Expected 8 spaces but found 12.
+[LINE 324] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 360] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 399] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 416] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 433] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 492] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 544] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 592] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 597] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 649] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 651] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 652] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 653] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 654] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 655] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 656] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 657] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 658] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 659] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 659] ERROR: No space found after comma.
+[LINE 660] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 661] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 662] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 663] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 664] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 665] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 666] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 667] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 668] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 669] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 670] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 671] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 672] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 673] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 674] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 675] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 676] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 677] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 678] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 679] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 680] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 681] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 682] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 683] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 3.
+[LINE 684] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 685] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 690] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 691] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 692] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 693] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 694] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 695] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 696] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 697] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 698] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 699] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 700] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 700] ERROR: No space found after comma.
+[LINE 701] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 702] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 703] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 704] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 705] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 705] ERROR: No space found after comma.
+[LINE 706] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 707] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 708] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 709] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 715] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 717] ERROR: Space after opening parenthesis of function call prohibited
+[LINE 720] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 721] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 722] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 723] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 724] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 725] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 3.
+[LINE 726] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 727] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 728] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 729] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 730] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 3.
+[LINE 731] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 732] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 3.
+[LINE 733] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 734] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 3.
+[LINE 735] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 736] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 747] ERROR: Space after opening parenthesis of function call prohibited
+[LINE 748] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 749] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 750] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 3.
+[LINE 751] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 752] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 760] ERROR: Line indented incorrectly. Expected at least 16 spaces, but found 14.
+[LINE 765] ERROR: Line indented incorrectly. Expected at least 20 spaces, but found 18.
+[LINE 778] ERROR: Space after opening parenthesis of function call prohibited
+[LINE 779] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 780] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 781] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 782] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 783] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 784] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 785] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 786] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 793] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 796] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 810] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 818] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 832] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 835] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 835] ERROR: No space found after comma.
+[LINE 841] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 861] WARNING: Equals sign not aligned with surrounding assignments. Expected 3 spaces, but found 1 space.
+[LINE 863] WARNING: Equals sign not aligned with surrounding assignments. Expected 14 spaces, but found 1 space.
+[LINE 874] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 880] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 897] ERROR: Opening function brace should be on a new line.
+[LINE 898] WARNING: Equals sign not aligned with surrounding assignments. Expected 3 spaces, but found 1 space.
+[LINE 904] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 11.
+[LINE 906] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 11.
+[LINE 907] ERROR: Line indented incorrectly. Expected 12 spaces but found 11.
+[LINE 908] ERROR: Line indented incorrectly. Expected at least 16 spaces, but found 15.
+[LINE 910] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 11.
+[LINE 912] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 11.
+[LINE 913] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 914] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 8.
+[LINE 915] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 8.
+[LINE 916] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 917] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 8.
+[LINE 918] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 919] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 923] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 924] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 925] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 926] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 927] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 928] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 929] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 929] ERROR: No space found after comma.
+[LINE 930] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 930] ERROR: No space found after comma.
+[LINE 931] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 931] ERROR: No space found after comma.
+[LINE 932] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 932] ERROR: No space found after comma.
+[LINE 933] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 934] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 1094] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1111] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1119] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1125] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1145] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1221] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1222] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1223] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1224] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1225] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1226] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1227] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1228] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1229] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1230] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1231] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1232] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1233] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1234] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1235] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1236] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1237] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1238] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1239] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1240] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1241] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1242] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1242] ERROR: No space found after comma.
+[LINE 1243] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1243] ERROR: No space found after comma.
+[LINE 1244] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1245] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1245] ERROR: No space found after comma.
+[LINE 1246] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1246] ERROR: No space found after comma.
+[LINE 1247] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1248] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1248] ERROR: No space found after comma.
+[LINE 1249] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1249] ERROR: No space found after comma.
+[LINE 1250] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1250] ERROR: No space found after comma.
+[LINE 1251] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1251] ERROR: No space found after comma.
+[LINE 1252] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 1253] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1324] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1325] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1326] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1327] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1330] WARNING: Equals sign not aligned with surrounding assignments. Expected 7 spaces, but found 1 space.
+[LINE 1331] WARNING: Equals sign not aligned with surrounding assignments. Expected 2 spaces, but found 1 space.
+[LINE 1335] WARNING: Equals sign not aligned with surrounding assignments. Expected 7 spaces, but found 1 space.
+[LINE 1336] WARNING: Equals sign not aligned with surrounding assignments. Expected 2 spaces, but found 1 space.
+[LINE 1340] WARNING: Equals sign not aligned with surrounding assignments. Expected 7 spaces, but found 1 space.
+[LINE 1341] WARNING: Equals sign not aligned with surrounding assignments. Expected 2 spaces, but found 1 space.
+[LINE 1359] ERROR: Line indented incorrectly. Expected 12 spaces but found 10.
+[LINE 1360] ERROR: Line indented incorrectly. Expected at least 16 spaces, but found 12.
+[LINE 1362] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 1366] ERROR: Line indented incorrectly. Expected 12 spaces but found 10.
+[LINE 1367] ERROR: Line indented incorrectly. Expected at least 16 spaces, but found 14.
+[LINE 1369] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 1373] ERROR: Line indented incorrectly. Expected 12 spaces but found 10.
+[LINE 1374] ERROR: Line indented incorrectly. Expected at least 16 spaces, but found 12.
+[LINE 1376] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 1380] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1392] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1393] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1394] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1395] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1398] WARNING: Equals sign not aligned with surrounding assignments. Expected 7 spaces, but found 1 space.
+[LINE 1399] WARNING: Equals sign not aligned with surrounding assignments. Expected 2 spaces, but found 1 space.
+[LINE 1410] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1423] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1424] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1425] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1426] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1429] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1431] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 1442] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1443] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1444] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1445] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1448] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1461] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1462] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1463] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1464] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 4.
+[LINE 1465] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 1467] ERROR: Expected "foreach (...) {\n" found "foreach (...)\n        {\n".
+[LINE 1473] WARNING: Equals sign not aligned with surrounding assignments. Expected 2 spaces, but found 1 space.
+[LINE 1474] WARNING: Equals sign not aligned with surrounding assignments. Expected 4 spaces, but found 1 space.
+[LINE 1493] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1520] ERROR: Opening function brace should be on a new line.
+[LINE 1533] ERROR: Line indented incorrectly. Expected at least 4 spaces, but found 2.
+[LINE 1541] ERROR: Opening function brace should be on a new line.
+[LINE 1548] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1617] ERROR: Opening function brace should be on a new line.
+[LINE 1622] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1636] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1637] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1638] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1651] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 11.
+[LINE 1656] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 11.
+[LINE 1670] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1674] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1690] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1701] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 1702] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 1703] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1703] ERROR: No space found after comma.
+[LINE 1740] ERROR: Opening function brace should be on a new line.
+[LINE 1757] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1758] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 1.
+[LINE 1759] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1762] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1763] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1777] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1806] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1807] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1821] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1840] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1841] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1865] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1866] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1876] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1891] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1892] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1902] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 1923] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1924] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 1.
+[LINE 1925] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1926] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1927] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1947] ERROR: No space found after comma.
+[LINE 1947] ERROR: No space found after comma.
+[LINE 1950] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1951] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 1.
+[LINE 1952] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1953] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1954] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 0.
+[LINE 1966] ERROR: Line indented incorrectly. Expected at least 4 spaces, but found 0.
+[LINE 2007] ERROR: Space after opening parenthesis of function call prohibited
+[LINE 2034] ERROR: Expected "foreach (...) {\n" found "foreach (...) { \n".
+[LINE 2051] ERROR: Closing Brace Indented Incorrectly. Expected 4 spaces, but found 6.
+[LINE 2064] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2065] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2066] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2067] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 1.
+[LINE 2068] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 2.
+[LINE 2069] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2076] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 2087] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 2111] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 2162] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 2196] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 2197] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 2198] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 2210] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 2230] ERROR: Opening function brace should be on a new line.
+[LINE 2246] ERROR: Opening function brace should be on a new line.
+[LINE 2283] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2284] WARNING: Line exceeds 85 characters. It is recommended that the line be shortened.
+[LINE 2284] ERROR: No space found after comma.
+[LINE 2285] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2286] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2287] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2288] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2289] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2290] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2291] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2292] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2293] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2294] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2295] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2296] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2297] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2298] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2299] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2300] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2301] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2302] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2303] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2304] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2313] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2314] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2315] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2316] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2317] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2318] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2319] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2320] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2321] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2322] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2334] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2335] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2336] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2337] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2338] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2339] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2340] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2341] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2342] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2343] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2344] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2345] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2346] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2347] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2348] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2349] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2350] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2351] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2352] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2353] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2354] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2355] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2356] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2357] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2358] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2359] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2360] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2361] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2362] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2363] ERROR: Line indented incorrectly. Expected at least 8 spaces, but found 0.
+[LINE 2376] ERROR: Expected "if (...) {\n" found "if (...) {       \n".
+[LINE 2381] ERROR: Line indented incorrectly. Expected at least 12 spaces, but found 10.
+[LINE 2408] ERROR: No space found after comma.
+--------------------------------------------------------------------------------
+

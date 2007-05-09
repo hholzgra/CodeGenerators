@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<plugin name="minimal">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.1</version>
+    <date>2007-04-17</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+  <deps>
+   <src/>
+  </deps>
+
+ <fulltext name="dna_fulltext">
+  <summary>DNA triplet fulltext index</summary>
+  <parser>
+   <code>
+    return param->mysql_parse(param->mysql_ftparam, param->doc, param-&gt;length);
+   </code>
+  </parser>
+ </fulltext>
+</plugin>

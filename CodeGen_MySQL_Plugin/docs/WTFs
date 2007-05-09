@@ -1,0 +1,2 @@
+- no SHOW_FLOAT
+- SHOW_INT, SHOW_LONG, SHOW_LONGLONG implicit unsigned

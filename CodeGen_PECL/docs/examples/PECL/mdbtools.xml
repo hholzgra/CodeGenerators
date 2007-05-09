@@ -1,0 +1,561 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE extension SYSTEM "extension.dtd">
+<extension name="mdbtools" version="0.9.0">
+<!-- 
+for now there is no way to extend the generated config.m4
+file with additional custom tests so you need to set theese 
+by hand before running configure:
+
+export CPPFLAGS=" -I/opt/gnome/lib/glib-2.0/include -I/opt/gnome/include/glib-2.0 " 
+export CFLAGS=" -I/opt/gnome/lib/glib-2.0/include -I/opt/gnome/include/glib-2.0 " 
+
+obviously you should change /opt/gnome/.../glib-2.0
+to whatever path glib2 stuff is installed on your
+system
+-->
+
+ <summary>MDB data file access library</summary>
+ <description>
+  mdbtools provides read access to MDB data files
+  as used by Microsoft Access and its underlying
+  JetEngine.
+
+  It is based on libmdb from the mdbtools package
+  available at http://mdbtools.sourceforge.net/
+ </description>
+
+ <license>LGPL</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2004-03-25</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+ <deps language="c" platform="all">
+  <with defaults='/usr:/usr/local' testfile='include/mdbtools.h'>mdbtools installation prefix</with>
+  <lib    name="mdb" function="mdb_init"/>
+  <header name="mdbtools.h"/>
+  <configm4>
+  AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+
+  if test $PKG_CONFIG = "no"; then
+       AC_MSG_ERROR("pkg-config not found")
+  fi
+
+  if ! $PKG_CONFIG glib-2.0; then
+       AC_MSG_ERROR("glib-2.0 not found by pkg-config")
+  fi
+
+  GLIB_INCS=`$PKG_CONFIG --cflags-only-I glib-2.0`
+  PHP_EVAL_INCLINE($GLIB_INCS)
+  CPPFLAGS="$CFLAGS $GLIB_INCS"
+  CFLAGS="$CFLAGS $GLIB_INCS"
+
+  GLIB_LIBS=`$PKG_CONFIG --libs glib-2.0`' -lm'
+  PHP_EVAL_LIBLINE($GLIB_LIBS)
+  LDFLAGS="$CFLAGS $GLIB_LIBS"
+  </configm4>
+ </deps>
+
+
+ <resources>
+  <resource name="MdbDatabase" payload="MdbHandle" alloc="no">
+   <description>
+    A MDB database resource connected to a *.mdb file.    
+   </description>
+   <destruct>
+     mdb_close(resource);
+   </destruct>
+  </resource>
+
+  <resource name="MdbTable" payload="my_MdbTableDef" alloc="yes">
+   <description>
+    A table within a MDB database. 
+   </description>
+   <destruct>
+<![CDATA[
+    int i;
+
+    for (i = 0; i < resource->num_cols; i++) {
+      efree(resource->bound_values[i]);
+    }
+    efree(resource->column_names);
+    efree(resource->bound_values);
+
+    mdb_free_tabledef(resource->table);
+]]>
+   </destruct>
+  </resource>
+ </resources>
+
+ <code role="header">
+<![CDATA[
+ 
+    typedef struct {
+        MdbTableDef *table;
+        int num_cols;
+        char **bound_values;
+        int   *bound_lengths;
+        char **column_names;
+    } my_MdbTableDef;
+
+]]>
+ </code>
+
+ <constants>
+  <!-- JetEngine version number -->
+  <constant name="MDB_VER_JET3"/>
+  <constant name="MDB_VER_JET4"/>
+
+  <!-- data types -->
+  <constant name="MDB_BOOL">Type 'Boolean'</constant>
+  <constant name="MDB_BYTE">Type 'Byte'</constant>
+  <constant name="MDB_INT">Type 'Integer'</constant>
+  <constant name="MDB_LONGINT">Type 'Long Integer'</constant>
+  <constant name="MDB_MONEY">Type 'Currency'</constant>
+  <constant name="MDB_FLOAT">Type 'Single'</constant>
+  <constant name="MDB_DOUBLE">Type 'Double'</constant>
+  <constant name="MDB_SDATETIME">Type 'DateTime (Short)'</constant>
+  <constant name="MDB_TEXT">Type 'Text'</constant>
+  <constant name="MDB_OLE">Type 'OLE'</constant>
+  <constant name="MDB_MEMO">Type 'Memo/Hyperlink'</constant>
+  <constant name="MDB_REPID">Type 'Replication ID'</constant>
+  <constant name="MDB_NUMERIC">Type 'Numeric'</constant>
+ </constants>
+
+  <function role="internal" name="MINIT">
+   <code>mdb_init();</code>
+  </function>
+
+  <function role="internal" name="MSHUTDOWN">
+   <code>mdb_exit();</code>
+  </function>
+
+  <function name="mdb_open">
+   <proto>resource MdbDatabase mdb_open(string path)</proto>
+   <summary>Open an Access .mdb file for reading</summary>
+   <description>
+<![CDATA[
+    <para>
+     Open the MDB file <parameter>path</parameter> for reading.
+    </para>
+    <para>
+     See also <function>mdb_close</function>.
+    </para>
+]]>
+   </description>
+   <code>
+    return_res = mdb_open(path, MDB_NOFLAGS);
+
+    if (!return_res) RETURN_FALSE;
+   </code>
+  </function>
+
+  <function name="mdb_close">
+   <proto>void mdb_close(resource MdbDatabase db)</proto>
+   <summary>Close an open Access .mdb file</summary>
+   <description>
+<![CDATA[
+    <para>
+      Close a MDB file previously opened with 
+      <function>mdb_open</function>.
+    </para>
+]]>
+   </description>
+   <code>
+     zend_list_delete(Z_LVAL_P(db)); 
+   </code>
+  </function>
+
+  <function name="mdb_version">
+   <proto>int mdb_version(resource MdbDatabase db)</proto>
+   <summary>Get Jet Engine version number from .mdb file</summary>
+   <description>
+<![CDATA[
+    <para>
+      Return the JetEngine version number of <parameter>db</parameter>.
+      This is either <constant>MDB_VER_JET3</constant> or 
+      <constant>MDB_VER_JET4</constant>.
+    </para>
+]]>
+   </description>
+   <code>
+<![CDATA[ 
+     RETURN_LONG(res_db->f->jet_version);
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_tables">
+   <proto>array mdb_tables(resource MdbDatabase db[, bool systabs])</proto>
+   <summary>Get names of tables in an .mdb file</summary>
+   <description>
+<![CDATA[
+    <para>
+      Return the names of all tables within the database <parameter>db</parameter>
+      as an array of strings. Internal system tables like MSysObjects are ignored
+      unless the optional parameter <parameter>systabs</parameter> is set to &true;.
+    </para>
+]]>
+   </description>
+   <code>
+<![CDATA[
+  int i;
+  MdbCatalogEntry *entry;
+
+  /* read the catalog */
+  if (NULL == mdb_read_catalog (res_db, MDB_TABLE)) RETURN_FALSE;
+
+  array_init(return_value);
+
+  /* loop over each entry in the catalog */
+  for (i=0; i < res_db->num_catalog; i++) {
+    entry = g_ptr_array_index (res_db->catalog, i);
+        
+    if (!systabs && !strncmp("MSys", entry->object_name, 4)) {
+        continue;
+    }
+    add_next_index_string(return_value, entry->object_name, 1);
+  }
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_table_open">
+   <summary>Open a table in an .mdb file for reading</summary>
+   <proto>resource MdbTable mdb_table_open(resource MdbDatabase db, string table)</proto>
+   <description>
+...
+   </description>
+   <code>
+<![CDATA[
+    int i, j;
+    MdbCatalogEntry *entry;
+    MdbColumn *col;
+ 
+    mdb_read_catalog(res_db, MDB_TABLE);
+
+    return_res->table = NULL;
+
+    for (i=0;i<res_db->num_catalog;i++) {
+        entry = g_ptr_array_index(res_db->catalog,i);
+        if (!strcmp(entry->object_name, table)) {
+            return_res->table = mdb_read_table(entry);
+            if (!return_res->table) RETURN_FALSE;
+
+            return_res->num_cols = return_res->table->num_cols;
+
+            mdb_read_columns(return_res->table);
+            mdb_read_indices(return_res->table);
+            mdb_rewind_table(return_res->table); 
+
+            return_res->column_names  = ecalloc(return_res->num_cols, sizeof(char *));
+            return_res->bound_values  = ecalloc(return_res->num_cols, sizeof(char *));
+            return_res->bound_lengths = ecalloc(return_res->num_cols, sizeof(int));
+
+            for (j=0; j<return_res->num_cols; j++) {
+                col=g_ptr_array_index(return_res->table->columns, j);
+
+                return_res->column_names[j] = col->name;
+   
+                return_res->bound_values[j] = emalloc(MDB_BIND_SIZE);
+                return_res->bound_values[j][0] = '\0';
+                mdb_bind_column(return_res->table, j+1, return_res->bound_values[j], return_res->bound_lengths+j);
+            }
+        }
+    }
+
+    if (!return_res->table) RETURN_FALSE;
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_fetch_row">
+   <proto>array mdb_fetch_row(resource MdbTable table)</proto>
+   <summary>Get a table row as an enumerated array</summary>
+   <description>
+<![CDATA[
+    <para>
+      <function>mdb_fetch_row</function> reads a single row from
+      <parameter>table</parameter> and returns the data as an
+      numericaly indexed array.
+    </para>
+    <para>
+      See also <function>mdb_fetch_assoc</function>.
+    </para>
+]]>
+   </description>
+   <code>
+<![CDATA[
+    int i;
+
+    if (!mdb_fetch_row(res_table->table)) {
+        RETURN_FALSE;
+    }
+
+    array_init(return_value);
+
+    for (i = 0; i < res_table->num_cols; i++) {
+        add_next_index_stringl(return_value, res_table->bound_values[i], res_table->bound_lengths[i], 1);
+    }
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_fetch_assoc">
+   <proto>array mdb_fetch_assoc(resource MdbTable table)</proto>
+   <summary>Get a table row as an associative array</summary>
+   <description>
+<![CDATA[
+    <para>
+      <function>mdb_fetch_assoc</function> reads a single row from
+      <parameter>table</parameter> and returns the data as an
+      array with column names as index and field contents as
+      values.
+    </para>
+    <para>
+      See also <function>mdb_fetch_row</function>.
+    </para>
+]]>
+   </description>
+   <code>
+<![CDATA[
+    int i;
+
+    if (!mdb_fetch_row(res_table->table)) {
+        RETURN_FALSE;
+    }
+
+    array_init(return_value);
+
+    for (i = 0; i < res_table->num_cols; i++) {
+        add_assoc_stringl(return_value, res_table->column_names[i], res_table->bound_values[i], res_table->bound_lengths[i], 1);
+    }
+
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_rewind">
+   <proto>int mdb_rewind(resource MdbTable table)</proto>
+   <summary>Rewind to first row in table</summary>
+   <description>
+<![CDATA[
+    <para>
+    </para>
+]]>
+   </description>
+   <code>
+<![CDATA[
+    RETURN_LONG(mdb_rewind_table(res_table->table));
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_table_close">
+   <proto>void mdb_table_close(resource MdbTable table)</proto>
+   <summary>Close an opened table</summary>
+   <description>
+<![CDATA[
+    <para>
+      Close access to <parameter>table</parameter>.
+    </para>
+]]>
+   </description>
+   <code>
+     zend_list_delete(Z_LVAL_P(table)); 
+   </code>
+  </function>
+
+  <function name="mdb_num_fields">
+   <proto>int mdb_num_fields(resource MdbTable table)</proto>
+   <summary>Get number of table columns</summary>
+   <description>
+<![CDATA[
+    <para>
+      <function>mdb_num_fields</function> returns the number of
+      columns in <parameter>table</parameter>.
+    </para>
+    <para>
+      See also <function>mdb_num_rows</function> and 
+      <function>mdb_table_fields</function>.
+    </para>
+]]>
+   </description>
+   <code>
+    RETURN_LONG(res_table->table->num_cols);
+   </code>
+  </function>
+
+  <function name="mdb_num_rows">
+   <proto>int mdb_num_rows(resource MdbTable table)</proto>
+   <summary>Get number of table rows</summary>
+   <description>
+<![CDATA[
+    <para>
+      <function>mdb_num_rows</function> returns the number of
+      rows in <parameter>table</parameter>.
+    </para>
+    <para>
+      See also <function>mdb_num_fields</function> and 
+      <function>mdb_table_fields</function>.
+    </para>
+]]>
+   </description>
+   <code>
+    RETURN_LONG(res_table->table->num_rows);
+   </code>
+  </function>
+
+  <function name="mdb_table_fields">
+   <proto>array mdb_table_fields(resource MdbTable table)</proto>
+   <summary>Get field type information for all fields in a table</summary>
+   <description>
+<![CDATA[
+    <para>
+      <function>mdb_num_fields</function> returns type information
+      about all columns in <parameter>table</parameter>. It returns
+      an array with one element per column that itself is an array
+      of name/value pairs describing the column.
+    </para>
+    <para>
+      Currently <literal>name</literal>, <literal>type</literal>,
+      <literal>size</literal>, <literal>prec</literal>, 
+      <literal>scale</literal> and <literal>isfixed</literal> are
+      extracted. 
+    </para>
+    <para>
+     <literal>type</literal> is returned as an integer. The following
+     constants correspond to the returned type codes:   
+  <constant>MDB_BOOL</constant>,
+  <constant>MDB_BYTE</constant>,
+  <constant>MDB_INT</constant>,
+  <constant>MDB_LONGINT</constant>,
+  <constant>MDB_MONEY</constant>,
+  <constant>MDB_FLOAT</constant>,
+  <constant>MDB_DOUBLE</constant>,
+  <constant>MDB_SDATETIME</constant>,
+  <constant>MDB_TEXT</constant>,
+  <constant>MDB_OLE</constant>,
+  <constant>MDB_MEMO</constant>,
+  <constant>MDB_REPID</constant> and
+  <constant>MDB_NUMERIC</constant>.
+    </para>
+    <para>
+      See also <function>mdb_type_name</function>.
+    </para>
+]]>
+   </description>
+   <code>
+<![CDATA[
+    int i;
+    zval *row;
+    MdbColumn *col;
+
+    array_init(return_value);
+    
+    for (i = 0; i < res_table->table->num_cols; i++)
+    {
+       MAKE_STD_ZVAL(row);
+       array_init(row);
+
+       col = g_ptr_array_index (res_table->table->columns, i);
+
+       add_assoc_string(row, "name", col->name, 1);
+       add_assoc_long(row, "type", col->col_type);
+       add_assoc_long(row, "size", col->col_size);
+       add_assoc_long(row, "prec", col->col_prec);
+       add_assoc_long(row, "scale", col->col_scale);
+       add_assoc_long(row, "isfixed", col->is_fixed);
+
+       add_next_index_zval(return_value, row);
+    }
+]]>
+   </code>
+  </function>
+
+
+
+
+  <function name="mdb_table_indexes">
+   <proto>array mdb_table_indexes(resource MdbTable table)</proto>
+   <summary>Get index type information for all indexes in a table</summary>
+   <description>
+...
+   </description>
+   <code>
+<![CDATA[
+    int i,j;
+    zval *row;
+    MdbIndex *idx;
+    char buf[256];
+
+    array_init(return_value);
+    
+    for (i = 0; i < res_table->table->num_idxs; i++)
+    {
+       MAKE_STD_ZVAL(row);
+       array_init(row);
+
+       idx = g_ptr_array_index (res_table->table->indices, i);
+
+       add_assoc_long(  row, "num",   idx->index_num);
+       add_assoc_string(row, "name",  idx->name, 1);
+       add_assoc_long(  row, "type",  idx->index_type);
+       add_assoc_long(  row, "rows",  idx->num_rows);
+       add_assoc_long(  row, "keys",  idx->num_keys);
+       add_assoc_long(  row, "flags", idx->flags);
+
+       for (j=0; j < idx->num_keys; j++) {
+         sprintf(buf, "key_col_%d", j);
+         add_assoc_long(row, buf, idx->key_col_num[j]);
+         sprintf(buf, "key_col_order_%d", j);
+         add_assoc_long(row, buf, idx->key_col_order[j]);
+       }
+
+       add_next_index_zval(return_value, row);
+    }
+]]>
+   </code>
+  </function>
+
+  <function name="mdb_type_name">
+   <proto>string mdb_type_name(resource MdbDatabase db, int typecode)</proto>
+   <summary>Look up the name for a field type</summary>
+   <description>
+<![CDATA[
+    <para>
+      <function>mdb_type_name</function> returns the textual type name
+      for the <parameter>typecode</parameter> in database <parameter>db</parameter>.
+    </para>
+]]>
+   </description>
+   <code>
+    RETURN_STRING(mdb_get_coltype_string (res_db->default_backend, typecode), 1);
+   </code>
+  </function>
+
+  <test name="foo">
+	<title>foobar</title>
+    <code>
+echo "hallo";
+    </code>
+    <result>
+hallo
+    </result>
+  </test>
+	
+</extension>

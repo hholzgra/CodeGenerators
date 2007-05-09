@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<extension name="gc_dist" version="0.9.5dev">
+ <deps>
+  <header name="math.h"/>
+<!--  <lib name="m"/> -->
+ </deps>
+
+ <code role="code" position="top">
+#define RADIANS(x) ((x) * M_PI / 180.0)
+
+static double _gc_dist(double radius, double A_lat, double A_lon, double B_lat, double B_lon)
+{
+  double x = pow(sin(RADIANS(A_lat - B_lat) / 2), 2) 
+           + cos(RADIANS(B_lat)) * cos(RADIANS(A_lat)) * pow(sin(RADIANS(A_lon - B_lon) / 2), 2);
+
+  return 2.0 * radius * atan2(sqrt(x), sqrt(1-x));
+}
+
+ </code>
+
+ <function name="gc_dist" returns="REAL">
+  <param name="radius" type="REAL"/>
+  <param name="A_lat"  type="REAL"/>
+  <param name="A_lon"  type="REAL"/>
+  <param name="B_lat"  type="REAL"/>
+  <param name="B_lon"  type="REAL"/>
+  <code>
+<?data
+  DBUG_RETURN( _gc_dist(radius, A_lat, A_lon, B_lat, B_lon) );
+?>
+  </code>
+ </function>
+
+ <function name="earth_distance_miles" returns="REAL">
+  <param name="A_lat"  type="REAL"/>
+  <param name="A_lon"  type="REAL"/>
+  <param name="B_lat"  type="REAL"/>
+  <param name="B_lon"  type="REAL"/>
+  <code>
+<?data
+  DBUG_RETURN( _gc_dist(3963.1676, A_lat, A_lon, B_lat, B_lon) );
+?>
+  </code>
+ </function>
+
+</extension>

@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+
+<!-- 
+
+lets add some descriptive information
+
+still no real real functionality 
+
+-->
+
+<extension name="uuid" version="1.0.0">
+
+ <summary>UUID extension</summary>
+
+ <description>
+  A wrapper around libuuid from the ext2utils project.
+ </description>
+
+ <license>LGPL</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2006-06-24</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+</extension>

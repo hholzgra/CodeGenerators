@@ -1,0 +1,143 @@
+<?xml version="1.0" ?>
+
+<!-- 
+
+lets add some descriptive information
+
+still no real real functionality 
+
+-->
+
+<extension name="uuid" version="1.0.0">
+
+ <summary>UUID extension</summary>
+
+ <description>
+  A wrapper around libuuid from the ext2utils project.
+ </description>
+
+ <license>LGPL</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2006-06-24</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+ <deps language="c" platform="unix">
+  <with>
+   <header name="uuid/uuid.h"/>
+   <lib name="uuid"/>
+  </with>
+ </deps>
+
+ <constant name="UUID_VARIANT_NCS"/>
+ <constant name="UUID_VARIANT_DCE"/>
+ <constant name="UUID_VARIANT_MICROSOFT"/>
+ <constant name="UUID_VARIANT_OTHER"/>
+
+ <constant name="UUID_TYPE_DEFAULT" define="yes" type="int" value="0"/>
+ <constant name="UUID_TYPE_TIME"    define="yes" type="int" value="UUID_TYPE_DCE_TIME"/>
+ <constant name="UUID_TYPE_DCE"     define="yes" type="int" value="UUID_TYPE_DCE_RANDOM"/>
+ <constant name="UUID_TYPE_NAME"    define="yes" type="int" value="UUID_TYPE_DCE_TIME"/>
+ <constant name="UUID_TYPE_RANDOM"  define="yes" type="int" value="UUID_TYPE_DCE_RANDOM"/>
+ <constant name="UUID_TYPE_NULL"    define="yes" type="int" value="-1"/>
+
+ <function name="uuid_create">
+  <proto>string uuid_create([int uuid_type])</proto>
+
+  <summary>Generate a new UUID</summary>
+
+  <description> 
+   ...
+  </description>
+
+  <code>
+   uuid_t uuid;
+   char uuid_str[37];
+
+   switch(uuid_type) {
+     case UUID_TYPE_DCE_TIME:
+       uuid_generate_time(uuid);
+       break;
+     case UUID_TYPE_DCE_RANDOM:
+       uuid_generate_random(uuid);
+       break;
+     case UUID_TYPE_DEFAULT:
+       uuid_generate(uuid);
+       break;
+     default:
+       php_error_docref(NULL TSRMLS_CC, 
+                        E_WARNING,
+                        "Unknown/invalid UUID type '%d' requested, using default type instead",
+                        uuid_type);
+       uuid_generate(uuid);
+       break;        
+   }
+
+   uuid_unparse(uuid, uuid_str);
+
+   RETURN_STRING(uuid_str, 1);
+  </code>
+
+  <test>
+   <code>
+<![CDATA[
+        // check basic format of generated UUIDs
+        $uuid = uuid_create();
+        if (ereg("[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}", $uuid)) {
+                echo "basic format ok\n";
+        } else {
+                echo "basic UUID format check failed, generated UUID was $uuid\n";
+        }
+]]>
+   </code>
+   <result>
+basic format ok
+   </result>
+  </test>
+
+ </function>
+ 
+ <function name="uuid_is_valid">
+  <proto>bool uuid_is_valid(string uuid)</proto>
+
+  <summary>Check whether a given UUID string is a valid UUID</summary>
+
+  <description>
+   add some text here
+  </description>
+
+  <code>
+   uuid_t u; 
+   RETURN_BOOL(0 == uuid_parse(uuid, u));
+  </code>
+
+  <test>
+   <code>
+var_dump(uuid_is_valid("1b4e28ba-2fa1-11d2-883f-b9a761bde3fb"));
+var_dump(uuid_is_valid("ffffffff-ffff-ffff-ffff-ffffffffffff"));
+var_dump(uuid_is_valid("foobar"));
+   </code>
+   <result>
+bool(true)
+bool(true)
+bool(false)
+   </result>
+  </test>
+
+ </function>
+
+</extension>

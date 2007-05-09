@@ -1,0 +1,29 @@
+- change XML parsing to simplexml? or DOM? and delegate tag level parsing to sub-parsers?
+  => not possible as these APIs do not provide line number information
+  => alternative: delegate parsing to nested Parser class instances?
+
+- XSchema or RELAX/NG instead of DTD?
+
+- more licenses
+  - GPL (with exception to allow linking against PHP)
+  - QPL
+  - MPL?
+  - Artistic
+  - ...
+  - change <license> tag to either take a known license name 
+    in the 'name' attribute or a free form license text as
+    CDATA
+
+- dual/multiple license support
+
+- (c) copyright 
+
+- use Console_Getargs instead of self extended Console_Getopt
+  => still beta, not touched in a year, what is its stautus?
+
+- check the include stuff, has to be possible to have more than
+  one top level tag in included files
+
+- find out how to validate xi:include with xlint
+
+

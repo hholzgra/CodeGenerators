@@ -1,0 +1,361 @@
+<!DOCTYPE extension SYSTEM "extension.dtd">
+<extension name="braille" version="1.0.0"> 
+
+  <summary>libbraille extension</summary>
+
+  <description>
+   Functions to control a braille display (and keyboard),
+   based on libbraille (http://libbraille.org/) 
+  </description>
+
+  <license>PHP</license>  
+
+  <maintainers>
+   <maintainer>
+    <user>hholzgra</user>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@php.net</email> 
+    <role>lead</role>
+   </maintainer>
+  </maintainers>
+
+  <release>
+   <version>0.1.0</version>
+   <date>2006-08-31</date>
+   <state>alpha</state>
+   <notes>
+    first package release
+   </notes>
+  </release>  
+
+  <channel>pear.php-baustelle.de</channel>
+
+  <deps language="c" platform="unix">
+   <with defaults='/usr:/usr/local' testfile='include/braille.h'>
+    libbraille installation prefix
+    <header name="braille.h" />
+    <lib name="braille" function="braille_init" />
+   </with>
+  </deps>
+
+  <constants>
+   <constant name="BRL_DEVICE"/>
+   <constant name="BRL_DRIVER"/>
+   <constant name="BRL_TERMINAL"/>
+   <constant name="BRL_TABLE"/>
+   <constant name="BRL_PATH"/>
+   <constant name="BRL_VERSION"/>
+   <constant name="BRL_PATHDRV"/>
+   <constant name="BRL_PATHTBL"/>
+   <constant name="BRL_PATHCONF"/>
+  </constants>
+
+  <constants>
+   <constant name="BRL_TYPE_UNKNOWN"/>
+   <constant name="BRL_TYPE_SPECIAL"/>
+   <constant name="BRL_TYPE_SERIAL"/>
+   <constant name="BRL_TYPE_USB"/>
+  </constants>
+
+  <constants>
+   <constant name="BRL_NONE"/>
+   <constant name="BRL_KEY"/>
+   <constant name="BRL_CURSOR"/>
+   <constant name="BRL_CMD"/>
+   <constant name="BRL_ACC"/>
+  </constants>
+
+  <function name="braille_init">
+   <proto>bool braille_init(void)</proto>
+   <code>
+    RETURN_BOOL(braille_init());
+   </code>
+  </function>
+
+  <function name="braille_close">
+   <proto>bool braille_close(void)</proto>
+   <code>
+    RETURN_BOOL(braille_close());
+   </code>
+  </function>
+
+  <function name="braille_geterror">
+   <proto>string braille_geterror(void)</proto>
+   <code>
+    RETURN_STRING(braille_geterror(), 1);
+   </code>
+  </function>
+
+  <function name="braille_drivernum">
+   <proto>int braille_drivernum(void)</proto>
+   <code>
+    RETURN_LONG(braille_drivernum());
+   </code>
+  </function>
+
+  <function name="braille_drivername">
+   <proto>string braille_drivername(int num)</proto>
+   <code>
+<?data
+    if ((num < 0) || (num >= braille_drivernum())) {
+	  RETURN_FALSE;
+    }
+
+    RETURN_STRING(braille_drivername(num), 1);
+?>
+   </code>
+  </function>
+
+  <function name="braille_drivermodels">
+   <proto>string braille_drivermodels(int num)</proto>
+   <code>
+<?data
+    if ((num < 0) || (num >= braille_drivernum())) {
+	  RETURN_FALSE;
+    }
+
+    RETURN_STRING(braille_drivermodels(num), 1);
+?>
+   </code>
+  </function>
+
+  <function name="braille_drivertype">
+   <proto>int braille_drivertype(int num)</proto>
+   <code>
+<?data
+    if ((num < 0) || (num >= braille_drivernum())) {
+	  RETURN_FALSE;
+    }
+
+    RETURN_LONG(braille_drivertype(num));
+?>
+   </code>
+  </function>
+
+  <function name="braille_driverauto">
+   <proto>bool braille_driverauto(int num)</proto>
+   <code>
+<?data
+    if ((num < 0) || (num >= braille_drivernum())) {
+	  RETURN_FALSE;
+    }
+
+    RETURN_BOOL(braille_driverauto(num));
+?>
+   </code>
+  </function>
+
+  <function name="braille_tablenum">
+   <proto>int braille_tablenum(void)</proto>
+   <code>
+    RETURN_LONG(braille_tablenum());
+   </code>
+  </function>
+
+  <function name="braille_tablename">
+   <proto>string braille_tablename(int num)</proto>
+   <code>
+<?data
+    if ((num < 0) || (num >= braille_tablenum())) {
+	  RETURN_FALSE;
+    }
+
+    RETURN_STRING(braille_tablename(num), 1);
+?>
+   </code>
+  </function>
+
+  <function name="braille_tabledesc">
+   <proto>string braille_tabledesc(int num)</proto>
+   <code>
+<?data
+    if ((num < 0) || (num >= braille_tablenum())) {
+	  RETURN_FALSE;
+    }
+
+    RETURN_STRING(braille_tabledesc(num), 1);
+?>
+   </code>
+  </function>
+
+  <function name="braille_config">
+   <proto>bool braille_config(int config, string arg)</proto>
+   <code>
+<?data
+    switch(config) 
+    {
+	  case BRL_DEVICE:
+      case BRL_DRIVER:	
+      case BRL_TERMINAL:
+      case BRL_TABLE:
+      case BRL_PATH:
+      case BRL_VERSION:
+      case BRL_PATHDRV:
+      case BRL_PATHTBL:
+      case BRL_PATHCONF:
+	    RETURN_BOOL(braille_config((brl_config)config, arg));
+      default:
+        RETURN_FALSE;
+    }
+?>
+   </code>
+  </function>
+
+  <function name="braille_info">
+   <proto>string braille_info(int config)</proto>
+   <code>
+<?data
+    switch(config) 
+    {
+	  case BRL_DEVICE:
+      case BRL_DRIVER:	
+      case BRL_TERMINAL:
+      case BRL_TABLE:
+      case BRL_PATH:
+      case BRL_VERSION:
+      case BRL_PATHDRV:
+      case BRL_PATHTBL:
+      case BRL_PATHCONF:
+	    RETURN_STRING(braille_info((brl_config)config), 1);
+      default:
+        RETURN_FALSE;
+    }
+?>
+   </code>
+  </function>
+
+  <function name="braille_size">
+   <proto>int braille_size(void)</proto>
+   <code>
+    RETURN_LONG(braille_size());
+   </code>
+  </function>
+
+  <function name="braille_statussize">
+   <proto>int braille_statussize(void)</proto>
+   <code>
+    RETURN_LONG(braille_statussize());
+   </code>
+  </function>
+
+  <function name="braille_display">
+   <proto>bool braille_display(string text)</proto>
+   <code>
+    RETURN_BOOL(braille_display(text));
+   </code>
+  </function>
+
+  <function name="braille_write">
+   <proto>bool braille_write(string text, int n)</proto>
+   <code>
+    RETURN_BOOL(braille_write(text, n));
+   </code>
+  </function>
+
+  <function name="braille_filter">
+   <proto>bool braille_filter(int mask, int pos)</proto>
+   <code>
+    RETURN_BOOL(braille_filter(mask, pos));
+   </code>
+  </function>
+
+  <function name="braille_render">
+   <proto>bool braille_render(void)</proto>
+   <code>
+    RETURN_BOOL(braille_render());
+   </code>
+  </function>
+
+  <function name="braille_statusdisplay">
+   <proto>bool braille_statusdisplay(string text)</proto>
+   <code>
+    RETURN_BOOL(braille_statusdisplay(text));
+   </code>
+  </function>
+
+  <function name="braille_statuswrite">
+   <proto>bool braille_statuswrite(string text, int n)</proto>
+   <code>
+    RETURN_BOOL(braille_statuswrite(text, n));
+   </code>
+  </function>
+
+  <function name="braille_statusfilter">
+   <proto>bool braille_statusfilter(int mask, int pos)</proto>
+   <code>
+    RETURN_BOOL(braille_statusfilter(mask, pos));
+   </code>
+  </function>
+
+  <function name="braille_statusrender">
+   <proto>bool braille_statusrender(void)</proto>
+   <code>
+    RETURN_BOOL(braille_statusrender());
+   </code>
+  </function>
+
+  <function name="braille_timeout">
+   <proto>bool braille_timeout(int timeout)</proto>
+   <code>
+    RETURN_BOOL(braille_timeout(timeout));
+   </code>
+  </function>
+
+  <function name="braille_ascii2braille">
+   <proto>string braille_ascii2braille(string from)</proto>
+   <code> 
+<?data
+    char *to = emalloc(from_len);
+	int i;
+
+    for (i = 0; i < from_len; i++) {
+      to[i] = braille_ascii2braille(from[i]);
+    }
+	RETURN_STRINGL(to, from_len, 0);
+?>
+   </code>
+  </function>
+
+  <function name="braille_braille2ascii">
+   <proto>string braille_braille2ascii(string from)</proto>
+   <code> 
+<?data
+    char *to = emalloc(from_len);
+	int i;
+
+    for (i = 0; i < from_len; i++) {
+      to[i] = braille_braille2ascii(from[i]);
+    }
+	RETURN_STRINGL(to, from_len, 0);
+?>
+   </code>
+  </function>
+
+  <function name="braille_usetable">
+   <proto>bool braille_usetable(string table)</proto>
+   <code>
+    RETURN_BOOL(braille_useatable(table));
+   </code>
+  </function>
+
+  <function name="braille_debug">
+   <proto>void braille_debug(int level)</proto>
+   <code>
+    braille_debug(level);
+   </code>
+  </function>
+
+<!--
+  <function name="braille_read">
+   <proto>int braille_read(mixed &amp;key)</proto>
+   <code>
+<?data
+  	array_init(key);
+	RETURN_LONG(0);
+?>
+   </code>
+  </function>
+-->
+
+</extension>
+

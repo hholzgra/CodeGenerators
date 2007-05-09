@@ -1,0 +1,52 @@
+<?xml version="1.0" ?>
+
+<!-- 
+
+lets add some descriptive information
+
+still no real real functionality 
+
+-->
+
+<extension name="oping" version="1.0.0">
+
+ <summary>liboping extension</summary>
+
+ <description>
+  PECL::oping is a PHP extension to generate ICMP echo requests, 
+  better nown as "ping packets". It is intended for use in network 
+  monitoring applications or applications that would otherwise 
+  need to fork ping(1) frequently.
+
+  The extension is based on the liboping C library):
+  http://verplant.org/liboping/
+ </description>
+
+ <license>PHP</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2006-06-24</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+ <deps language="c" platform="unix">
+  <with>
+   <header name="oping.h"/>
+   <lib name="oping"/>
+  </with>
+ </deps>
+
+</extension>

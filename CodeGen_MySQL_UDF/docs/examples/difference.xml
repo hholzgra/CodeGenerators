@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE udf SYSTEM "udf_extension.dtd">
+<udf name="difference">
+
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@php.net</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <function name="difference" returns="int"> 
+    <param name="s1" type="string"/>
+    <param name="s2" type="string"/>
+    <code>
+  int diff = 0;
+  s1 = soundex(s1);
+  s2 = soundex(s2);
+
+  for (int i= 0; i &lt; 4; i++)
+  {
+     if (s1[i] == s2[i]) diff++;
+  }
+  RETURN_INT(diff);
+    </code>
+  </function>
+
+</udf>

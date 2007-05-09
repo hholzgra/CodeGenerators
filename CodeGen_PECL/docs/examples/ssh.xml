@@ -1,0 +1,353 @@
+<?xml version="1.0"?>
+<extension name="ssh" version="1.1.0">
+ <deps>
+  <with>
+   <lib name="ssh"/>
+   <header name="libssh/libssh.h"/>
+  </with>
+ </deps>
+
+ <resource name="ssh_options" payload="SSH_OPTIONS" alloc="no">
+  <destruct>/* ssh_options_free(resource); */</destruct> <!-- TODO missing from public libssh.h -->
+ </resource>
+
+ <function name="ssh_options_new">
+  <proto>resource ssh_options ssh_options_new(void)</proto>
+  <code>
+    return_res = ssh_options_new();
+    if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name="ssh_options_free">
+  <proto>void ssh_options_free(resource ssh_options options)</proto>
+  <code>
+   FREE_RESOURCE(options_res);
+  </code>
+ </function>
+
+ <function name="ssh_options_set_host">
+  <proto>void ssh_options_set_host(resource ssh_options options, string host)</proto>
+  <code>ssh_options_set_host(options, host);</code> <!-- TODO: auto-map this? -->
+ </function>
+
+ <function name="ssh_options_set_username">
+  <proto>void ssh_options_set_username(resource ssh_options options, string username)</proto>
+  <code>ssh_options_set_username(options, username);</code>
+ </function>
+
+ <resource name="ssh_session" payload="SSH_SESSION" alloc="no">
+  <destruct>
+    ssh_finalize(resource); 
+    ssh_disconnect(resource);
+  </destruct>  
+ </resource>
+
+ <function name="ssh_new">
+  <proto>resource ssh_session ssh_new(void)</proto>
+  <code>
+   return_res = ssh_new();
+   if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name="ssh_cleanup">
+  <proto>void ssh_cleanup(resource ssh_session session)</proto>
+  <code>
+   FREE_RESOURCE(session_res);
+  </code>
+ </function>
+
+ <function name="ssh_set_options">
+  <proto>void ssh_set_options(resource ssh_session session, resource ssh_options options)</proto>
+  <code>
+    ssh_set_options(session, options);
+  </code>
+ </function> 
+
+ <function name="ssh_connect">
+  <proto>int ssh_connect(resource ssh_session session)</proto>
+  <code>
+    RETURN_LONG(ssh_connect(session));
+  </code>
+ </function>
+
+ <function name="ssh_disconnect">
+  <proto>void ssh_disconnect(resource ssh_session session)</proto>
+  <code>
+    ssh_disconnect(session);
+  </code>
+ </function>
+
+ <function name="ssh_finalize">
+  <proto>int ssh_finalize(resource ssh_session session)</proto>
+  <code>
+    RETURN_LONG(ssh_finalize(session));
+  </code>
+ </function>
+
+ <function name="ssh_is_server_known">
+  <proto>int ssh_is_server_known(resource ssh_session session)</proto>
+  <code>
+   RETURN_LONG(ssh_is_server_known(session));
+  </code>
+  <test>
+   <code>
+    $options = ssh_options_new();
+    ssh_options_set_host($options, "localhost");
+    $session = ssh_new();
+    ssh_set_options($session, $options);
+    echo ssh_connect($session)."\n";
+    echo ssh_is_server_known($session)."\n";
+   </code>
+   <result>
+0
+1
+   </result>
+  </test>
+ </function>
+
+ <constant name="SSH_SERVER_ERROR"/>
+ <constant name="SSH_SERVER_NOT_KNOWN"/>
+ <constant name="SSH_SERVER_KNOWN_OK"/>
+ <constant name="SSH_SERVER_KNOWN_CHANGED"/>
+ <constant name="SSH_SERVER_FOUND_OTHER"/>
+
+ <function name="ssh_get_pubkey_hash">
+  <proto>string ssh_get_pubkey_hash(resource ssh_session session)</proto>
+  <code>
+<?data
+    int length;
+    unsigned char hash[MD5_DIGEST_LEN];
+    length = ssh_get_pubkey_hash(session, hash);
+    RETURN_STRINGL(hash, length, 1);
+?>
+  </code>
+ </function>
+
+ <function name="ssh_write_knownhost">
+  <proto>bool ssh_write_knownhost(resource ssh_session session)</proto>
+  <code>
+    RETURN_BOOL( 0 == ssh_write_knownhost(session));
+  </code>
+ </function>
+
+ <function name="ssh_userauth_autopubkey">
+  <proto>int ssh_userauth_autopubkey(resource ssh_session session)</proto>
+  <code>
+    RETURN_LONG(ssh_userauth_autopubkey(session));
+  </code>
+ </function>
+
+ <constant name="SSH_AUTH_ERROR">a serious error happened</constant>
+ <constant name="SSH_AUTH_DENIED">Authentication failed : use another method</constant>
+ <constant name="SSH_AUTH_PARTIAL">You've been partially authenticated, you still have to use another method</constant>
+ <constant name="SSH_AUTH_SUCCESS">Authentication success </constant>
+
+ <function name="ssh_get_issue_banner">
+  <proto>string ssh_get_issue_banner(resource ssh_session session)</proto>
+  <code>
+   char *banner = NULL;
+  
+   banner = ssh_get_issue_banner(session);
+
+   RETURN_STRING(banner ? banner : "", 1);
+  </code>
+ </function>
+
+ <function name="ssh_userauth_kbdint">
+  <proto>int ssh_userauth_kbdint(resource ssh_session session, string user, string submethods)</proto>
+  <code>
+    RETURN_LONG(ssh_userauth_kbdint(session, 
+                                    user_len   ? user       : NULL, 
+                                    submethods ? submethods : NULL
+                                    )); 
+  </code>
+ </function>
+
+ <function name="ssh_userauth_kbdint_getnprompts">
+  <proto>int ssh_userauth_kbdint_getnprompts(resource ssh_session session)</proto> 
+  <code>
+    RETURN_LONG(ssh_userauth_kbdint_getnprompts(session));
+  </code>
+ </function>
+
+ <function name="ssh_userauth_kbdint_getname">
+  <proto>string ssh_userauth_kbdint_getname(resource ssh_session session)</proto>
+  <code>
+    char *name = ssh_userauth_kbdint_getname(session);
+
+    if (!name) RETURN_FALSE;
+
+    RETURN_STRING(name, 1);
+  </code>
+ </function>
+
+ <function name="ssh_userauth_kbdint_getinstruction">
+  <proto>string ssh_userauth_kbdint_getinstruction(resource ssh_session session)</proto>
+  <code>
+    char *instruction = ssh_userauth_kbdint_getinstruction(session);
+
+    if (!instruction) RETURN_FALSE;
+
+    RETURN_STRING(instruction, 1);
+  </code>
+ </function>
+
+ <function name="ssh_userauth_kbdint_getprompt">
+  <proto>array ssh_userauth_kbdint_getprompt(resource ssh_session session, int n)</proto>
+  <code>
+<?data
+     char echo;
+     char *prompt;
+
+     prompt = ssh_userauth_kbdint_getprompt(session, n, &echo);
+
+     if (!prompt) RETURN_FALSE;
+
+     add_assoc_string(return_value, "prompt", prompt, 1);
+     add_assoc_long(return_value, "echo", echo);
+?>
+  </code>
+ </function>
+
+ <function name="ssh_userauth_password">
+  <proto>int ssh_userauth_password(resource ssh_session session, string user, string pwd)</proto>
+  <code>
+    RETURN_LONG(ssh_userauth_password(session, user_len ? user : NULL, pwd));
+  </code>
+ </function>
+
+ <resource name="ssh_channel" payload="CHANNEL" alloc="no">
+  <destruct>channel_free(resource);</destruct>
+ </resource>
+
+ <function name="ssh_channel_new">
+  <proto>resource ssh_channel ssh_channel_new(resource ssh_session session)</proto>
+  <code>
+    return_res = channel_new(session);
+  </code>
+ </function>
+
+ <function name="ssh_channel_open_session">
+  <proto>int ssh_channel_open_session(resource ssh_channel channel)</proto>
+  <code>
+    RETURN_LONG(channel_open_session(channel));
+  </code>
+ </function>
+
+ <function name="ssh_channel_request_pty">
+  <proto>int ssh_channel_request_pty(resource ssh_channel channel)</proto>
+  <code>
+    RETURN_LONG(channel_request_pty(channel));
+  </code>
+ </function>
+
+ <function name="ssh_channel_request_pty_size">
+  <proto>int ssh_channel_request_pty_size(resource ssh_channel channel, string terminal, int width, int height)</proto>
+  <code>
+    RETURN_LONG(channel_request_pty_size(channel, terminal, width, height));
+  </code>
+ </function>
+
+ <function name="ssh_channel_request_shell">
+  <proto>int ssh_channel_request_shell(resource ssh_channel channel)</proto>
+  <code>
+    RETURN_LONG(channel_request_shell(channel));
+  </code>
+ </function>
+
+ <function name="ssh_channel_request_exec">
+  <proto>int ssh_channel_request_exec(resource ssh_channel channel, string cmd)</proto>
+  <code>
+    RETURN_LONG(channel_request_exec(channel, cmd));
+  </code>
+ </function>
+
+ <function name="ssh_channel_poll">
+  <proto>int ssh_channel_poll(resource ssh_channel channel, int stderr)</proto>
+  <code>
+    RETURN_LONG(channel_poll(channel, stderr));
+  </code>
+ </function>
+
+ <function name="ssh_get_error">
+  <proto>string ssh_get_error(resource ssh_session session)</proto>
+  <code>
+    RETURN_STRING(ssh_get_error(session), 1);
+  </code>
+ </function>
+
+ <function name="ssh_get_error_code">
+  <proto>int ssh_get_error_code(resource ssh_session session)</proto>
+  <code>
+    RETURN_LONG(ssh_get_error_code(session));
+  </code>
+ </function>
+
+
+
+ <resource name="sftp_session" payload="SFTP_SESSION" alloc="no">
+  <destruct>
+  </destruct>
+ </resource>
+
+ <function name="sftp_new">
+  <proto>resource sftp_session sftp_new(resource ssh_session session)</proto>
+  <code>
+    return_res = sftp_new(session);
+    if (!return_res) RETURN_FALSE;   
+  </code>
+ </function>
+
+ <function name="sftp_init">
+  <proto>int sftp_init(resource sftp_session sftp)</proto>
+  <code>
+    RETURN_LONG(sftp_init(sftp));
+  </code>
+ </function>
+
+
+ <resource name="sftp_dir" payload="SFTP_DIR" alloc="no">
+  <destruct>
+    sftp_dir_close(resource);
+  </destruct>
+ </resource>
+
+ <function name="sftp_opendir">
+  <proto>resource sftp_dir sftp_opendir(resource sftp_session sftp, string path)</proto>
+  <code>
+    return_res = sftp_opendir(sftp, path);
+    if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ 
+
+ <resource name="sftp_attributes" payload="SFTP_ATTRIBUTES" alloc="no">
+  <destruct>
+  </destruct>
+ </resource>
+
+ <function name="sftp_readdir">
+  <proto>resource sftp_arributes sftp_readdir(resource sftp_session sftp, resource sftp_dir dir)</proto>
+  <code>
+    return_res = sftp_readdir(sftp, dir);
+    if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name="sftp_dir_eof">
+  <proto>bool sftp_dir_eof(resource sftp_dir dir)</proto>
+  <code>
+    RETURN_BOOL(sftp_dir_eof(dir));
+  </code>
+ </function>
+
+
+ <resource name="sftp_file" payload="SFTP_FILE" alloc="no">
+  <destruct>
+  </destruct>
+ </resource>
+
+</extension>

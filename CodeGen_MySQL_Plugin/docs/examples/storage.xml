@@ -1,0 +1,274 @@
+<?xml version="1.0"?>
+<plugin name="storage">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.1</version>
+    <date>2004-05-25</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+  <deps language="c++">
+   <src/>
+  </deps>
+
+  <acinclude>
+<![CDATA[
+
+dnl ---------------------------------------------------------------------------
+dnl Macro: MYSQL_CHECK_MDBDB
+dnl Sets HAVE_MDB_DB if --with-mdb-storage-engine is used
+dnl ---------------------------------------------------------------------------
+AC_DEFUN([MYSQL_CHECK_MDBDB], [
+  AC_ARG_WITH([mdb-storage-engine],
+              [
+  --with-mdb-storage-engine
+                          Enable the MDB Storage Engine],
+              [mdbdb="$withval"],
+              [mdbdb=yes])
+  AC_MSG_CHECKING([for mdb storage engine ($mdbdb)])
+  case "$mdbdb" in
+    yes )
+      # the mdb engine requires mdbtool lib
+      # the mdbtool lib depends on glib-2
+      # glib-2 requires pkg-tool to config
+      # checking for these in reverse order
+    
+      # first figure out where pkg-config lives
+      AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
+      if test $PKG_CONFIG = "no"; then
+        AC_MSG_ERROR("pkg-config not found")
+      fi
+
+      # then check for installed glib-2 and set compiler/linker flags
+      if ! $PKG_CONFIG glib-2.0; then
+            AC_MSG_ERROR("glib-2.0 not found by pkg-config")
+      fi
+      [MYSQL_CXXFLAGS="$MYSQL_CXXFLAGS "`$PKG_CONFIG --cflags-only-I glib-2.0`]
+      [MYSQL_LDFLAGS="$MYSQL_LDFLAGS "`$PKG_CONFIG --libs glib-2.0`]
+
+dnl      TODO compiler/linker flags for mdbtool currently hardcoded
+dnl      [CXXFLAGS="$CXXFLAGS"]
+dnl      [LDFLAGS="$LDFLAGS /usr/local/lib/libmdb.a"]
+
+      AC_DEFINE([HAVE_MDB_DB], [1], [Builds the MDB Storage Engine])
+      AC_MSG_RESULT([yes, CXXFLAGS now $MYSQL_CXXFLAGS])
+      [mdbdb=yes]
+      ;;
+    * )
+      AC_MSG_RESULT([no])
+      [mdbdb=no]
+      ;;
+  esac
+
+])
+dnl ---------------------------------------------------------------------------
+dnl END OF MYSQL_CHECK_MDB SECTION
+dnl ---------------------------------------------------------------------------
+
+]]>
+  </acinclude>
+
+  <configure position="bottom">
+MYSQL_CHECK_MDBDB()
+  </configure>
+
+   <code role="header" position="top">
+<![CDATA[
+extern "C" { // mdbtools header files are not yet C++ aware :(
+#include <mdbtools.h>
+}
+typedef struct st_skeleton_share {
+  char *table_name;
+  uint table_name_length,use_count;
+  pthread_mutex_t mutex;
+  THR_LOCK lock;
+
+  MdbHandle   *db;
+  MdbTableDef *table;
+
+  char **bound_values;
+} SKELETON_SHARE;
+
+]]>
+   </code>
+
+   <code position="top">
+<![CDATA[
+static HASH skeleton_open_tables;
+pthread_mutex_t skeleton_mutex;
+
+static SKELETON_SHARE *get_share(const char *table_name, TABLE *table)
+{
+  SKELETON_SHARE *share;
+  uint length;
+  char *tmp_name;
+
+  pthread_mutex_lock(&skeleton_mutex);
+  length=(uint) strlen(table_name);
+
+  if (!(share=(SKELETON_SHARE*) hash_search(&skeleton_open_tables,
+                                           (byte*) table_name,
+                                           length)))
+  {
+    if (!(share=(SKELETON_SHARE *)
+          my_multi_malloc(MYF(MY_WME | MY_ZEROFILL),
+                          &share, sizeof(*share),
+                          &tmp_name, length+1,
+                          NullS)))
+    {
+      pthread_mutex_unlock(&skeleton_mutex);
+      return NULL;
+    }
+
+    share->use_count=0;
+    share->table_name_length=length;
+    share->table_name=tmp_name;
+    strmov(share->table_name,table_name);
+    if (my_hash_insert(&skeleton_open_tables, (byte*) share))
+      goto error;
+    thr_lock_init(&share->lock);
+    pthread_mutex_init(&share->mutex,MY_MUTEX_INIT_FAST);
+  }
+  share->use_count++;
+  pthread_mutex_unlock(&skeleton_mutex);
+
+  return share;
+
+error:
+  pthread_mutex_destroy(&share->mutex);
+  my_free((gptr) share, MYF(0));
+
+  return NULL;
+}
+]]>
+   </code>
+
+  <storage name="storage_example">
+
+   <init>
+	  mdb_init();
+	  mdb_set_date_fmt("%Y-%m-%d %H:%M:%S");
+   </init>
+
+   <deinit>
+	  mdb_exit();
+   </deinit>
+
+   <class>
+<![CDATA[
+private:
+  THR_LOCK_DATA lock;   
+  SKELETON_SHARE *share;  
+
+  int current_row, next_row;
+
+  int get_row(byte *buf);
+]]>
+   </class>
+
+   <function name="constructor">
+   </function>
+
+   <function name="destructor">
+   </function>
+
+   <function name="create">
+     return 0;
+   </function>
+
+   <function name="open">
+<![CDATA[
+     if (!(share = get_share(name, table)))
+        return 1;
+     thr_lock_data_init(&share->lock,&lock,NULL);
+     return 0;
+]]>
+   </function>
+
+   <function name="close">
+<![CDATA[
+     return 0;
+]]>
+   </function>
+
+   <function name="rnd_init">
+<![CDATA[
+     current_row = next_row = 0;
+  
+     stats.records = 0;
+
+     return 0;
+]]>
+   </function>
+
+   <function name="rnd_next">
+<![CDATA[
+    if (!mdb_fetch_row(share->table)) {
+      return HA_ERR_END_OF_FILE;
+    }
+
+    return get_row(buf);
+]]>
+   </function>
+
+   <function name="position">
+<![CDATA[
+    ha_store_ptr(ref, ref_length, share->table->cur_row);
+]]>
+   </function>
+
+   <function name="rnd_pos">
+<![CDATA[
+    share->table->cur_row = ha_get_ptr(pos,ref_length);
+
+    return get_row(buf);
+]]>
+   </function>
+
+   <function name="info">
+<![CDATA[
+    /* This is a lie, but you don't want the optimizer to see zero or 1 */
+    if (stats.records < 2) 
+      stats.records= 2;
+]]>
+   </function>
+
+   <function name="store_lock">
+<![CDATA[
+     return NULL;
+]]>
+   </function>
+
+  </storage>
+
+  <code position="bottom">
+<![CDATA[
+    int ha_mdb::get_row(byte *buf) {
+
+    memset(buf, 0, table->null_bytes);
+    
+    Field **field = table->field; 
+    
+    for (int i = 0; i < share->table->num_cols && *field; i++) {
+        char *p = share->bound_values[i];
+        
+        (*field)->store(p, strlen(p), system_charset_info);
+
+        field++;
+    }
+    
+    return 0;
+}
+]]>
+  </code>
+
+</plugin>

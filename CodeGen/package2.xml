@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+
+ <name>CodeGen</name>
+ <channel>pear.php.net</channel>
+
+ <summary>Tool to create Code generaters that operate on XML descriptions</summary>
+ <description>
+  This is an &apos;abstract&apos; package, it provides the base 
+  framework for applications like CodeGen_PECL and
+  CodeGen_MySqlUDF (not released yet).  
+ </description>
+
+ <lead>
+  <name>Hartmut Holzgraefe</name>
+  <user>hholzgra</user>
+  <email>hartmut@php.net</email>
+  <active>yes</active>
+ </lead>
+
+ <date>2007-04-18</date>
+ <time>17:38:51</time>
+
+ <version>
+  <release>1.0.3</release>
+  <api>1.0.3</api>
+ </version>
+
+ <stability>
+  <release>stable</release>
+  <api>stable</api>
+ </stability>
+
+ <license uri="http://www.php.net/license">PHP</license>
+
+ <notes>
+  Changes since 1.0.2:
+
+  - more support for conditional elements
+  - support for Makefile.frag, config.m4 and #define snippets 
+  - some missing getters added in Maintainer.php
+ </notes>
+
+ <contents>
+  <dir name="/">
+   <dir name="CodeGen">
+    <dir name="Dependency">
+     <file baseinstalldir="/" name="Header.php" role="php" />
+     <file baseinstalldir="/" name="Lib.php" role="php" />
+    </dir> <!-- //CodeGen/Dependency -->
+    <dir name="License">
+     <file baseinstalldir="/" name="BSD.php" role="php" />
+     <file baseinstalldir="/" name="GPL.php" role="php" />
+     <file baseinstalldir="/" name="LGPL.php" role="php" />
+     <file baseinstalldir="/" name="PHP.php" role="php" />
+    </dir> <!-- //CodeGen/License -->
+    <dir name="Tools">
+     <file baseinstalldir="/" name="Code.php" role="php" />
+     <file baseinstalldir="/" name="FileReplacer.php" role="php" />
+     <file baseinstalldir="/" name="Getopt.php" role="php" />
+     <file baseinstalldir="/" name="Indent.php" role="php" />
+     <file baseinstalldir="/" name="IndentC.php" role="php" />
+     <file baseinstalldir="/" name="Outbuf.php" role="php" />
+     <file baseinstalldir="/" name="Platform.php" role="php" />
+     <file baseinstalldir="/" name="Tokenizer.php" role="php" />
+    </dir> <!-- //CodeGen/Tools -->
+    <file baseinstalldir="/" name="Command.php" role="php" />
+    <file baseinstalldir="/" name="Element.php" role="php" />
+    <file baseinstalldir="/" name="Extension.php" role="php" />
+    <file baseinstalldir="/" name="ExtensionParser.php" role="php" />
+    <file baseinstalldir="/" name="License.php" role="php" />
+    <file baseinstalldir="/" name="Maintainer.php" role="php" />
+    <file baseinstalldir="/" name="Release.php" role="php" />
+    <file baseinstalldir="/" name="XmlParser.php" role="php" />
+   </dir> <!-- //CodeGen -->
+  </dir> <!-- / -->
+ </contents>
+
+ <dependencies>
+  <required>
+   <php>
+    <min>5</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.3</min>
+   </package>
+   <package>
+    <name>Console_Getopt</name>
+    <channel>pear.php.net</channel>
+    <min>1.0</min>
+   </package>
+  </required>
+ </dependencies>
+
+ <phprelease />
+
+ <changelog>
+  <release>
+   <version>
+    <release>1.0.2</release>
+    <api>1.0.2</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-08-16</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>
+    Changes since 1.0.1:
+
+    - support for conditional elements
+   </notes>
+  </release>
+
+  <release>
+   <version>
+    <release>1.0.1</release>
+    <api>1.0.1</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-07-09</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>
+    Changes since 1.0.0:
+
+    - moved config.m4 stuff to CodeGen_PECL
+    - untabify before indent
+    - added C specific indentation class that knows not to indent prepro directives
+    - added CodeGen_Tools_Code helper object to CodeGen_Extension
+    - changed &quot;abstract static&quot; methods to just &quot;abstract&quot; to prevent PHP warnings
+    - added target dir support for additional package files
+    - changed error handling for licenses
+    - better XML attribute checking
+    - only set Platform and Release in constructor if not already set
+    - extensions summary and description tags now handled here
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>1.0.0rc1</release>
+    <api>1.0.0rc1</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-09-22</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>preparing for first &quot;stable&quot; release
+   </notes>
+  </release>
+
+  <release>
+   <version>
+    <release>0.9.0</release>
+    <api>0.9.0</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <date>2005-08-11</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>
+    not yet feature complete but usable and no known bugs,
+    so declared stable but not given an 1.0 version id yet
+   </notes>
+  </release>
+
+  <release>
+   <version>
+    <release>1.0.0</release>
+    <api>1.0.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <date>2006-02-17</date>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>
+    first stable  release
+   </notes>
+  </release>
+ </changelog>
+</package>

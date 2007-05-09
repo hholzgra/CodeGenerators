@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE udf SYSTEM "udf_extension.dtd">
+<udf name="my_strcpy">
+
+ <maintainer>
+  <name>Hartmut Holzgraefe</name>
+  <email>hartmut@php.net</email>
+ </maintainer>
+
+ <license>PHP</license>
+
+ <function name="my_strcpy" returns="string"> 
+  <param name="text" type="string"/>
+  <code>
+   char *d=result, *s = text;
+   while (text_len--) {
+     *d++ = *s++;
+   }
+   *d = '\0';
+   *length = text_len;
+  </code>
+
+  <test>
+   <code>
+foobar
+   </code>
+   <result>
+foobar
+   </result>
+  </test>
+ </function>
+
+
+</udf>

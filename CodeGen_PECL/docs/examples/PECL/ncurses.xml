@@ -1,0 +1,1764 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../../extension.dtd"> 
+<extension name="ncurses" version="1.0.0">
+
+ <summary>ncurses extension</summary>
+
+ <description>
+  PHP bindings for the ncurses terminal control library
+ </description>
+
+ <license>PHP</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2006-06-24</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+ <deps language="c" platform="unix">
+  <with>
+   <header name="ncurses.h"/>
+   <header name="curses.h"/>
+   <header name="panel.h"/>
+   <lib name="ncurses"/>
+   <lib name="panel"/>
+  </with>
+ </deps>
+
+ <constants>
+  <constant name='NCURSES_ERR'
+        type='int' value='ERR'/>
+  <constant name='NCURSES_COLOR_BLACK'
+        type='int' value='COLOR_BLACK'/>
+  <constant name='NCURSES_COLOR_RED'
+        type='int' value='COLOR_RED'/>
+  <constant name='NCURSES_COLOR_GREEN'
+        type='int' value='COLOR_GREEN'/>
+  <constant name='NCURSES_COLOR_YELLOW'
+        type='int' value='COLOR_YELLOW'/>
+  <constant name='NCURSES_COLOR_BLUE'
+        type='int' value='COLOR_BLUE'/>
+  <constant name='NCURSES_COLOR_MAGENTA'
+        type='int' value='COLOR_MAGENTA'/>
+  <constant name='NCURSES_COLOR_CYAN'
+        type='int' value='COLOR_CYAN'/>
+  <constant name='NCURSES_COLOR_WHITE'
+        type='int' value='COLOR_WHITE'/>
+  <constant name='NCURSES_KEY_DOWN'
+        type='int' value='KEY_DOWN'/>
+  <constant name='NCURSES_KEY_UP'
+        type='int' value='KEY_UP'/>
+  <constant name='NCURSES_KEY_LEFT'
+        type='int' value='KEY_LEFT'/>
+  <constant name='NCURSES_KEY_RIGHT'
+        type='int' value='KEY_RIGHT'/>
+  <constant name='NCURSES_KEY_BACKSPACE'
+        type='int' value='KEY_BACKSPACE'/>
+  <constant name='NCURSES_KEY_MOUSE'
+        type='int' value='KEY_MOUSE'/>
+  <constant name='NCURSES_KEY_F0'
+        type='int' value='KEY_F(0)'/>
+  <constant name='NCURSES_KEY_F1'
+        type='int' value='KEY_F(1)'/>
+  <constant name='NCURSES_KEY_F2'
+        type='int' value='KEY_F(2)'/>
+  <constant name='NCURSES_KEY_F3'
+        type='int' value='KEY_F(3)'/>
+  <constant name='NCURSES_KEY_F4'
+        type='int' value='KEY_F(4)'/>
+  <constant name='NCURSES_KEY_F5'
+        type='int' value='KEY_F(5)'/>
+  <constant name='NCURSES_KEY_F6'
+        type='int' value='KEY_F(6)'/>
+  <constant name='NCURSES_KEY_F7'
+        type='int' value='KEY_F(7)'/>
+  <constant name='NCURSES_KEY_F8'
+        type='int' value='KEY_F(8)'/>
+  <constant name='NCURSES_KEY_F9'
+        type='int' value='KEY_F(9)'/>
+  <constant name='NCURSES_KEY_F10'
+        type='int' value='KEY_F(10)'/>
+  <constant name='NCURSES_KEY_F11'
+        type='int' value='KEY_F(11)'/>
+  <constant name='NCURSES_KEY_F12'
+        type='int' value='KEY_F(12)'/>
+  <constant name='NCURSES_KEY_DL'
+        type='int' value='KEY_DL'/>
+  <constant name='NCURSES_KEY_IL'
+        type='int' value='KEY_IL'/>
+  <constant name='NCURSES_KEY_DC'
+        type='int' value='KEY_DC'/>
+  <constant name='NCURSES_KEY_IC'
+        type='int' value='KEY_IC'/>
+  <constant name='NCURSES_KEY_EIC'
+        type='int' value='KEY_EIC'/>
+  <constant name='NCURSES_KEY_CLEAR'
+        type='int' value='KEY_CLEAR'/>
+  <constant name='NCURSES_KEY_EOS'
+        type='int' value='KEY_EOS'/>
+  <constant name='NCURSES_KEY_EOL'
+        type='int' value='KEY_EOL'/>
+  <constant name='NCURSES_KEY_SF'
+        type='int' value='KEY_SF'/>
+  <constant name='NCURSES_KEY_SR'
+        type='int' value='KEY_SR'/>
+  <constant name='NCURSES_KEY_NPAGE'
+        type='int' value='KEY_NPAGE'/>
+  <constant name='NCURSES_KEY_PPAGE'
+        type='int' value='KEY_PPAGE'/>
+  <constant name='NCURSES_KEY_STAB'
+        type='int' value='KEY_STAB'/>
+  <constant name='NCURSES_KEY_CTAB'
+        type='int' value='KEY_CTAB'/>
+  <constant name='NCURSES_KEY_CATAB'
+        type='int' value='KEY_CATAB'/>
+  <constant name='NCURSES_KEY_ENTER'
+        type='int' value='KEY_ENTER'/>
+  <constant name='NCURSES_KEY_SRESET'
+        type='int' value='KEY_SRESET'/>
+  <constant name='NCURSES_KEY_RESET'
+        type='int' value='KEY_RESET'/>
+  <constant name='NCURSES_KEY_PRINT'
+        type='int' value='KEY_PRINT'/>
+  <constant name='NCURSES_KEY_LL'
+        type='int' value='KEY_LL'/>
+  <constant name='NCURSES_KEY_A1'
+        type='int' value='KEY_A1'/>
+  <constant name='NCURSES_KEY_A3'
+        type='int' value='KEY_A3'/>
+  <constant name='NCURSES_KEY_B2'
+        type='int' value='KEY_B2'/>
+  <constant name='NCURSES_KEY_C1'
+        type='int' value='KEY_C1'/>
+  <constant name='NCURSES_KEY_C3'
+        type='int' value='KEY_C3'/>
+  <constant name='NCURSES_KEY_BTAB'
+        type='int' value='KEY_BTAB'/>
+  <constant name='NCURSES_KEY_BEG'
+        type='int' value='KEY_BEG'/>
+  <constant name='NCURSES_KEY_CANCEL'
+        type='int' value='KEY_CANCEL'/>
+  <constant name='NCURSES_KEY_CLOSE'
+        type='int' value='KEY_CLOSE'/>
+  <constant name='NCURSES_KEY_COMMAND'
+        type='int' value='KEY_COMMAND'/>
+  <constant name='NCURSES_KEY_COPY'
+        type='int' value='KEY_COPY'/>
+  <constant name='NCURSES_KEY_CREATE'
+        type='int' value='KEY_CREATE'/>
+  <constant name='NCURSES_KEY_END'
+        type='int' value='KEY_END'/>
+  <constant name='NCURSES_KEY_EXIT'
+        type='int' value='KEY_EXIT'/>
+  <constant name='NCURSES_KEY_FIND'
+        type='int' value='KEY_FIND'/>
+  <constant name='NCURSES_KEY_HELP'
+        type='int' value='KEY_HELP'/>
+  <constant name='NCURSES_KEY_MARK'
+        type='int' value='KEY_MARK'/>
+  <constant name='NCURSES_KEY_MESSAGE'
+        type='int' value='KEY_MESSAGE'/>
+  <constant name='NCURSES_KEY_MOVE'
+        type='int' value='KEY_MOVE'/>
+  <constant name='NCURSES_KEY_NEXT'
+        type='int' value='KEY_NEXT'/>
+  <constant name='NCURSES_KEY_OPEN'
+        type='int' value='KEY_OPEN'/>
+  <constant name='NCURSES_KEY_OPTIONS'
+        type='int' value='KEY_OPTIONS'/>
+  <constant name='NCURSES_KEY_PREVIOUS'
+        type='int' value='KEY_PREVIOUS'/>
+  <constant name='NCURSES_KEY_REDO'
+        type='int' value='KEY_REDO'/>
+  <constant name='NCURSES_KEY_REFERENCE'
+        type='int' value='KEY_REFERENCE'/>
+  <constant name='NCURSES_KEY_REFRESH'
+        type='int' value='KEY_REFRESH'/>
+  <constant name='NCURSES_KEY_REPLACE'
+        type='int' value='KEY_REPLACE'/>
+  <constant name='NCURSES_KEY_RESTART'
+        type='int' value='KEY_RESTART'/>
+  <constant name='NCURSES_KEY_RESUME'
+        type='int' value='KEY_RESUME'/>
+  <constant name='NCURSES_KEY_SAVE'
+        type='int' value='KEY_SAVE'/>
+  <constant name='NCURSES_KEY_SBEG'
+        type='int' value='KEY_SBEG'/>
+  <constant name='NCURSES_KEY_SCANCEL'
+        type='int' value='KEY_SCANCEL'/>
+  <constant name='NCURSES_KEY_SCOMMAND'
+        type='int' value='KEY_SCOMMAND'/>
+  <constant name='NCURSES_KEY_SCOPY'
+        type='int' value='KEY_SCOPY'/>
+  <constant name='NCURSES_KEY_SCREATE'
+        type='int' value='KEY_SCREATE'/>
+  <constant name='NCURSES_KEY_SDC'
+        type='int' value='KEY_SDC'/>
+  <constant name='NCURSES_KEY_SDL'
+        type='int' value='KEY_SDL'/>
+  <constant name='NCURSES_KEY_SELECT'
+        type='int' value='KEY_SELECT'/>
+  <constant name='NCURSES_KEY_SEND'
+        type='int' value='KEY_SEND'/>
+  <constant name='NCURSES_KEY_SEOL'
+        type='int' value='KEY_SEOL'/>
+  <constant name='NCURSES_KEY_SEXIT'
+        type='int' value='KEY_SEXIT'/>
+  <constant name='NCURSES_KEY_SFIND'
+        type='int' value='KEY_SFIND'/>
+  <constant name='NCURSES_KEY_SHELP'
+        type='int' value='KEY_SHELP'/>
+  <constant name='NCURSES_KEY_SHOME'
+        type='int' value='KEY_SHOME'/>
+  <constant name='NCURSES_KEY_SIC'
+        type='int' value='KEY_SIC'/>
+  <constant name='NCURSES_KEY_SLEFT'
+        type='int' value='KEY_SLEFT'/>
+  <constant name='NCURSES_KEY_SMESSAGE'
+        type='int' value='KEY_SMESSAGE'/>
+  <constant name='NCURSES_KEY_SMOVE'
+        type='int' value='KEY_SMOVE'/>
+  <constant name='NCURSES_KEY_SNEXT'
+        type='int' value='KEY_SNEXT'/>
+  <constant name='NCURSES_KEY_SOPTIONS'
+        type='int' value='KEY_SOPTIONS'/>
+  <constant name='NCURSES_KEY_SPREVIOUS'
+        type='int' value='KEY_SPREVIOUS'/>
+  <constant name='NCURSES_KEY_SPRINT'
+        type='int' value='KEY_SPRINT'/>
+  <constant name='NCURSES_KEY_SREDO'
+        type='int' value='KEY_SREDO'/>
+  <constant name='NCURSES_KEY_SREPLACE'
+        type='int' value='KEY_SREPLACE'/>
+  <constant name='NCURSES_KEY_SRIGHT'
+        type='int' value='KEY_SRIGHT'/>
+  <constant name='NCURSES_KEY_SRSUME'
+        type='int' value='KEY_SRSUME'/>
+  <constant name='NCURSES_KEY_SSAVE'
+        type='int' value='KEY_SSAVE'/>
+  <constant name='NCURSES_KEY_SSUSPEND'
+        type='int' value='KEY_SSUSPEND'/>
+  <constant name='NCURSES_KEY_SUNDO'
+        type='int' value='KEY_SUNDO'/>
+  <constant name='NCURSES_KEY_SUSPEND'
+        type='int' value='KEY_SUSPEND'/>
+  <constant name='NCURSES_KEY_UNDO'
+        type='int' value='KEY_UNDO'/>
+  <constant name='NCURSES_KEY_RESIZE'
+        type='int' value='KEY_RESIZE'/>
+  <constant name='NCURSES_A_NORMAL'
+        type='int' value='A_NORMAL'/>
+  <constant name='NCURSES_A_STANDOUT'
+        type='int' value='A_STANDOUT'/>
+  <constant name='NCURSES_A_UNDERLINE'
+        type='int' value='A_UNDERLINE'/>
+  <constant name='NCURSES_A_REVERSE'
+        type='int' value='A_REVERSE'/>
+  <constant name='NCURSES_A_BLINK'
+        type='int' value='A_BLINK'/>
+  <constant name='NCURSES_A_DIM'
+        type='int' value='A_DIM'/>
+  <constant name='NCURSES_A_BOLD'
+        type='int' value='A_BOLD'/>
+  <constant name='NCURSES_A_PROTECT'
+        type='int' value='A_PROTECT'/>
+  <constant name='NCURSES_A_INVIS'
+        type='int' value='A_INVIS'/>
+  <constant name='NCURSES_A_ALTCHARSET'
+        type='int' value='A_ALTCHARSET'/>
+  <constant name='NCURSES_A_CHARTEXT'
+        type='int' value='A_CHARTEXT'/>
+  <constant name='NCURSES_BUTTON1_PRESSED'
+        type='int' value='BUTTON1_PRESSED'/>
+  <constant name='NCURSES_BUTTON1_RELEASED'
+        type='int' value='BUTTON1_RELEASED'/>
+  <constant name='NCURSES_BUTTON1_CLICKED'
+        type='int' value='BUTTON1_CLICKED'/>
+  <constant name='NCURSES_BUTTON1_DOUBLE_CLICKED'
+        type='int' value='BUTTON1_DOUBLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON1_TRIPLE_CLICKED'
+        type='int' value='BUTTON1_TRIPLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON2_PRESSED'
+        type='int' value='BUTTON2_PRESSED'/>
+  <constant name='NCURSES_BUTTON2_RELEASED'
+        type='int' value='BUTTON2_RELEASED'/>
+  <constant name='NCURSES_BUTTON2_CLICKED'
+        type='int' value='BUTTON2_CLICKED'/>
+  <constant name='NCURSES_BUTTON2_DOUBLE_CLICKED'
+        type='int' value='BUTTON2_DOUBLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON2_TRIPLE_CLICKED'
+        type='int' value='BUTTON2_TRIPLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON3_PRESSED'
+        type='int' value='BUTTON3_PRESSED'/>
+  <constant name='NCURSES_BUTTON3_RELEASED'
+        type='int' value='BUTTON3_RELEASED'/>
+  <constant name='NCURSES_BUTTON3_CLICKED'
+        type='int' value='BUTTON3_CLICKED'/>
+  <constant name='NCURSES_BUTTON3_DOUBLE_CLICKED'
+        type='int' value='BUTTON3_DOUBLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON3_TRIPLE_CLICKED'
+        type='int' value='BUTTON3_TRIPLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON4_PRESSED'
+        type='int' value='BUTTON4_PRESSED'/>
+  <constant name='NCURSES_BUTTON4_RELEASED'
+        type='int' value='BUTTON4_RELEASED'/>
+  <constant name='NCURSES_BUTTON4_CLICKED'
+        type='int' value='BUTTON4_CLICKED'/>
+  <constant name='NCURSES_BUTTON4_DOUBLE_CLICKED'
+        type='int' value='BUTTON4_DOUBLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON4_TRIPLE_CLICKED'
+        type='int' value='BUTTON4_TRIPLE_CLICKED'/>
+  <constant name='NCURSES_BUTTON_SHIFT'
+        type='int' value='BUTTON_SHIFT'/>
+  <constant name='NCURSES_BUTTON_CTRL'
+        type='int' value='BUTTON_CTRL'/>
+  <constant name='NCURSES_BUTTON_ALT'
+        type='int' value='BUTTON_ALT'/>
+  <constant name='NCURSES_ALL_MOUSE_EVENTS'
+        type='int' value='ALL_MOUSE_EVENTS'/>
+  <constant name='NCURSES_REPORT_MOUSE_POSITION'
+        type='int' value='REPORT_MOUSE_POSITION'/>
+ </constants> 
+
+ <resource name="ncurses_window" payload="WINDOW" alloc="no">
+  <destruct>
+   delwin(resource);
+  </destruct>
+ </resource>
+
+ <resource name="ncurses_panel" payload="PANEL" alloc="no">
+  <destruct>
+   delpanel(resource);
+  </destruct>
+ </resource>
+
+ <global name="initialized"          type="int" value="0"/>
+ <global name="registered_constants" type="int" value="0"/>
+
+ <function role="internal" name="MSHUTDOWN">
+  <code>
+    if (NCURSES_G(initialized)) {
+      endwin();
+    }
+  </code>
+ </function>
+
+ <code role="header">
+<![CDATA[
+#define IS_NCURSES_INITIALIZED() \
+  if (!NCURSES_G(initialized)) { \
+    php_error_docref(NULL TSRMLS_CC, E_WARNING, "You must initialize ncruses using ncurses_init() before calling any ncurses functions."); \
+    RETURN_FALSE; \
+  }
+]]>
+ </code>
+
+ <function name="ncurses_addch">
+  <proto>int ncurses_addch(int ch)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(addch(ch));
+  </code>
+ </function>
+
+ <function name="ncurses_waddch">
+  <proto>int ncurses_waddch(resource ncurses_window window, int ch)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(waddch(window, ch));
+  </code>
+ </function>
+
+ <function name="ncurses_color_set">
+  <proto>int ncurses_color_set(int pair)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(color_set(pair,NULL));
+  </code>
+ </function>
+
+ <function name='ncurses_delwin'>
+  <proto>bool ncurses_delwin(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   FREE_RESOURCE(window_res);
+  </code>
+ </function>
+
+ <function name='ncurses_end'>
+  <proto>int ncurses_end(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   NCURSES_G(initialized) = 0;
+   RETURN_LONG(endwin());
+  </code>
+ </function>
+
+ <function name='ncurses_getch'>
+  <proto>int ncurses_getch(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(getch());
+  </code>
+ </function>
+
+ <function name='ncurses_has_colors'>
+  <proto>bool ncurses_has_colors(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_BOOL(has_colors());
+  </code>
+ </function>
+
+ <function name='ncurses_init'>
+  <proto>bool ncurses_init(void)</proto>
+  <code>
+<![CDATA[
+   if (!initscr()) {             /* initialize the curses library */
+     RETURN_FALSE;
+   }
+
+   keypad(stdscr, TRUE);  /* enable keyboard mapping */
+   (void) nonl();         /* tell curses not to do NL->CR/NL on output */
+   (void) cbreak();       /* take input chars one at a time, no wait for \n */
+
+   if (!NCURSES_G(registered_constants)) {
+                zend_constant c;
+
+                WINDOW **pscr = (WINDOW**)emalloc(sizeof(WINDOW *));
+                zval *zscr;
+
+#if 0 /* TODO FIXME */
+                *pscr = stdscr;
+                MAKE_STD_ZVAL(zscr);
+                ZEND_REGISTER_RESOURCE(zscr, pscr, le_ncurses_windows);
+                c.value = *zscr;
+                zval_copy_ctor(&c.value);
+                c.flags = CONST_CS;
+                c.name = zend_strndup(ZEND_STRL("STDSCR"));
+                c.name_len = sizeof("STDSCR");
+                zend_register_constant(&c TSRMLS_CC);
+#endif
+
+                /* we need this "interesting" arrangement because the
+                 * underlying values of the ACS_XXX defines are not
+                 * initialized until after ncurses has been initialized */
+
+#define PHP_NCURSES_DEF_CONST(x)    \
+                ZVAL_LONG(zscr, x);         \
+                c.value = *zscr;            \
+                zval_copy_ctor(&c.value);   \
+                c.flags = CONST_CS;         \
+                c.name = zend_strndup(ZEND_STRL("NCURSES_" #x)); \
+                c.name_len = sizeof("NCURSES_" #x);                           \
+                zend_register_constant(&c TSRMLS_CC)
+
+                PHP_NCURSES_DEF_CONST(ACS_ULCORNER);
+                PHP_NCURSES_DEF_CONST(ACS_LLCORNER);
+                PHP_NCURSES_DEF_CONST(ACS_URCORNER);
+                PHP_NCURSES_DEF_CONST(ACS_LRCORNER);
+                PHP_NCURSES_DEF_CONST(ACS_LTEE);
+                PHP_NCURSES_DEF_CONST(ACS_RTEE);
+                PHP_NCURSES_DEF_CONST(ACS_BTEE);
+                PHP_NCURSES_DEF_CONST(ACS_TTEE);
+                PHP_NCURSES_DEF_CONST(ACS_HLINE);
+                PHP_NCURSES_DEF_CONST(ACS_VLINE);
+                PHP_NCURSES_DEF_CONST(ACS_PLUS);
+                PHP_NCURSES_DEF_CONST(ACS_S1);
+                PHP_NCURSES_DEF_CONST(ACS_S9);
+                PHP_NCURSES_DEF_CONST(ACS_DIAMOND);
+                PHP_NCURSES_DEF_CONST(ACS_CKBOARD);
+                PHP_NCURSES_DEF_CONST(ACS_DEGREE);
+                PHP_NCURSES_DEF_CONST(ACS_PLMINUS);
+                PHP_NCURSES_DEF_CONST(ACS_BULLET);
+                PHP_NCURSES_DEF_CONST(ACS_LARROW);
+                PHP_NCURSES_DEF_CONST(ACS_RARROW);
+                PHP_NCURSES_DEF_CONST(ACS_DARROW);
+                PHP_NCURSES_DEF_CONST(ACS_UARROW);
+                PHP_NCURSES_DEF_CONST(ACS_BOARD);
+                PHP_NCURSES_DEF_CONST(ACS_LANTERN);
+                PHP_NCURSES_DEF_CONST(ACS_BLOCK);
+
+                FREE_ZVAL(zscr);
+                NCURSES_G(registered_constants) = 1;
+   }
+   NCURSES_G(initialized) = 1;
+
+   RETURN_TRUE;
+]]>
+  </code>
+ </function>
+
+ <function name='ncurses_init_pair'>
+  <proto>int ncurses_init_pair(int pair, int fg, int bg)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(init_pair(pair, fg, bg));
+  </code>
+ </function>
+
+ <function name='ncurses_move'>
+  <proto>int ncurses_move(int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(move(y, x));
+  </code>
+ </function>
+
+ <function name='ncurses_newpad'>
+  <proto>resource ncurses_window ncurses_newpad(int rows, int cols)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+
+   return_res = newpad(rows, cols);
+
+   if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name='ncurses_prefresh'>
+  <proto>int ncurses_prefresh(resource ncurses_window pad, int pminrow, int pmincol, int sminrow, int smincol, int smaxrow, int smaxcol)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(prefresh(pad, pminrow, pmincol, sminrow, smincol, smaxrow, smaxcol));
+  </code>
+ </function>
+
+ <function name='ncurses_pnoutrefresh'>
+  <proto>int ncurses_pnoutrefresh(resource ncurses_window pad, int pminrow, int pmincol, int sminrow, int smincol, int smaxrow, int smaxcol)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(pnoutrefresh(pad, pminrow, pmincol, sminrow, smincol, smaxrow, smaxcol));
+  </code>
+ </function>
+
+ <function name='ncurses_newwin'>
+  <proto>resource ncurses_window ncurses_newwin(int rows, int cols, int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   
+   return_res = newwin(rows, cols, y, x);
+   if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name='ncurses_refresh'>
+  <proto>int ncurses_refresh(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(refresh());
+  </code>
+ </function>
+
+ <function name='ncurses_start_color'>
+  <proto>int ncurses_start_color(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(start_color());
+  </code>
+ </function>
+
+ <function name='ncurses_standout'>
+  <proto>int ncurses_standout(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(standout());
+  </code>
+ </function>
+
+ <function name='ncurses_standend'>
+  <proto>int ncurses_standend(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(standend());
+  </code>
+ </function>
+
+ <function name='ncurses_baudrate'>
+  <proto>int ncurses_baudrate(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(baudrate());
+  </code>
+ </function>
+
+ <function name='ncurses_beep'>
+  <proto>int ncurses_beep(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(beep());
+  </code>
+ </function>
+
+ <function name='ncurses_can_change_color'>
+  <proto>bool ncurses_can_change_color(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_BOOL(can_change_color());
+  </code>
+ </function>
+
+ <function name='ncurses_cbreak'>
+  <proto>bool ncurses_cbreak(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_BOOL(cbreak());
+  </code>
+ </function>
+
+ <function name='ncurses_clear'>
+  <proto>bool ncurses_clear(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_BOOL(clear());
+  </code>
+ </function>
+
+ <function name='ncurses_clrtobot'>
+  <proto>bool ncurses_clrtobot(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_BOOL(clrtobot());
+  </code>
+ </function>
+
+ <function name='ncurses_clrtoeol'>
+  <proto>bool ncurses_clrtoeol(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_BOOL(clrtoeol());
+  </code>
+ </function>
+
+ <function name='ncurses_reset_prog_mode'>
+  <proto>int ncurses_reset_prog_mode(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(reset_prog_mode())
+  </code>
+ </function>
+
+ <function name='ncurses_reset_shell_mode'>
+  <proto>int ncurses_reset_shell_mode(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(reset_shell_mode())
+  </code>
+ </function>
+
+ <function name='ncurses_def_prog_mode'>
+  <proto>int ncurses_def_prog_mode(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(def_prog_mode())
+  </code>
+ </function>
+
+ <function name='ncurses_def_shell_mode'>
+  <proto>int ncurses_def_shell_mode(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(def_shell_mode())
+  </code>
+ </function>
+
+ <function name='ncurses_delch'>
+  <proto>int ncurses_delch(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(delch())
+  </code>
+ </function>
+
+ <function name='ncurses_deleteln'>
+  <proto>int ncurses_deleteln(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(deleteln())
+  </code>
+ </function>
+
+ <function name='ncurses_doupdate'>
+  <proto>int ncurses_doupdate(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(doupdate())
+  </code>
+ </function>
+
+ <function name='ncurses_echo'>
+  <proto>int ncurses_echo(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(echo())
+  </code>
+ </function>
+
+ <function name='ncurses_erase'>
+  <proto>int ncurses_erase(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(erase())
+  </code>
+ </function>
+
+ <function name='ncurses_erasechar'>
+  <proto>string ncurses_erasechar(void)</proto>
+  <code>
+   char temp[2];
+   IS_NCURSES_INITIALIZED();
+
+   IS_NCURSES_INITIALIZED();
+   temp[0] = erasechar();
+   temp[1] = '\0';
+
+   RETURN_STRINGL (temp, 1, 1);
+  </code>
+ </function>
+
+ <function name='ncurses_flash'>
+  <proto>int ncurses_flash(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(flash());
+  </code>
+ </function>
+
+ <function name='ncurses_flushinp'>
+  <proto>int ncurses_flushinp(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(flushinp());
+  </code>
+ </function>
+
+ <function name='ncurses_has_ic'>
+  <proto>int ncurses_has_ic(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(has_ic());
+  </code>
+ </function>
+
+ <function name='ncurses_has_il'>
+  <proto>int ncurses_has_il(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(has_il());
+  </code>
+ </function>
+
+ <function name='ncurses_inch'>
+  <proto>string ncurses_inch(void)</proto>
+  <code>
+   char temp[2];
+
+   IS_NCURSES_INITIALIZED();
+   temp[0] = inch();
+   temp[1] = '\0';
+
+   RETURN_STRINGL (temp, 1, 1);
+  </code>
+ </function>
+
+ <function name='ncurses_insertln'>
+  <proto>int ncurses_insertln(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(insertnl());
+  </code>
+ </function>
+
+ <function name='ncurses_isendwin'>
+  <proto>int ncurses_isendwin(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(isendwin());
+  </code>
+ </function>
+
+ <function name='ncurses_killchar'>
+  <proto>string ncurses_killchar(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_nl'>
+  <proto>int ncurses_nl(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(nl());
+  </code>
+ </function>
+
+ <function name='ncurses_nocbreak'>
+  <proto>int ncurses_nocbreak(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(nocbreak());
+  </code>
+ </function>
+
+ <function name='ncurses_noecho'>
+  <proto>int ncurses_noecho(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(noecho());
+  </code>
+ </function>
+
+ <function name='ncurses_nonl'>
+  <proto>int ncurses_nonl(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(nonl());
+  </code>
+ </function>
+
+ <function name='ncurses_noraw'>
+  <proto>bool ncurses_noraw(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(noraw());
+  </code>
+ </function>
+
+ <function name='ncurses_raw'>
+  <proto>int ncurses_raw(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(raw());
+  </code>
+ </function>
+
+ <function name='ncurses_meta'>
+  <proto>int ncurses_meta(resource ncurses_window window, bool bit8)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_werase'>
+  <proto>int ncurses_werase(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_resetty'>
+  <proto>int ncurses_resetty(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(resetty());
+  </code>
+ </function>
+
+ <function name='ncurses_savetty'>
+  <proto>int ncurses_savetty(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(savetty());
+  </code>
+ </function>
+
+ <function name='ncurses_termattrs'>
+  <proto>int ncurses_termattrs(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(termattrs());
+  </code>
+ </function>
+
+ <function name='ncurses_use_default_colors'>
+  <proto>int ncurses_use_default_colors(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(use_default_colors());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_attr'>
+  <proto>int ncurses_slk_attr(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_attr());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_clear'>
+  <proto>int ncurses_slk_clear(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_clear());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_noutrefresh'>
+  <proto>int ncurses_slk_noutrefresh(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(noutrefresh());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_refresh'>
+  <proto>int ncurses_slk_refresh(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_refresh());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_restore'>
+  <proto>int ncurses_slk_restore(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_restore());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_touch'>
+  <proto>int ncurses_slk_touch(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_touch());
+  </code>
+ </function>
+
+ <function name='ncurses_slk_set'>
+  <proto>bool ncurses_slk_set(int labelnr, string label, int format)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_attroff'>
+  <proto>int ncurses_attroff(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(attroff(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_attron'>
+  <proto>int ncurses_attron(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(attron(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_attrset'>
+  <proto>int ncurses_attrset(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(attrset(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_bkgd'>
+  <proto>int ncurses_bkgd(int attrchar)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(bkgd(attrchar));
+  </code>
+ </function>
+
+ <function name='ncurses_curs_set'>
+  <proto>int ncurses_curs_set(int visibility)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(curs_set(visibility));
+  </code>
+ </function>
+
+ <function name='ncurses_delay_output'>
+  <proto>int ncurses_delay_output(int milliseconds)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(delay_output(milliseconds));
+  </code>
+ </function>
+
+ <function name='ncurses_echochar'>
+  <proto>int ncurses_echochar(int character)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(echochar(character));
+  </code>
+ </function>
+
+ <function name='ncurses_halfdelay'>
+  <proto>int ncurses_halfdelay(int tenth)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(halfdelay(tenth));
+  </code>
+ </function>
+
+ <function name='ncurses_has_key'>
+  <proto>int ncurses_has_key(int keycode)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(has_key(keycode));
+  </code>
+ </function>
+
+ <function name='ncurses_insch'>
+  <proto>int ncurses_insch(int character)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(insch(character));
+  </code>
+ </function>
+
+ <function name='ncurses_insdelln'>
+  <proto>int ncurses_insdelln(int count)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(insdelln(count));
+  </code>
+ </function>
+
+ <function name='ncurses_mouseinterval'>
+  <proto>int ncurses_mouseinterval(int milliseconds)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mouseinterval(milliseconds));
+  </code>
+ </function>
+
+ <function name='ncurses_napms'>
+  <proto>int ncurses_napms(int milliseconds)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(napms(milliseconds));
+  </code>
+ </function>
+
+ <function name='ncurses_scrl'>
+  <proto>int ncurses_scrl(int count)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(scrl(count));
+  </code>
+ </function>
+
+ <function name='ncurses_slk_attroff'>
+  <proto>int ncurses_slk_attroff(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_attroff(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_slk_attron'>
+  <proto>int ncurses_slk_attron(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_attron(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_slk_attrset'>
+  <proto>int ncurses_slk_attrset(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_attrset(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_slk_color'>
+  <proto>int ncurses_slk_color(int color_pair_number)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_color(color_pair_number));
+  </code>
+ </function>
+
+ <function name='ncurses_slk_init'>
+  <proto>int ncurses_slk_init(int format)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_init(format));
+  </code>
+ </function>
+
+<!-- TODO we don't have access to the actual file descriptors, do we?
+ <function name='ncurses_typeahead'>
+  <proto>int ncurses_typeahead(int fd)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+-->
+
+ <function name='ncurses_ungetch'>
+  <proto>int ncurses_ungetch(int keycode)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(ungetch(keycode));
+  </code>
+ </function>
+
+ <function name='ncurses_vidattr'>
+  <proto>int ncurses_vidattr(int attributes)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(vidattr(attributes));
+  </code>
+ </function>
+
+ <function name='ncurses_use_extended_names'>
+  <proto>int ncurses_use_extended_names(bool flag)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(use_extended_names(flag));
+  </code>
+ </function>
+
+ <function name='ncurses_bkgdset'>
+  <proto>void ncurses_bkgdset(int attrchar)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(slk_bkgdset(attrchar));
+  </code>
+ </function>
+
+ <function name='ncurses_filter'>
+  <proto>void ncurses_filter(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   filter();
+  </code>
+ </function>
+
+ <function name='ncurses_noqiflush'>
+  <proto>void ncurses_noqiflush(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   noqiflush();
+  </code>
+ </function>
+
+ <function name='ncurses_qiflush'>
+  <proto>void ncurses_qiflush(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   qiflush();
+  </code>
+ </function>
+
+ <function name='ncurses_timeout'>
+  <proto>void ncurses_timeout(int milliseconds)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   timeout(milliseconds);
+  </code>
+ </function>
+
+ <function name='ncurses_use_env'>
+  <proto>void ncurses_use_env(int flag)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   use_env(flag);
+  </code>
+ </function>
+
+ <function name='ncurses_addstr'>
+  <proto>int ncurses_addstr(string text)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(addstr(text));
+  </code>
+ </function>
+
+ <function name='ncurses_putp'>
+  <proto>int ncurses_putp(string text)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(putp(text));
+  </code>
+ </function>
+
+ <function name='ncurses_scr_dump'>
+  <proto>int ncurses_scr_dump(string filename)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(scr_dump(filename));
+  </code>
+ </function>
+
+ <function name='ncurses_scr_init'>
+  <proto>int ncurses_scr_init(string filename)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(scr_init(filename));
+  </code>
+ </function>
+
+ <function name='ncurses_scr_restore'>
+  <proto>int ncurses_scr_restore(string filename)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(scr_restore(filename));
+  </code>
+ </function>
+
+ <function name='ncurses_scr_set'>
+  <proto>int ncurses_scr_set(string filename)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(scr_set(filename));
+  </code>
+ </function>
+
+ <function name='ncurses_mvaddch'>
+  <proto>int ncurses_mvaddch(int y, int x, int c)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvaddch(y, x, c));
+  </code>
+ </function>
+
+ <function name='ncurses_mvaddchnstr'>
+  <proto>int ncurses_mvaddchnstr(int y, int x, string s, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvaddchnstr(y, x, s, n));
+  </code>
+ </function>
+
+ <function name='ncurses_addchnstr'>
+  <proto>int ncurses_addchnstr(string s, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(addchnstr(s, n));
+  </code>
+ </function>
+
+ <function name='ncurses_mvaddchstr'>
+  <proto>int ncurses_mvaddchstr(int y, int x, string s)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvaddchstr(y, x, s));
+  </code>
+ </function>
+
+ <function name='ncurses_addchstr'>
+  <proto>int ncurses_addchstr(string s)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(addchstr(s));
+  </code>
+ </function>
+
+ <function name='ncurses_mvaddnstr'>
+  <proto>int ncurses_mvaddnstr(int y, int x, string s, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvaddnstr(y, x, s, n));
+  </code>
+ </function>
+
+ <function name='ncurses_addnstr'>
+  <proto>int ncurses_addnstr(string s, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(addnstr(s, n));
+  </code>
+ </function>
+
+ <function name='ncurses_mvaddstr'>
+  <proto>int ncurses_mvaddstr(int y, int x, string s)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvaddstr(y, x, s));
+  </code>
+ </function>
+
+ <function name='ncurses_mvdelch'>
+  <proto>int ncurses_mvdelch(int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvdelch(y, x));
+  </code>
+ </function>
+
+ <function name='ncurses_mvgetch'>
+  <proto>int ncurses_mvgetch(int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvgetch(y, x));
+  </code>
+ </function>
+
+ <function name='ncurses_mvinch'>
+  <proto>int ncurses_mvinch(int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvinch(y, x));
+  </code>
+ </function>
+
+ <function name='ncurses_insstr'>
+  <proto>int ncurses_insstr(string text)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(insstr(text));
+  </code>
+ </function>
+
+ <function name='ncurses_mvhline'>
+  <proto>int ncurses_mvhline(int y, int x, int attrchar, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvhline(y, x, attrchar, n));
+  </code>
+ </function>
+
+ <function name='ncurses_mvvline'>
+  <proto>int ncurses_mvvline(int y, int x, int attrchar, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvvline(y, x, attrchar, n));
+  </code>
+ </function>
+
+ <function name='ncurses_mvcur'>
+  <proto>int ncurses_mvcur(int old_y,int old_x, int new_y, int new_x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvcur(old_y, old_x, new_y, new_x));
+  </code>
+ </function>
+
+ <function name='ncurses_init_color'>
+  <proto>int ncurses_init_color(int color, int red, int green, int blue)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(init_color(color, red, green, blue));
+  </code>
+ </function>
+
+ <function name='ncurses_border'>
+  <proto>int ncurses_border(int left, int right, int top, int bottom, int tl_corner, int tr_corner, int bl_corner, int br_corner)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(border(left, right, top, bottom, tl_corner, tr_corner, bl_corner, br_corner));
+  </code>
+ </function>
+
+ <function name='ncurses_wborder'>
+  <proto>int ncurses_wborder(resource ncurses_window window, int left, int right, int top, int bottom, int tl_corner, int tr_corner, int bl_corner, int br_corner)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wborder(window, left, right, top, bottom, tl_corner, tr_corner, bl_corner, br_corner));
+  </code>
+ </function>
+
+ <function name='ncurses_assume_default_colors'>
+  <proto>int ncurses_assume_default_colors(int fg, int bg)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(assume_default_colors(fg, bg));
+  </code>
+ </function>
+
+ <function name='ncurses_define_key'>
+  <proto>int ncurses_define_key(string definition, int keycode)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(define_key(definition, keycode));
+  </code>
+ </function>
+
+ <function name='ncurses_hline'>
+  <proto>int ncurses_hline(int charattr, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(hline(charattr, n));
+  </code>
+ </function>
+
+ <function name='ncurses_vline'>
+  <proto>int ncurses_vline(int charattr, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(vline(charattr, n));
+  </code>
+ </function>
+
+ <function name='ncurses_whline'>
+  <proto>int ncurses_whline(resource ncurses_window window, int charattr, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(whline(window, charattr, n));
+  </code>
+ </function>
+
+ <function name='ncurses_wvline'>
+  <proto>int ncurses_wvline(resource ncurses_window window, int charattr, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wvline(window, charattr, n));
+  </code>
+ </function>
+
+ <function name='ncurses_keyok'>
+  <proto>int ncurses_keyok(int keycode, int enable)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(keyok(keycode, enable));
+  </code>
+ </function>
+
+ <function name='ncurses_mvwaddstr'>
+  <proto>int ncurses_mvwaddstr(resource ncurses_window window, int y, int x, string text)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(mvwaddstr(window, y, x, text));
+  </code>
+ </function>
+
+ <function name='ncurses_wrefresh'>
+  <proto>int ncurses_wrefresh(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wrefresh(window));
+  </code>
+ </function>
+
+ <function name='ncurses_termname'>
+  <proto>string ncurses_termname(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+
+   RETURN_STRING(termname(), 1);
+  </code>
+ </function>
+
+ <function name='ncurses_longname'>
+  <proto>string ncurses_longname(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_STRING(longname(), 1);
+  </code>
+ </function>
+
+ <function name='ncurses_ungetmouse'>
+  <proto>array ncurses_ungetmouse(void)</proto>
+  <code>
+<![CDATA[
+   MEVENT mevent;
+
+   IS_NCURSES_INITIALIZED();
+
+   if (ERR == getmouse(&mevent)) {
+     RETURN_FALSE;
+   }
+
+   array_init(return_value);
+
+   add_assoc_long(return_value, "id",    mevent.id);
+   add_assoc_long(return_value, "x",     mevent.x);
+   add_assoc_long(return_value, "y",     mevent.y);
+   add_assoc_long(return_value, "z",     mevent.z);
+   add_assoc_long(return_value, "mmask", mevent.bstate);
+]]>
+  </code>
+ </function>
+
+ <function name='ncurses_wmove'>
+  <proto>int ncurses_wmove(resource ncurses_window window, int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wmove(window, y, x));
+  </code>
+ </function>
+
+ <function name='ncurses_keypad'>
+  <proto>int ncurses_keypad(resource ncurses_window window, bool bf)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(keypad(window, bf));
+  </code>
+ </function>
+
+ <function name='ncurses_wcolor_set'>
+  <proto>int ncurses_wcolor_set(resource ncurses_window window, int color_pair)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wcolor_set(window, color_pair, NULL));
+  </code>
+ </function>
+
+ <function name='ncurses_wclear'>
+  <proto>int ncurses_wclear(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wclear(window));
+  </code>
+ </function>
+
+ <function name='ncurses_wnoutrefresh'>
+  <proto>int ncurses_wnoutrefresh(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wnoutrefresh(window));
+  </code>
+ </function>
+
+ <function name='ncurses_waddstr'>
+  <proto>int ncurses_waddstr(resource ncurses_window window, string str)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(waddstr(window, str));
+  </code>
+ </function>
+
+ <function name='ncurses_waddnstr'>
+  <proto>int ncurses_waddnstr(resource ncurses_window window, string str, int n)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(waddnstr(window, str, n));
+  </code>
+ </function>
+
+ <function name='ncurses_wgetch'>
+  <proto>int ncurses_wgetch(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wgetch(window));
+  </code>
+ </function>
+
+ <function name='ncurses_wattroff'>
+  <proto>int ncurses_wattroff(resource ncurses_window window, int attrs)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wattroff(window, attrs));
+  </code>
+ </function>
+
+ <function name='ncurses_wattron'>
+  <proto>int ncurses_wattron(resource ncurses_window window, int attrs)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wattron(window, attrs));
+  </code>
+ </function>
+
+ <function name='ncurses_wattrset'>
+  <proto>int ncurses_wattrset(resource ncurses_window window, int attrs)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wattrset(window, attrs));
+  </code>
+ </function>
+
+ <function name='ncurses_wstandend'>
+  <proto>int ncurses_wstandend(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wstandend(window));
+  </code>
+ </function>
+
+ <function name='ncurses_wstandout'>
+  <proto>int ncurses_wstandout(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(wstandout(window));
+  </code>
+ </function>
+
+ <function name='ncurses_new_panel'>
+  <proto>resource ncurses_panel ncurses_new_panel(resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+
+   return_res = new_panel(window);
+
+   if (return_res == NULL) {
+     RETURN_FALSE;
+   }
+   
+   set_panel_userptr(return_res, (void*)return_res_id);
+  </code>
+ </function>
+
+ <function name='ncurses_del_panel'>
+  <proto>bool ncurses_del_panel(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   FREE_RESOURCE(panel_res);   
+  </code>
+ </function>
+
+ <function name='ncurses_hide_panel'>
+  <proto>int ncurses_hide_panel(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(hide_panel(panel));
+  </code>
+ </function>
+
+ <function name='ncurses_show_panel'>
+  <proto>int ncurses_show_panel(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(show_panel(panel));
+  </code>
+ </function>
+
+ <function name='ncurses_top_panel'>
+  <proto>int ncurses_top_panel(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(top_panel(panel));
+  </code>
+ </function>
+
+ <function name='ncurses_bottom_panel'>
+  <proto>int ncurses_bottom_panel(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(bottom_panel(panel));
+  </code>
+ </function>
+
+ <function name='ncurses_move_panel'>
+  <proto>int ncurses_move_panel(resource ncurses_panel panel, int y, int x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(move_panel(panel, y, x));
+  </code>
+ </function>
+
+ <function name='ncurses_replace_panel'>
+  <proto>int ncurses_replace_panel(resource ncurses_panel panel, resource ncurses_window window)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   RETURN_LONG(replace_panel(panel, window));
+  </code>
+ </function>
+
+ <function name='ncurses_panel_above'>
+  <proto>resource ncurses_panel ncurses_panel_above(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   return_res = panel_above(panel);
+   if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name='ncurses_panel_below'>
+  <proto>resource ncurses_panel ncurses_panel_below(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   return_res = panel_below(panel);
+   if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name='ncurses_panel_window'>
+  <proto>resource ncurses_window ncurses_panel_window(resource ncurses_panel panel)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   return_res = panel_window(panel);
+   if (!return_res) RETURN_FALSE;
+  </code>
+ </function>
+
+ <function name='ncurses_update_panels'>
+  <proto>void ncurses_update_panels(void)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+   update_panels();
+  </code>
+ </function>
+
+<!-- FIXME pass-by-ref not working yet
+ <function name='ncurses_instr'>
+  <proto>int ncurses_instr(string &amp;buffer)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_color_content'>
+  <proto>int ncurses_color_content(int color, int &amp;r, int &amp;g, int &amp;b)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_pair_content'>
+  <proto>int ncurses_pair_content(int pair, int &amp;f, int &amp;b)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_mousemask'>
+  <proto>int ncurses_mousemask(int newmask, int &amp;oldmask)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_getmouse'>
+  <proto>bool ncurses_getmouse(array &amp;mevent)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_mouse_trafo'>
+  <proto>bool ncurses_mouse_trafo(int &amp;y, int &amp;x, bool toscreen)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_wmouse_trafo'>
+  <proto>bool ncurses_wmouse_trafo(resource ncurses_window window, int &amp;y, int &amp;x, bool toscreen)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_getyx'>
+  <proto>void ncurses_getyx(resource ncurses_window window, int &amp;y, int &amp;x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+ <function name='ncurses_getmaxyx'>
+  <proto>void ncurses_getmaxyx(resource ncurses_window window, int &amp;y, int &amp;x)</proto>
+  <code>
+   IS_NCURSES_INITIALIZED();
+  </code>
+ </function>
+
+-->
+
+</extension>
+
+

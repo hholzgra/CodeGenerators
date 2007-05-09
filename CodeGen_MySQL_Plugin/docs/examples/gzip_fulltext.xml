@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<plugin name="gzip_fulltext">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.1</version>
+    <date>2004-05-25</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+  <deps>
+   <src/>
+   <header name="zlib.h"/>
+  </deps>
+
+ <fulltext name="gzip">
+  <summary>A fulltext plugin to search on gzip COMPRESS()ed fields</summary>
+
+  <parser>
+   <code>
+<![CDATA[
+    /* check for compress header to distinguish between compressed data
+       and uncompressed search terms
+       MySQL COMPRESS() stores the real data length in the first 4 bytes
+       followed by the compressed data which starts with the two magic
+       marker bytes 0x78, 0x9C
+    */
+	if ((param->length >= 6) 
+        && ((unsigned char)(param->doc[4]) == 0x78) 
+        && ((unsigned char)(param->doc[5]) == 0x9C)) {
+	  ulong real_size;
+	  char *real_doc;
+	  int result;
+
+      /* calculate the real size and allocate memory */
+	  real_size = uint4korr(&param->length) & 0x3FFFFFFF;
+	  real_doc = malloc(real_size + 1);
+      if (!real_doc) {
+          return 1;
+      }
+
+      /* the following flag needs to be set as we uncompress
+         to dynamic storage we free again right away */
+	  param->flags |=  MYSQL_FTFLAGS_NEED_COPY;
+
+      /* uncompress  */
+	  result = uncompress((unsigned char*)real_doc, &real_size, (unsigned char *)(param->doc) + 4, param->length);
+
+	  if (result == Z_OK) {
+          /* OK, pass on to default parser */
+		  result = param->mysql_parse(param, real_doc, real_size);
+	  } else {
+          /* failure */
+		  result = 1;
+	  }
+
+      /* cleanup, no leaks please */
+	  free(real_doc);        
+
+      return result;
+  } else {
+     /* uncompressed data is passed on right away */
+	 return param->mysql_parse(param, param->doc, param->length);
+  }
+]]>
+   </code>
+  </parser>
+
+  <test name="gzip_plugin">
+   <!-- this test just checks for the plugins existance -->
+   <code>
+SELECT PLUGIN_NAME, PLUGIN_STATUS,PLUGIN_TYPE,PLUGIN_LIBRARY FROM INFORMATION_SCHEMA.PLUGINS WHERE PLUGIN_NAME='gzip';
+   </code>
+   <result>
+PLUGIN_NAME	PLUGIN_STATUS	PLUGIN_TYPE	PLUGIN_LIBRARY
+gzip	ACTIVE	FTPARSER	gzip_fulltext.so
+   </result>
+  </test>
+
+  <test name="gzip_fulltext">
+   <!-- 
+    this test creates a table using the new plugin,
+    populates it with some text rows, both gzip compressed and plain text,
+    and then checks the result of some full text queries, again using 
+    both compressed and uncompressed data
+   -->
+   <code>
+--disable_warnings
+DROP TABLE IF EXISTS t1;
+--ensable_warnings
+CREATE TABLE t1 (     
+  doc CHAR(100) DEFAULT NULL,     
+  FULLTEXT KEY `doc` (`doc`) WITH PARSER gzip   
+) ENGINE=MyISAM DEFAULT CHARSET latin1;
+  
+INSERT INTO t1 (doc) VALUES ('this is a fulltext parser test');
+INSERT INTO t1 (doc) VALUES (COMPRESS('this is a fulltext parser test'));
+INSERT INTO t1 (doc) VALUES ('the meaning of life, universe and all the rest');
+INSERT INTO t1 (doc) VALUES ('some dummy text');
+INSERT INTO t1 (doc) VALUES (COMPRESS('more dummy text'));
+  
+SELECT COUNT(*) FROM t1 WHERE MATCH(doc) AGAINST('parser');  
+SELECT COUNT(*) FROM t1 WHERE MATCH(doc) AGAINST(COMPRESS('parser'));
+SELECT COUNT(*) FROM t1 WHERE MATCH(doc) AGAINST(COMPRESS('universe'));
+   </code>
+   <result>
+COUNT(*)
+2
+COUNT(*)
+2
+COUNT(*)
+1
+   </result>
+  </test>
+
+ </fulltext>
+
+</plugin>

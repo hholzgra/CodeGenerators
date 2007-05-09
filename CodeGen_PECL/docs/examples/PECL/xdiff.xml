@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<extension name="xdiff" version="1.0.0">
+ <deps>
+  <with name="xdiff">
+   <lib name="xdiff"/>
+   <header name="xdiff.h"/>
+  </with>
+ </deps>
+
+ <code position="top">
+<?data
+static void *wrap_malloc(void *priv, unsigned int size) {
+        return malloc(size);
+}
+
+static void wrap_free(void *priv, void *ptr) {
+        free(ptr);
+}
+
+static void *wrap_realloc(void *priv, void *ptr, unsigned int size) {
+        return realloc(ptr, size);
+}
+?>
+ </code>
+
+ <function name="xdiff_diff">
+  <proto>string xdiff_diff(stream f1, stream f2)</proto>
+ </function>
+
+ <function name="xdiff_strdiff">
+  <proto>string xdiff_strdiff(string s1, string s2)</proto>
+ </function>
+
+</extension>

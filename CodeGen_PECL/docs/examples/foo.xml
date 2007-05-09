@@ -1,0 +1,18 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd">
+<extension name="foo" version="0.1.0">
+<deps language="cpp">
+ <with name="bar" defaults='/usr:/usr/local:/usr/local/bar' testfile='include/bar.h'>
+  Add bar support
+ <header name="bar.h" prepend="yes" />
+ <lib name="bar" />
+ </with>
+ <with name="foo" defaults='/usr:/usr/local:/usr/local/bar' testfile='include/bar.h'>
+  Add bar support
+ <header name="bar2.h" prepend="yes" />
+ <lib name="bar2" />
+ </with>
+ <header name="bar3.h" prepend="yes" />
+ <lib name="bar3" />
+</deps>
+</extension> 

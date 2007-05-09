@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<plugin name="is_example">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.1</version>
+    <date>2006-04-27</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+  <deps language="c++"/>
+
+ <infoschema name="is_dummy">
+  <summary>minimal example plugin</summary>
+
+  <field name="FOOBAR" type="LONG"/>
+
+  <code>
+<?data
+  TABLE* table= tables->table;
+
+  table->field[FIELD_FOOBAR]->store(23);
+  schema_table_store_record(thd, table);
+
+  table->field[FIELD_FOOBAR]->store(23);
+  schema_table_store_record(thd, table);
+
+  return 0;
+?>
+  </code>
+
+ </infoschema>
+
+</plugin>

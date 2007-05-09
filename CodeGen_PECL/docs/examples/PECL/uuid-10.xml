@@ -1,0 +1,520 @@
+<?xml version="1.0" ?>
+
+<!-- 
+
+lets add some descriptive information
+
+still no real real functionality 
+
+-->
+
+<extension name="uuid" version="1.0.0">
+
+ <summary>UUID extension</summary>
+
+ <description>
+  A wrapper around libuuid from the ext2utils project.
+ </description>
+
+ <license>LGPL</license>
+
+ <maintainers>
+  <maintainer>
+   <user>hholzgra</user>
+   <name>Hartmut Holzgraefe</name>
+   <email>hartmut@php.net</email>
+   <role>lead</role>
+  </maintainer>
+ </maintainers>
+
+ <release>
+  <version>0.1</version>
+  <date>2006-06-24</date>
+  <state>alpha</state>
+  <notes>
+   first tests
+  </notes>
+ </release>
+
+ <deps language="c" platform="unix">
+  <with>
+   <header name="uuid/uuid.h"/>
+   <lib name="uuid"/>
+  </with>
+ </deps>
+
+ <constant name="UUID_VARIANT_NCS"/>
+ <constant name="UUID_VARIANT_DCE"/>
+ <constant name="UUID_VARIANT_MICROSOFT"/>
+ <constant name="UUID_VARIANT_OTHER"/>
+
+ <constant name="UUID_TYPE_DEFAULT" define="yes" type="int" value="0"/>
+ <constant name="UUID_TYPE_TIME"    define="yes" type="int" value="UUID_TYPE_DCE_TIME"/>
+ <constant name="UUID_TYPE_DCE"     define="yes" type="int" value="UUID_TYPE_DCE_RANDOM"/>
+ <constant name="UUID_TYPE_NAME"    define="yes" type="int" value="UUID_TYPE_DCE_TIME"/>
+ <constant name="UUID_TYPE_RANDOM"  define="yes" type="int" value="UUID_TYPE_DCE_RANDOM"/>
+ <constant name="UUID_TYPE_NULL"    define="yes" type="int" value="-1"/>
+ <constant name="UUID_TYPE_INVALID" define="yes" type="int" value="-42"/>
+
+ <function name="uuid_create">
+  <proto>string uuid_create([int uuid_type])</proto>
+
+  <summary>Generate a new UUID</summary>
+
+  <description> 
+   ...
+  </description>
+
+  <code>
+   uuid_t uuid;
+   char uuid_str[37];
+
+   switch(uuid_type) {
+     case UUID_TYPE_DCE_TIME:
+       uuid_generate_time(uuid);
+       break;
+     case UUID_TYPE_DCE_RANDOM:
+       uuid_generate_random(uuid);
+       break;
+     case UUID_TYPE_DEFAULT:
+       uuid_generate(uuid);
+       break;
+     default:
+       php_error_docref(NULL TSRMLS_CC, 
+                        E_WARNING,
+                        "Unknown/invalid UUID type '%d' requested, using default type instead",
+                        uuid_type);
+       uuid_generate(uuid);
+       break;        
+   }
+
+   uuid_unparse(uuid, uuid_str);
+
+   RETURN_STRING(uuid_str, 1);
+  </code>
+
+  <test>
+   <code>
+<![CDATA[
+        // check basic format of generated UUIDs
+        $uuid = uuid_create();
+        if (ereg("[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}", $uuid)) {
+                echo "basic format ok\n";
+        } else {
+                echo "basic UUID format check failed, generated UUID was $uuid\n";
+        }
+]]>
+   </code>
+   <result>
+basic format ok
+   </result>
+  </test>
+
+ </function>
+ 
+ <function name="uuid_is_valid">
+  <proto>bool uuid_is_valid(string uuid)</proto>
+
+  <summary>Check whether a given UUID string is a valid UUID</summary>
+
+  <description>
+   add some text here
+  </description>
+
+  <code>
+   uuid_t u; 
+   RETURN_BOOL(0 == uuid_parse(uuid, u));
+  </code>
+
+  <test>
+   <code>
+var_dump(uuid_is_valid("1b4e28ba-2fa1-11d2-883f-b9a761bde3fb"));
+var_dump(uuid_is_valid("ffffffff-ffff-ffff-ffff-ffffffffffff"));
+var_dump(uuid_is_valid("foobar"));
+   </code>
+   <result>
+bool(true)
+bool(true)
+bool(false)
+   </result>
+  </test>
+
+ </function>
+
+ <function name="uuid_compare">
+  <proto>int uuid_compare(string uuid1, string uuid2)</proto>
+
+  <summary>Compare two UUIDs</summary>
+
+  <code>
+        uuid_t u1, u2;
+
+        if(uuid_parse(uuid1, u1)) RETURN_FALSE;
+        if(uuid_parse(uuid2, u2)) RETURN_FALSE;
+
+        RETURN_LONG(uuid_compare(u1, u2));
+  </code>
+
+  <test>
+   <code>
+<?data
+        $uuids = array();
+        $uuids[0] = "00000000-0000-0000-0000-000000000000";
+        $uuids[1] = "878b258c-a9f1-467c-8e1d-47d79ca2c01b";
+        $uuids[2] = "b691c99c-7fc5-11d8-9fa8-00065b896488";
+
+        foreach ($uuids as $key1 => $uuid1) {
+                foreach ($uuids as $key2 => $uuid2) {
+                        echo "uuid$key1";
+
+                        switch (uuid_compare($uuid1, $uuid2)) {
+                        case -1: echo " < "; break;
+                        case  0: echo " = "; break;
+                        case  1: echo " > "; break;
+                        }
+
+                        echo "uuid$key2\n";
+                }
+                echo "\n";
+        }
+?>
+   </code>
+   <result>
+<?data
+uuid0 = uuid0
+uuid0 < uuid1
+uuid0 < uuid2
+
+uuid1 > uuid0
+uuid1 = uuid1
+uuid1 < uuid2
+
+uuid2 > uuid0
+uuid2 > uuid1
+uuid2 = uuid2
+?>
+   </result>
+  </test>
+
+ </function>
+
+ <function name="uuid_is_null">
+  <proto>bool uuid_is_null(string uuid)</proto>
+
+  <summary>Check wheter an UUID is the NULL UUID 00000000-0000-0000-0000-000000000000</summary>
+
+  <description>
+   ...
+  </description>
+
+  <code>
+    uuid_t u;
+
+    if(uuid_parse(uuid, u)) RETURN_FALSE;
+
+    RETURN_BOOL(uuid_is_null(u));
+  </code>
+
+  <test>
+   <code>
+var_dump(uuid_is_null("00000000-0000-0000-0000-000000000000"));
+var_dump(uuid_is_null("b691c99c-7fc5-11d8-9fa8-00065b896488"));
+var_dump(uuid_is_null("xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"));
+   </code>
+   <result>
+bool(true)
+bool(false)
+bool(false)
+   </result>
+  </test>
+ </function>
+
+
+ <function name="uuid_type">
+  <proto>int uuid_type(string uuid)</proto>
+
+  <summary>Return the UUIDs type</summary>
+
+  <description>
+   ...
+  </description>
+
+  <code>
+        uuid_t u;
+
+        if(uuid_parse(uuid, u)) RETURN_FALSE;
+
+        if (uuid_is_null(u)) RETURN_LONG(UUID_TYPE_NULL);
+
+        RETURN_LONG(uuid_type(u));
+  </code>
+
+  <test>
+   <code>
+echo uuid_type("b691c99c-7fc5-11d8-9fa8-00065b896488") == UUID_TYPE_TIME   ? "OK\n" : "Failure\n";
+echo uuid_type("878b258c-a9f1-467c-8e1d-47d79ca2c01b") == UUID_TYPE_RANDOM ? "OK\n" : "Failure\n";
+echo uuid_type("00000000-0000-0000-0000-000000000000") == UUID_TYPE_NULL   ? "OK\n" : "Failure\n";
+   </code>
+   <result>
+OK
+OK
+OK
+   </result>
+  </test>
+
+ </function>
+
+ <function name="uuid_variant">
+  <proto>int uuid_variant(string uuid)</proto>
+
+  <summary>Return the UUIDs variant</summary>
+
+  <description>
+   ...
+  </description>
+
+  <code>
+        uuid_t u;
+
+        if(uuid_parse(uuid, u)) RETURN_FALSE;
+
+        if (uuid_is_null(u)) RETURN_LONG(UUID_TYPE_NULL);
+
+        RETURN_LONG(uuid_variant(u));
+  </code>
+
+  <test>
+   <code>
+echo uuid_variant("b691c99c-7fc5-11d8-9fa8-00065b896488")."\n";
+echo uuid_variant("878b258c-a9f1-467c-8e1d-47d79ca2c01b")."\n";
+echo uuid_variant("00000000-0000-0000-0000-000000000000")."\n";
+   </code>
+   <result>
+OK
+OK
+OK
+   </result>
+  </test>
+
+ </function>
+
+ <function name="uuid_time">
+  <proto>int uuid_time(string uuid)</proto>
+  
+  <summary>Extract creation time from a time based UUID as UNIX timestamp</summary>
+
+  <description>
+  ...
+  </description>
+
+  <code>
+        uuid_t u;
+
+        if(uuid_parse(uuid, u))  RETURN_FALSE;
+        if(uuid_variant(u) != 1) RETURN_FALSE;
+        if(uuid_type(u) != 1)    RETURN_FALSE;
+
+        RETURN_LONG(uuid_time(u, NULL));
+  </code>
+
+  <test>
+   <code>
+var_dump(uuid_time("b691c99c-7fc5-11d8-9fa8-00065b896488"));
+var_dump(uuid_time("878b258c-a9f1-467c-8e1d-47d79ca2c01b"));
+   </code>
+   <result>
+int(1080374815)
+bool(false)
+   </result>
+  </test>
+ </function>
+
+ <function name="uuid_mac">
+  <proto>string uuid_mac(string uuid)</proto>
+  
+  <summary>Get UUID creator network MAC address</summary>
+
+  <description>
+   ...
+  </description>
+
+  <code>
+<?data
+        uuid_t u;
+        char *uuid_str[37];
+
+        if(uuid_parse(uuid, u))  RETURN_FALSE;
+        if(uuid_variant(u) != 1) RETURN_FALSE;
+        if(uuid_type(u) != 1)    RETURN_FALSE;
+        if(uuid[10]&0x80)        RETURN_FALSE; // invalid MAC 
+
+        uuid_unparse(u, uuid_str);
+        RETURN_STRING(uuid_str+24, 1);
+?>
+  </code>
+
+  <test>
+   <code>
+var_dump(uuid_mac("b691c99c-7fc5-11d8-9fa8-00065b896488"));
+var_dump(uuid_mac("878b258c-a9f1-467c-8e1d-47d79ca2c01b"));
+   </code>
+   <result>
+int(00065b896488)
+bool(false)
+   </result>
+  </test>
+
+ </function>
+
+ <class name="uuid">
+  <payload type="uuid_t" alloc="yes"/>
+
+  <function name="__construct">
+   <proto>void __construct([mixed uuid])</proto>
+   <code>
+<![CDATA[
+   int uuid_type = UUID_TYPE_INVALID;
+
+   switch (uuid ? Z_TYPE_P(uuid) : IS_NULL) {
+     case IS_STRING:       
+       if (uuid_parse(Z_STRVAL_P(uuid), *(payload->data))) {
+         php_error_docref(NULL TSRMLS_CC, E_WARNING,
+                          "Invalid UUID string, using the NULL UUID instead");
+         uuid_clear(*(payload->data));
+       }
+       return;
+
+     case IS_LONG:
+       uuid_type = Z_LVAL_P(uuid);
+       break;
+
+     case IS_NULL:
+       uuid_type = UUID_TYPE_DEFAULT;
+       break;
+
+     default:
+       uuid_type = UUID_TYPE_INVALID;
+       break;
+   }
+
+   switch(uuid_type) {
+     case UUID_TYPE_DCE_TIME:
+       uuid_generate_time(*(payload->data));
+       break;
+     case UUID_TYPE_DCE_RANDOM:
+       uuid_generate_random(*(payload->data));
+       break;
+     case UUID_TYPE_DEFAULT:
+       uuid_generate(*(payload->data));
+       break;
+     case UUID_TYPE_NULL:
+       uuid_clear(*(payload->data));
+       break;
+     default:
+       php_error_docref(NULL TSRMLS_CC, E_WARNING,
+                        "Unknown/invalid UUID type '%d' requested, using default type instead",
+                        uuid_type);
+       uuid_generate(*(payload->data));
+       break;
+   }
+
+]]>
+   </code>   
+  </function>
+
+  <function name="__toString">
+   <proto>string __toString()</proto>
+
+   <code>
+    char uuid_str[37];
+
+    uuid_unparse(*(payload->data), uuid_str);
+
+    RETURN_STRING(uuid_str, 1);
+   </code>
+
+   <test>
+    <code>
+$d = new uuid();
+echo $d."\n";
+    </code>
+    <result mode="regex">
+[[:xdigit:]]{8}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{4}-[[:xdigit:]]{12}
+    </result>
+   </test>
+
+  </function>
+
+  <function name="getType">
+   <proto>string getType(void)</proto>
+   <code>
+    switch (uuid_type(*(payload->data))) {
+      case UUID_TYPE_DCE_TIME:
+        RETURN_STRING("DCE_TIME", 1);
+      case UUID_TYPE_DCE_RANDOM:
+        RETURN_STRING("DCE_RANDOM", 1);
+      default:
+        RETURN_STRING("UNKNOWN", 1);
+    }
+   </code>
+   
+   <test>
+    <code>
+$u = new uuid(UUID_TYPE_TIME);
+echo $u->getType()."\n";
+$u = new uuid(UUID_TYPE_RANDOM);
+echo $u->getType()."\n";
+$u = new uuid(UUID_TYPE_NULL);
+echo $u->getType()."\n";
+    </code>
+    <result>
+DCE_TIME
+DCE_RANDOM
+UNKNOWN
+    </result>
+   </test>
+  </function>
+
+  <function name="getVariant">
+   <proto>string getVariant(void)</proto>
+   <code>
+    if (uuid_is_null(*(payload->data))) {
+      RETURN_STRING("NULL", 1);
+    }
+
+    switch (uuid_variant(*(payload->data))) {
+      case UUID_VARIANT_NCS:
+        RETURN_STRING("NCS", 1);
+      case UUID_VARIANT_DCE:
+        RETURN_STRING("DCE", 1);
+      case UUID_VARIANT_MICROSOFT:
+        RETURN_STRING("MICROSOFT", 1);
+      case UUID_VARIANT_OTHER:
+        RETURN_STRING("OTHER", 1);
+      default:
+        RETURN_STRING("UNKNOWN", 1);
+    }
+   </code>
+
+   <test>
+    <code>
+$u = new uuid(UUID_TYPE_TIME);
+echo $u->getVariant()."\n";
+$u = new uuid(UUID_TYPE_RANDOM);
+echo $u->getVariant()."\n";
+$u = new uuid(UUID_TYPE_NULL);
+echo $u->getVariant()."\n";
+    </code>
+    <result>
+DCE
+DCE
+NULL
+    </result>
+   </test>
+  </function>
+
+
+ </class>
+
+
+</extension>

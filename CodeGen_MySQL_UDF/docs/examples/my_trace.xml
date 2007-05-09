@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE udf SYSTEM "udf_extension.dtd">
+<udf name="my_trace">
+
+ <maintainer>
+  <name>Hartmut Holzgraefe</name>
+  <email>hartmut@mysql.com</email>
+ </maintainer>
+
+ <license>GPL</license>
+
+ <function name="my_trace" returns="int">
+  <param type="string" name="msg"/>
+  <code>
+   fprintf(stderr,"my_trace::code %s\n", msg);
+   fflush(stderr);
+   return 1;
+  </code>
+  <init>
+   fprintf(stderr,"my_trace::init\n");
+   fflush(stderr);
+  </init>
+  <deinit>
+   fprintf(stderr,"my_trace::deinit\n");
+   fflush(stderr);
+  </deinit>
+  <test>
+   <code>
+SELECT my_trace('foobar');
+   </code>
+   <result>
+my_trace('foobar')
+1
+   </result>
+  </test>
+ </function>
+
+</udf>
