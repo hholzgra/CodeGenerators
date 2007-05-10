@@ -2,6 +2,15 @@
 <!DOCTYPE udf SYSTEM "udf_extension.dtd">
 <extension name="regexp" version="0.9.5dev">
 
+  <summary>MySQL functions emulating a subset of the Oracle REGEXP functions</summary>
+
+  <description>
+<![CDATA[
+The functions provided by this package provide a subset of the functionality
+provided by the Oracle regular expression functions. 
+]]>
+  </description>
+
   <maintainer>
     <name>Hartmut Holzgraefe</name>
     <email>hartmut@mysql.com</email>
@@ -22,8 +31,9 @@
    <src/>
   </deps>
 
-
   <function name="regexp_like" returns="int" null="yes">
+    <summary>Compare strings against a regular expression pattern</summary>
+
     <param name="text"    type="string"/>
     <param name="pattern" type="string"/>
     <param name="mode"    type="string" optional="yes"/>
@@ -34,7 +44,7 @@
     </data>               
 
     <init>
-<?data
+<![CDATA[
     if (pattern) {
         // static regex pattern -> we can compile it once and reuse it 
         int stat;
@@ -55,20 +65,20 @@
     } else {
         data->dynamic = 1;
     }
-?>
+]]>
     </init>
 
     <deinit>
-<?data
+<![CDATA[
     if (!data->dynamic) {
         // free static compiler pattern
         my_regfree(&data->expr);
     }
-?>
+]]>
     </deinit>
 
     <code>
-<?data
+<![CDATA[
     my_regmatch_t match;
     int stat;
     char *copy;
@@ -98,7 +108,7 @@
 
     RETURN_INT(stat == REG_NOMATCH ? 0 : 1);
 
-?>
+]]>
     </code>
 	
 	<test>
@@ -156,7 +166,7 @@ r3
     </data>               
 
     <init>
-<?data
+<![CDATA[
     if (pattern) {
         // static regex pattern -> we can compile it once and reuse it 
         int stat;
@@ -177,20 +187,20 @@ r3
     } else {
         data->dynamic = 1;
     }
-?>
+]]>
     </init>
 
     <deinit>
-<?data
+<![CDATA[
     if (!data->dynamic) {
         // free static compiler pattern
         my_regfree(&data->expr);
     }
-?>
+]]>
     </deinit>
 
     <code>
-<?data
+<![CDATA[
     my_regmatch_t match;
     int stat;
     char *copy;
@@ -222,7 +232,7 @@ r3
 
     RETURN_STRINGL(text + match.rm_so, match.rm_eo - match.rm_so);
 
-?>
+]]>
     </code>
     <test>
       <code>
@@ -251,7 +261,7 @@ r1
     </data>               
 
     <init>
-<?data
+<![CDATA[
     if (pattern) {
         // static regex pattern -> we can compile it once and reuse it 
         int stat;
@@ -272,20 +282,20 @@ r1
     } else {
         data->dynamic = 1;
     }
-?>
+]]>
     </init>
 
     <deinit>
-<?data
+<![CDATA[
     if (!data->dynamic) {
         // free static compiler pattern
         my_regfree(&data->expr);
     }
-?>
+]]>
     </deinit>
 
     <code>
-<?data
+<![CDATA[
     my_regmatch_t match;
     int stat;
     char *copy;
@@ -323,7 +333,7 @@ r1
     }
 
     RETURN_INT(position + (return_end ? match.rm_eo : match.rm_so + 1));
-?>
+]]>
     </code>
     <test>
       <code>
