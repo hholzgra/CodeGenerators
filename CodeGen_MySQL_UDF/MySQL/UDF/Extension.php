@@ -353,13 +353,26 @@ typedef long long longlong;
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/README");
 
-?>
-This is a standalone UDF extension created using CodeGen_Mysql_UDF <?php echo self::version(); ?>
+        $title = $this->archivePrefix."-".$this->name." ".$this->version;
 
-...
-<?php
+        echo "$title\n";
+        echo str_repeat("=", strlen($title))."\n\n";
 
-      return $file->write();
+        if (isset($this->summary)) {
+            echo $this->summary."\n\n";
+        }
+
+        if (isset($this->description)) {
+            echo $this->description."\n\n";
+        }
+
+        echo "See the INSTALL file for installation instruction\n\n";
+
+        echo "-- \nThis UDF extension was created using CodeGen_Mysql_UDF ".self::version()."\n\n";
+
+        echo "http://codegenerators.php-baustelle.de/trac/wiki/CodeGen_MySQL_UDF\N";
+
+        return $file->write();
     }
 
 
@@ -372,16 +385,422 @@ This is a standalone UDF extension created using CodeGen_Mysql_UDF <?php echo se
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/INSTALL");
 
-?>
-This is a standalone UDF extension created using CodeGen_Mysql_UDF <?php echo self::version(); ?>
+        $title = $this->archivePrefix."-".$this->name." ".$this->version;
 
-...
+        echo "$title\n";
+        echo str_repeat("=", strlen($title))."\n";
+
+        echo "\n== Configuration ==\n\n";
+
+        if ($this->needSource) {
+?>
+This user defined function module relies on information only 
+available in the MySQL source code, it can't be compiled if
+you've only installed MySQL binary packages.
+
+To compile this package you need to first tell configure 
+where to find the MySQL source directory you want to compile
+against using the --with-mysql-src configure option, e.g:
+
+  configure --with-mysql-src=/home/username/src/mysql-5.0.37
+
 <?php
+        } else {
+?>
+You can configure this package as usual, in the simplest case
+you just need to invoke 
+
+  configure 
+
+without options. This requires that the "mysql_config" binary 
+of the server installation you want to compile this UDF module
+for is in your environments $PATH
+
+You may specify an explicit mysql installation to compile 
+against by using the
+
+  --with-mysql=...
+
+option, this option expects either the path of this installations
+"mysql_config" binary or the installations base dir (assuming
+that "mysql_config" is in the "$prefix/bin" directory) as argument.
+
+So any of the following may be used to configure the package
+against a server installed in a "/usr/local/mysql" prefix 
+(the default if you compiled mysql yourself or used one of the
+tar.gz distribution packages provided by mysql.com):
+
+  configure --with-mysql=/usr/local/mysql
+
+  configure --with-mysql=/usr/local/mysql/bin/mysql_config
+
+<?php
+        }
+?>
+
+For a full list of configure options see 
+
+  configure --help
+
+By default the UDF library created by this package will install
+into /usr/local/lib. The mysql server may not be able to load
+it from there though as this directory may not be in its
+library search path. 
+
+You may solve this by:
+
+  - adding /usr/local/lib to the LD_LIBRARY_PATH before
+    invoking the mysql server
+
+  - changing the UDF install prefix by using either the
+    --prefix or --libdir configure option so that the
+    UDF library gets installed into a directory that is
+    in the servers load path
+
+  - or both of the above
+
+== Compilation ==
+
+Once you have successfully configured the package 
+you should be able to compile it by simply typing
+
+  make
+        
+== Testing ==
+
+This package includes test cases that can be invoked using
+ 
+  mysql test
+
+This relies on the following mysql binaries being available
+in your environments search $PATH to function as the tests
+rely on the mysql server test framework:
+
+ * mysql            - the mysql command line client
+ * mysqld           - the mysql server
+ * mysqladmin       - the mysql administration command line tool
+ * mysql_install_db - the database server initialisation tool
+ * mysqltest        - the actual test framework tool
+
+== Installing the library ==
+
+To install the generated UDF library you simply need to invoke
+
+  make install
+
+Depending on the target directories user permissions you might
+need to do this as superuser though, eg. by using "sudo":
+
+  sudo make install
+
+Remember that the mysql server will only be able to load the
+library if it is installed in a directory in its library load
+path, you may modify this search path by invoking the server
+with the $LD_LIBRARY_PATH environment variable set appropriately
+before starting.
+
+== Installing the actual functions ==
+
+To actually enable the functions provided by this UDF module
+you need to make them known to the MySQL server using 
+"CREATE FUNCTION" SQL commands:
+
+<?php
+      echo  "Register the functions provided by this UDF module using\n";
+        foreach ($this->functions as $function) {
+            echo $function->createStatement($this)."\n";
+        }
+        echo  "\n";        
+        echo  "Unregister the functions provided by this UDF module using\n";        
+        foreach ($this->functions as $function) {
+            echo $function->dropStatement($this)."\n";
+        }
+?>
+
+== Changing the source ==
+
+Changes applied to any of the files in this project may be 
+overwritten by further invocations of the udf-gen tool so
+you should always try to apply all necessary changes to the
+XML specification file the project was generated from instead
+and then regenerate the project from the spec file instead.
+
+The udf-gen tool will only overwrite files that actually 
+changed, so preserving file system time stamps of unmodified
+files, to play nice with "make" and to avoid unnecessary
+recompilation of source files.
+
+<?
 
         $file->write();
     }
 
     
+   /**
+    * Generate DocBook documentation
+    *
+    * @access protected
+    */
+    function generateDocumentation()
+    {
+        $file = new CodeGen_Tools_Outbuf($this->dirpath."/manual.xml");
+
+        $title = $this->archivePrefix."-".$this->name." ".$this->version;
+
+        echo "<?xml version='1.0'?>\n";
+        echo "<!DOCTYPE book PUBLIC '-//OASIS//DTD DocBook XML V4.3//EN'\n";
+        echo "          'http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd' [\n";
+        echo "]>\n\n";
+        
+        echo "<book>\n";
+
+        echo " <title><literal>$title</literal> - {$this->summary}</title>\n";
+
+        echo " <chapter>\n  <title>Introduction</title>\n   <para>\n";
+        echo $this->docbookify($this->description)."\n";
+        echo "  </para>\n </chapter>\n";
+
+        echo " <chapter>\n  <title>Installation</title>\n";
+        echo "  <section>\n   <title>Configuration</title>\n";
+
+        if ($this->needSource) {
+?>
+    <para>
+     This user defined function module relies on information only 
+     available in the MySQL source code, it can't be compiled if
+     you've only installed MySQL binary packages.
+    </para>
+    <para>
+     To compile this package you need to first tell configure 
+     where to find the MySQL source directory you want to compile
+     against using the <option>--with-mysql-src</option> configure 
+     option, e.g:
+    </para>
+    <informalexample>
+     <programlisting>
+      configure --with-mysql-src=/home/username/src/mysql-5.0.37
+     </programlisting>
+    </informalexample>
+<?php
+        } else {
+?>
+    <para>
+     You can configure this package as usual, in the simplest case
+     you just need to invoke 
+    </para>
+    <informalexample>
+     <programlisting>
+      configure 
+     </programlisting>
+    </informalexample>
+    <para>
+     without options. This requires that the <command>mysql_config</command> 
+     binary of the server installation you want to compile this UDF module
+     for is in your environments <literal>$PATH</literal>.
+    </para>
+    <para>
+     You may specify an explicit mysql installation to compile 
+     against by using the <option>--with-mysql=...</option> option, 
+     this option expects either the path of this installations
+     <command>mysql_config</command> binary or the installations base dir 
+     (assuming that <command>mysql_config</command> is in the 
+      <filename>$prefix/bin</filename> directory) as argument.
+    </para>
+    <para>
+     So any of the following may be used to configure the package
+     against a server installed in a <filename>/usr/local/mysql</filename>
+     prefix (the default if you compiled mysql yourself or used one of the
+     <literal>tar.gz</literal> distribution packages provided by 
+     <literal>mysql.com</literal>):
+    </para>
+    <informalexample>
+     <programlisting>
+  configure --with-mysql=/usr/local/mysql
+
+  configure --with-mysql=/usr/local/mysql/bin/mysql_config
+     </programlisting>
+    </informalexample>
+
+<?php
+        }
+?>
+    <para>
+     For a full list of configure options see 
+    </para>
+    <informalexample>
+     <programlisting>
+      configure --help
+     </programlisting>
+    </informalexample>
+    <warning>
+     <para>
+      By default the UDF library created by this package will install
+      into <filename>/usr/local/lib</filename>. The mysql server may 
+      not be able to load it from there though as this directory may 
+      not be in its library search path. 
+     </para>
+     <para>
+      You may solve this by:
+      <itemizedlist>
+       <listitem>
+        <para>
+         adding <filename>/usr/local/lib</filename> to the 
+         <literal>LD_LIBRARY_PATH</literal> before invoking the mysql 
+         server
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         changing the UDF install prefix by using either the
+         <option>--prefix</option> or <option>--libdir</option>
+         configure option so that the UDF library gets installed 
+         into a directory that is in the servers load path
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         or both of the above
+        </para>
+       </listitem>
+      </itemizedlist>
+     </para>
+    </warning>
+   </section>
+   <section>
+    <title>Compilation</title>
+    <para>
+     Once you have successfully configured the package 
+     you should be able to compile it by simply typing
+    </para>
+    <informalexample>
+     <programlisting>
+     make
+     </programlisting>
+    </informalexample>
+   </section>
+   <section>
+    <title>Testing</title>
+    <para>
+     This package includes test cases that can be invoked using
+     <informalexample>
+      <programlisting>
+      make test
+      </programlisting>
+     </informalexample>
+   </para>
+   <para>
+    This relies on the following mysql binaries being available
+    in your environments search <literal>$PATH</literal> to function 
+    as the tests rely on the mysql server test framework:
+    <itemizedlist>
+     <listitem><para><command>mysql</command> - the mysql command line client</para></listitem>
+     <listitem><para><command>mysqld</command> - the mysql server</para></listitem>
+     <listitem><para><command>mysqladmin</command> - the mysql administration command line tool</para></listitem>
+     <listitem><para><command>mysql_install_db</command> - the database server initialisation tool</para></listitem>
+     <listitem><para><command>mysqltest</command> - the actual test framework tool</para></listitem>
+    </itemizedlist>
+   </para>
+  </section>
+  <section>
+   <title>Installing the library</title>
+    <para>
+     To install the generated UDF library you simply need to invoke
+     <informalexample>
+      <programlisting>
+       make install
+      </programlisting>
+     </informalexample>
+    </para>
+    <para>
+     Depending on the target directories user permissions you might
+     need to do this as superuser though, eg. by using <command>sudo</command>:
+     <informalexample>
+      <programlisting>
+       sudo make install
+      </programlisting>
+     </informalexample>
+    </para>
+    <note>
+     <para>
+      Remember that the mysql server will only be able to load the
+      library if it is installed in a directory in its library load
+      path, you may modify this search path by invoking the server
+      with the <literal>$LD_LIBRARY_PATH</literal> environment variable 
+      set appropriately before starting.
+     </para>
+    </note>
+   </section>
+   <section>
+    <title>Installing the actual functions</title>
+    <para>
+To actually enable the functions provided by this UDF module
+you need to make them known to the MySQL server using 
+<literal>CREATE FUNCTION</literal> SQL commands:
+    </para>
+    <para>
+     Register the functions provided by this UDF module using
+     <informalexample>
+      <programlisting> 
+<?php
+        foreach ($this->functions as $function) {
+            echo $function->createStatement($this)."\n";
+        }
+?>
+      </programlisting>
+     </informalexample>
+    </para>
+    <para>
+     Unregister the functions provided by this UDF module using
+     <informalexample>
+      <programlisting>
+<?php
+        foreach ($this->functions as $function) {
+            echo $function->dropStatement($this)."\n";
+        }
+?>
+      </programlisting>
+     </informalexample>
+    </para>
+   </section>
+   <section>
+    <title>Changing the source</title>
+    <para>
+     Changes applied to any of the files in this project may be 
+     overwritten by further invocations of the <command>udf-gen</command>
+     tool so you should always try to apply all necessary changes to the
+     XML specification file the project was generated from instead
+     and then regenerate the project from the spec file instead.
+    </para>
+    <para>
+     The udf-gen tool will only overwrite files that actually 
+     changed, so preserving file system time stamps of unmodified
+     files, to play nice with <command>make</command> and to avoid 
+     unnecessary recompilation of source files.
+    </para>
+   </section>
+ </chapter>
+ <chapter>
+  <title>Functions provided by this UDF module</title>
+<?
+
+        foreach ($this->functions as $function) {
+            echo $function->docbook($this);
+        }
+
+        echo "  </chapter>\n</book>\n";
+        
+        $file->write();
+    }
+
+    function docbookify($text) 
+    {
+        $text = htmlspecialchars($text);
+        
+        $text = preg_replace('|^\s*$|m', "</para>\n<para>", $text);
+
+        return $text;
+    }
+
     function writeTests()
     {
         parent::writeTests();
