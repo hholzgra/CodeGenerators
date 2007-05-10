@@ -36,7 +36,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <notes>
   Changes since 1.0.2:
   
-  - removed <acinclude> tag parsing
+  - removed "acinclude" tag parsing
   - toBool() is now more strict, may throw exceptions
  </notes>
 
