@@ -21,12 +21,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
 
- <date>2007-04-18</date>
- <time>17:38:51</time>
+ <date>2007-05-10</date>
 
  <version>
-  <release>1.0.3</release>
-  <api>1.0.3</api>
+  <release>1.0.4</release>
+  <api>1.0.4</api>
  </version>
 
  <stability>
@@ -34,15 +33,14 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <api>stable</api>
  </stability>
 
- <license uri="http://www.php.net/license">PHP</license>
-
  <notes>
   Changes since 1.0.2:
-
-  - more support for conditional elements
-  - support for Makefile.frag, config.m4 and #define snippets 
-  - some missing getters added in Maintainer.php
+  
+  - removed <acinclude> tag parsing
+  - toBool() is now more strict, may throw exceptions
  </notes>
+
+ <license uri="http://www.php.net/license">PHP</license>
 
  <contents>
   <dir name="/">
@@ -103,6 +101,25 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <phprelease />
 
  <changelog>
+  <release>
+   <date>2007-04-18</date>
+   <version>
+    <release>1.0.3</release>
+    <api>1.0.3</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <notes>
+    Changes since 1.0.2:
+  
+    - more support for conditional elements
+    - support for Makefile.frag, config.m4 and #define snippets 
+    - some missing getters added in Maintainer.php
+   </notes>
+  </release>
+
   <release>
    <version>
     <release>1.0.2</release>
