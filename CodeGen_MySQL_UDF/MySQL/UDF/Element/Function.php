@@ -1099,6 +1099,61 @@ class CodeGen_MySQL_UDF_Element_Function
       
         return $test;
     }
+
+    /**
+     * Genereate docbook <refentry> for this function
+     *
+     * @return string
+     */
+    function docbook($extension)
+    {
+        ob_start();
+
+        $id = str_replace("_", "-", $this->name);
+        
+        echo "
+<refentry id='function.$id'>
+ <refnamediv>
+  <refname>{$this->name}</refname>
+  <refpurpose>".htmlspecialchars($this->summary)."</refpurpose>
+ </refnamediv>
+ <refsect1>
+  <title>Signature</title>
+  <methodsynopsis>
+   <type>{$this->returns}</type><methodname>{$this->name}</methodname>
+";
+
+        if (empty($this->params)) {
+            echo "   <void/>\n";
+        } else {
+            foreach ($this->params as $name => $param) {
+                echo "   <methodparam";
+                if ($param['default'] != NULL) {
+                    echo " choice='opt'";
+                }
+                echo "><type>$param[type]</type>";
+                echo "<parameter>$name";
+                if ($param['default'] != NULL) {
+                    echo " = ".htmlspecialchars($param["default"]);
+                }                
+                echo "</parameter></methodparam>\n";
+            }
+        }
+
+        echo "  </methodsynopsis>
+ </refsect1>
+ <refsect1>
+  <title>Description</title>
+  <para>
+".$extension->docbookify($this->description)."
+  </para>
+ </refsect1>
+</refentry>
+";
+
+
+        return ob_get_clean();        
+    }
 }
 
 /*
