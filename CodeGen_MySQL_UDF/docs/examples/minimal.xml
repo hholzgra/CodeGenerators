@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1" ?>
-<!DOCTYPE udf SYSTEM "udf_extension.dtd">
+<?xml version="1.0"?>
 <udf name="minimal">
  <function name="twice" returns="int"> 
   <param name="val" type="int"/>
