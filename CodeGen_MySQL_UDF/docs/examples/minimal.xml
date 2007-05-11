@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE udf SYSTEM "udf_extension.dtd">
+<udf name="minimal">
+ <function name="twice" returns="int"> 
+  <param name="val" type="int"/>
+  <code>
+    return val * 2;
+  </code>
+ </function>
+</udf>
