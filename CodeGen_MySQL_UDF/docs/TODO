@@ -1,7 +1,6 @@
 - TEST system (done)
 
-- generate UDF documentation
- - use same DocBook semantics as PHP?
+- generate UDF documentation (work in progress)
 
 - add --udf-cflags switch to mysql_config 
   lets wait for whatever solution comes with the new PLUGIN stuff  
@@ -20,6 +19,7 @@
 - support for constant parameters in init function
 
 - finish datetime support (relies on non-public header files now)
+ -> probably needs to use WITH_MYSQL_SRC() on configure.in then
 
 - support for other pseudo-types: "mixed", "enum"(?), ...
 
