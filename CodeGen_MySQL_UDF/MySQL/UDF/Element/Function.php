@@ -983,9 +983,9 @@ class CodeGen_MySQL_UDF_Element_Function
      *
      * @param  string code snippet
      */
-    function setTestCode($code)
+    function addTestCode($code)
     {
-        $this->testCode = $code;
+        $this->testCode.= $code;
     }
     
     /**
@@ -1011,9 +1011,9 @@ class CodeGen_MySQL_UDF_Element_Function
      *
      * @param  string result text
      */
-    function setTestResult($text)
+    function addTestResult($text)
     {
-        $this->testResult = $text;
+        $this->testResult.= $text;
     }
     
     /**

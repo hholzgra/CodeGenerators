@@ -224,7 +224,7 @@ class CodeGen_MySQL_UDF_ExtensionParser
 
     function tagend_function_test_code($attr, $data)
     {
-        return $this->helper->setTestCode(CodeGen_Tools_Indent::linetrim($data));
+        return $this->helper->addTestCode(CodeGen_Tools_Indent::linetrim($data));
     }
 
     function tagstart_function_test_result($attr)
@@ -234,7 +234,7 @@ class CodeGen_MySQL_UDF_ExtensionParser
 
     function tagend_function_test_result($attr, $data)
     {
-        return $this->helper->setTestResult(CodeGen_Tools_Indent::linetrim($data), @$attr['mode']);
+        return $this->helper->addTestResult(CodeGen_Tools_Indent::linetrim($data), @$attr['mode']);
     } 
 
     function tagend_function_test($attr)
