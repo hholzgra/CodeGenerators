@@ -178,7 +178,7 @@ r3
         // we have to make sure we have a NUL terminated C string
         // as argument for my_regcomp           
         copy = strndup(pattern, pattern_len);
-        stat  = my_regcomp(&data->expr, copy, REG_EXTENDED, &my_charset_latin1);
+        stat  = my_regcomp(&data->expr, copy, parse_mode(mode), &my_charset_latin1);
         free(copy);
 
         if (stat) {
@@ -205,12 +205,23 @@ r3
     <code>
 <![CDATA[
     my_regmatch_t match;
-    int stat;
+    int stat = 0;
     char *copy;
     
+    if (occurence < 1) {
+        RETURN_NULL;
+    }
+
+    if (position) {
+        position -= 1; /* oracle offsets start at 1, not 0 */
+        if (position >= text_len) {
+            RETURN_NULL;
+        }
+    }
+
     if (data->dynamic) {
         copy = strndup(pattern, pattern_len);
-        stat  = my_regcomp(&data->expr, copy, REG_EXTENDED, &my_charset_latin1);
+        stat  = my_regcomp(&data->expr, copy, parse_mode(mode), &my_charset_latin1);
         free(copy);
         if (stat) {
             // TODO: need ERROR() and WARNING() macro
@@ -219,7 +230,18 @@ r3
     }
 
     copy = strndup(text, text_len);
-    stat = my_regexec(&data->expr, copy, 1, &match, 0);
+
+    while (occurence > 0) {
+        fprintf(stderr, "occ %d, pos %d, text '%s'\n", (int)occurence, (int)position, text);
+        stat = my_regexec(&data->expr, copy + position, 1, &match, 0);
+        if (stat) {
+            break;
+        }
+        if (--occurence) {
+            position += match.rm_eo;
+        }
+    }
+
     free(copy);
 
     if (data->dynamic) {
@@ -233,17 +255,65 @@ r3
         RETURN_NULL;
     }
 
-    RETURN_STRINGL(text + match.rm_so, match.rm_eo - match.rm_so);
+    RETURN_STRINGL(text + position + match.rm_so, match.rm_eo - match.rm_so);
 
 ]]>
     </code>
     <test>
       <code>
+-- checking simple case
 SELECT REGEXP_SUBSTR("abc 123 def", "[[:digit:]]+") AS r1;
+
+-- checking position offsets
+SELECT REGEXP_SUBSTR("abc 123 def", "[[:digit:]]+", 5) AS r2;
+SELECT REGEXP_SUBSTR("abc 123 def", "[[:digit:]]+", 6) AS r3;
+SELECT REGEXP_SUBSTR("abc 123 def", "[[:digit:]]+", 10) AS r4;
+
+-- checking occurence
+SELECT REGEXP_SUBSTR("abc 123 def 456 ghi", "[[:digit:]]+", 1, 1) AS r5;
+SELECT REGEXP_SUBSTR("abc 123 def 456 ghi", "[[:digit:]]+", 1, 2) AS r6;
+
+-- checking the 'i' flag
+SELECT REGEXP_SUBSTR("xxx abc xxx", "abc", 1, 1, 'i') AS r7;
+SELECT REGEXP_SUBSTR("xxx ABC xxx", "abc", 1, 1, 'i') AS r8;
+SELECT REGEXP_SUBSTR("xxx abc xxx", "ABC", 1, 1, 'i') AS r9;
+SELECT REGEXP_SUBSTR("xxx ABC xxx", "ABC", 1, 1, 'i') AS r10;
+
+-- checking the 'c' flag
+SELECT REGEXP_SUBSTR("xxx abc xxx", "abc", 1, 1, 'c') AS r11;
+SELECT REGEXP_SUBSTR("xxx ABC xxx", "abc", 1, 1, 'c') AS r12;
+SELECT REGEXP_SUBSTR("xxx abc xxx", "ABC", 1, 1, 'c') AS r13;
+SELECT REGEXP_SUBSTR("xxx ABC xxx", "ABC", 1, 1, 'c') AS r14;
       </code>
       <result>
 r1
 123
+r2
+123
+r3
+23
+r4
+NULL
+r5
+123
+r6
+456
+r7
+abc
+r8
+ABC
+r9
+abc
+r10
+ABC
+r11
+abc
+r12
+NULL
+r13
+NULL
+r14
+ABC
       </result>
     </test>
   </function>
@@ -303,9 +373,12 @@ r1
     int stat;
     char *copy;
 
-	if (position) {
-	  position -= 1; /* oracle offsets start at 1, not 0 */
-	}
+    if (position) {
+        position -= 1; /* oracle offsets start at 1, not 0 */
+        if (position >= text_len) {
+            RETURN_NULL;
+        }
+    }
  
     if (data->dynamic) {
         copy = strndup(pattern, pattern_len);
@@ -406,6 +479,13 @@ r3
     <code>
       char *c_pattern, *c_replace, *c_text;
       char *result;
+
+      if (position) {
+        position -= 1; /* oracle offsets start at 1, not 0 */
+        if (position >= text_len) {
+            RETURN_NULL;
+        }
+      }
 
       c_pattern = strndup(pattern, pattern_len);
       c_replace = strndup(replace, replace_len);
