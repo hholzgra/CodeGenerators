@@ -353,7 +353,7 @@ typedef long long longlong;
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/README");
 
-        $title = $this->archivePrefix."-".$this->name." ".$this->version;
+        $title = $this->archivePrefix."-".$this->name." ".$this->release->getVersion();
 
         echo "$title\n";
         echo str_repeat("=", strlen($title))."\n\n";
@@ -385,7 +385,7 @@ typedef long long longlong;
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/INSTALL");
 
-        $title = $this->archivePrefix."-".$this->name." ".$this->version;
+        $title = $this->archivePrefix."-".$this->name." ".$this->release->getVersion();
 
         echo "$title\n";
         echo str_repeat("=", strlen($title))."\n";
@@ -545,7 +545,7 @@ recompilation of source files.
     {
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/manual.xml");
 
-        $title = $this->archivePrefix."-".$this->name." ".$this->version;
+        $title = $this->archivePrefix."-".$this->name." ".$this->release->getVersion();
 
         echo "<?xml version='1.0'?>\n";
         echo "<!DOCTYPE book PUBLIC '-//OASIS//DTD DocBook XML V4.3//EN'\n";
