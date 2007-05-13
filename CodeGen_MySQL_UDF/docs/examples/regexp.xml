@@ -157,11 +157,11 @@ r3
 
 
   <function name="regexp_substr" returns="string" null="yes">
-    <param name="text"    type="string"/>
-    <param name="pattern" type="string"/>
-    <param name="position" type="int" optional="yes" default="1"/>
+    <param name="text"      type="string"/>
+    <param name="pattern"   type="string"/>
+    <param name="position"  type="int" optional="yes" default="1"/>
     <param name="occurence" type="int" optional="yes" default="1"/>
-    <param name="mode" type="string" optional="yes" default="c"/>
+    <param name="mode"      type="string" optional="yes" default="c"/>
 
     <data>
      <element name="expr"    type="my_regex_t"/>
@@ -396,12 +396,12 @@ r3
 
 
   <function name="regexp_replace" returns="string" null="yes">
-    <param name="text"    type="string"/>
-    <param name="pattern" type="string"/>
-    <param name="replace" type="string"/>
-    <param name="position" type="int" optional="yes" default="1"/>
+    <param name="text"      type="string"/>
+    <param name="pattern"   type="string"/>
+    <param name="replace"   type="string"/>
+    <param name="position"  type="int" optional="yes" default="1"/>
     <param name="occurence" type="int" optional="yes" default="1"/>
-    <param name="mode" type="string" optional="yes" default="c"/>
+    <param name="mode"      type="string" optional="yes" default="c"/>
 
     <code>
       char *c_pattern, *c_replace, *c_text;
