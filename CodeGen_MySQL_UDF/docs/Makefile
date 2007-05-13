@@ -1,4 +1,8 @@
-all: manual.html manual.pdf
+all: html pdf
+
+html: manual.html 
+
+pdf: manual.pdf
 
 manual.html: manual.xml
 	docbook2html -u manual.xml
