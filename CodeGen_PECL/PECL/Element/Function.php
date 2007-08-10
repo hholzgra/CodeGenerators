@@ -203,6 +203,15 @@ class CodeGen_PECL_Element_Function
      */
     protected $varargs = false;
 
+    function setVarargs($varargs) 
+    {
+        $this->varargs = (bool)$varargs;
+    }
+
+    function getVarargs() 
+    {
+        return $this->varargs;
+    }
 
     /**
      * Function prototype
@@ -1168,6 +1177,13 @@ class CodeGen_PECL_Element_Function
                         // TODO: pass by ref for 'simple' types requires further thinking
                     }
                 }
+                
+                if ($this->varargs) {
+                    $code .= "\n";
+                    $code .= "    int varargc;\n";
+                    $code .= "    zval ***varargv, ***real_argv;\n";
+                    $code .= "\n";
+                }
             } 
 
             // now we do the actual parameter parsing
@@ -1179,7 +1195,7 @@ class CodeGen_PECL_Element_Function
                 }
             } else {
                 if ($this->varargs) {
-                    $argc = sprint("MIN(ZEND_NUM_ARGS(),%d)", count($this->params)-1);
+                    $argc = sprintf("MIN(ZEND_NUM_ARGS(), %d)", count($this->params));
                 } else {
                     $argc = "ZEND_NUM_ARGS()";
                 }
@@ -1188,7 +1204,9 @@ class CodeGen_PECL_Element_Function
                 $code .= $this->parseParameterHook($argc, $argString, $argPointers);
                     
                 if ($this->varargs) {
-                    // TODO can't do a zend_get_parameters_array with offset yet
+                    $code .= "    zend_get_parameters_array_ex(varargc, real_argv);\n";
+                    $code .= "    varargc -= ".count($this->params).";\n";
+                    $code .= "    varargv = real_argv + ".count($this->params).";\n";
                 }
                     
 
@@ -1221,9 +1239,14 @@ class CodeGen_PECL_Element_Function
                 }
                 $code .= $extension->codegen->varblock($this->code);
 
+                // free varargs array if exists
+                if ($this->varargs) {
+                    $code .= "\n    free(real_argv);\n";
+                }
+
                 // when a function returns a named resource we know what to do
                 if ($this->returns['type'] == "resource" && isset($this->returns['subtype'])) {
-                    $code .= "    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
+                    $code .= "\n    return_res_id = ZEND_REGISTER_RESOURCE(return_value, return_res, le_"
                         .$this->returns['subtype'].");\n";
                 }
             } else {
