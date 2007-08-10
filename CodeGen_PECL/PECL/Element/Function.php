@@ -1204,6 +1204,8 @@ class CodeGen_PECL_Element_Function
                 $code .= $this->parseParameterHook($argc, $argString, $argPointers);
                     
                 if ($this->varargs) {
+                    $code .= "\n    varargc = ZEND_NUM_ARGS();\n";
+                    $code .= "    real_argv = (zval ***)calloc(sizeof(zval **), varargc);\n";
                     $code .= "    zend_get_parameters_array_ex(varargc, real_argv);\n";
                     $code .= "    varargc -= ".count($this->params).";\n";
                     $code .= "    varargv = real_argv + ".count($this->params).";\n";
