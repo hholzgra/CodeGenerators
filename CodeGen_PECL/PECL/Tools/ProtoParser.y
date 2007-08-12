@@ -47,33 +47,67 @@ typename(A) ::= STREAM.                { A = array("type" => "stream"); }
 param_spec ::= param_list.
 param_spec ::= SQUARE_OPEN param(P) SQUARE_CLOSE. {
   P["optional"] = true;
-  $this->function->addParam(P);
+  $stat = $this->function->addParam(P);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
 }
 param_spec ::= SQUARE_OPEN param(P) optional_params SQUARE_CLOSE. {
   P["optional"] = true;
-  $this->function->addParam(P);
+  $stat = $this->function->addParam(P);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
 }
-param_spec ::= ELLIPSE.                { $this->function->setVarargs(true); }
+param_spec ::= ELLIPSE. { 
+  $this->function->setVarargs(true); 
+}
+param_spec ::= typename(T) ELLIPSE. { 
+  $stat = $this->function->setVarargsType(T["type"]);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
+  $this->function->setVarargs(true); 
+}
 param_spec ::= VOID.
 param_spec ::= .
 
 param_list ::= param_list COMMA ELLIPSE. { 
   $this->function->setVarargs(true);
 }
+param_list ::= param_list COMMA typename(T) ELLIPSE. { 
+  $stat = $this->function->setVarargsType(T["type"]);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
+  $this->function->setVarargs(true);
+}
 param_list ::= param_list COMMA param(P). {
-  $this->function->addParam(P);
+  $stat = $this->function->addParam(P);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
 }
 param_list ::= param_list optional_params.
 param_list ::= param(P). {
-  $this->function->addParam(P);
+  $stat = $this->function->addParam(P);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
 }
 optional_params ::= SQUARE_OPEN COMMA param(P) SQUARE_CLOSE. {
   P["optional"] = true;
-  $this->function->addParam(P);
+  $stat = $this->function->addParam(P);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
 }
 optional_params ::= SQUARE_OPEN COMMA param(P) optional_params SQUARE_CLOSE. {
   P["optional"] = true;
-  $this->function->addParam(P);
+  $stat = $this->function->addParam(P);
+  if ($stat !== true) {
+	throw new Exception($stat->getMessage());
+  }
 }
 
 param(P) ::= typespec(A) NAME(B). {
