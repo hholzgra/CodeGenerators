@@ -192,7 +192,7 @@ class CodeGen_PECL_Element_Method
         }
 
         if ($this->name == "__construct") {
-            $code = parent::parseParameterHook($argc, $argString, $argPointers);
+            $code = parent::parseParameterHook($argString, $argPointers, $count);
             $code.= "\n    _this_zval = getThis();\n";
         } else {
             $code = "
