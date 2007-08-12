@@ -729,30 +729,11 @@ HASSQgRukwiZmpucmwYRADs=
    </para>
   </section>
 
-  <section>
-   <title>Functions</title>
-   <para>
-    Two different kinds of functions may be defined using the
-    <literal>&lt;function&gt;</literal> tag: public and internal
-    functions.
-    Public functions are functions you want to make available at the
-    PHP code level, internal functions are C functions to be used by
-    the PHP extension API.
-   </para>
-   <para>
-    Public function names should by convention be prefixed with the
-    extension name followed by an underscore, internal functions are
-    one of <literal>MINIT</literal>, <literal>MSHUTDOWN</literal>,
-    <literal>RINIT</literal>, <literal>RSHUTDOWN</literal> or
-    <literal>MINFO</literal>.
-   </para>
-
    <section>
-    <title>Public functions</title>
+    <title>PHP functions</title>
     <para>
-     The definition of a public PHP function requires the attributes 
-     <literal>role="public"</literal> and
-     <literal>name=...</literal> and at least the
+     The definition of a PHP function requires 
+     <literal>name=...</literal> attribute and at least the
      <literal>&lt;proto&gt;</literal> tag to be set.
     </para>
     <para>
@@ -805,19 +786,438 @@ HASSQgRukwiZmpucmwYRADs=
     </para>
 
     <!-- TODO: this is a very big TODO!!!! -->
-    <note>
+
+    <section>
+     <title>Function prototypes</title>
      <para>
-      Maybe some stuff regarding actual coding should be added here?
+      A functions parameters and return type are specified by the contents
+      of a functions <literal>&lt;proto&gt;</literal> tag. 
+      The <literal>&lt;proto&gt;</literal> tag uses the same format as the
+      <literal>proto</literal> lines within the PHP source code:
+      <itemizedlist>
+       <listitem><para>
+        there is no <literal>$</literal> prefix for parameter names
+       </para></listitem>
+       <listitem><para>
+        types are specified for function parameters and a functions return type
+       </para></listitem>    
+       <listitem><para>
+        optional parameters are enclosed by square brackets
+       </para></listitem>    
+       <listitem><para>
+        optional parameters may be given a default value
+       </para></listitem>    
+       <listitem><para>
+        functions with a variable number of arguments may be defined by
+        ading <literal>...</literal> as last entry in the parameter list
+       </para></listitem>    
+      </itemizedlist>
      </para>
-    </note>
+     <example>
+      <title>Function prototype examples</title>
+      <programlisting>
+<![CDATA[
+        // no parameter, no return value
+        void   funcname(void);
+
+        // one int parameter, returning int
+        int    funcname(int param);
+
+        // returning string, taking one mandatory and two
+        // optional parameter
+        string funcname(string param1 [[, string param2], string param3]);
+
+        // optional parameter with default value
+        int funcname([int param = 42]);
+
+        // variable argument list
+        int funcname(string param1, ...);
+
+        // working with objects and resources
+        object foo funcname(resource bar param1);
+]]>
+      </programlisting>
+     </example>
+    </section>    
+     
+     <section>
+      <title>Parameter types</title>
+      <para>
+       
+      </para>
+
+      <section>
+       <title><type>bool</type></title>
+       <para>
+        <type>bool</type> parameters are internally mapped to local 
+        <type>zend_bool</type> variables.
+       </para>
+       <example>
+        <title><type>bool</type> parameter</title>
+        <programlisting>
+<![CDATA[
+<function name="f_bool">
+ <proto>void f_bool(bool param)</void>
+ <code>
+  if (param) {
+    ...
+  } else {
+    ...
+  }
+ </code>
+</function>
+]]>
+        </programlisting>
+       </example>
+      </section>
+
+      <section>
+       <title><type>int</type></title>
+       <para>
+        <type>int</type> parameters are internally mapped to local
+        <type>long</type> variables.
+       </para>
+      </section>
+
+      <section>
+       <title><type>float</type></title>
+       <para>
+        <type>float</type> parameters are internally mapped to local
+        <type>double</type> variables.
+       </para>
+      </section>
+
+      <section>
+       <title><type>string</type></title>
+       <para>
+        For a <type>string</type> parameter two local variables are
+        created: a <type>char*</type> pointing to the actual string
+        data and an <type>int</type> containing the string length.
+       </para>
+       <para>
+        The <type>char *</type> goes by the name of the parameter,
+        the <type>int</type> gets an extra <literal>_len</literal>
+        postfix appended to the parameter name.
+       </para>
+       <example>
+        <title><type>bool</type> parameter</title>
+        <programlisting>
+<![CDATA[
+<function name="f_string">
+ <proto>void f_string(string param)</void>
+ <code>
+  int i;
+
+  for (i = 0; i < param_len; i++) {
+    param[i] = toupper(param[i]);
+  }
+ </code>
+</function>
+]]>
+        </programlisting>
+       </example>
+      </section>
+
+      <section>
+       <title><type>array</type></title>
+       <para>
+        For an <type>array</type> parameter two local variables are
+        created: a <type>zval *</type> by the name of the parameter
+        and a <type>HashTable *</type> with the postfix 
+        <literal>_hash</literal> added to the parameter name.
+       </para>
+       <para>
+        To work with array parameters you have to use Zend API 
+        functions like <function>zend_hash_num_elements</function>,
+        <function>zend_hash_internal_pointer_reset</function> and
+        <function>zend_hash_get_current_data_ex</function>.
+       </para>
+       <para> 
+        How to work with Zend <type>HashTable</type> and the 
+        <function>zend_hash_...</function> functions is beyond
+        the scope of this documentation though.
+       </para>
+       <!-- TODO add docs links and example -->
+      </section>
+
+      <section>
+       <title><type>object</type></title>
+       <para>
+        For PHP objects local <type>zval *</type> variables
+        pointing to the actual object instances are created.
+        How to operate on these is beyond the scope of this
+        document.
+       </para>
+       <!-- TODO add docs links and example -->
+      </section>
+
+      <section>
+       <title><type>resource</type></title>
+       <para>
+        For <type>resource</type> parameters three local variables
+        are created:
+        <itemizedlist>
+         <listitem>
+          <simpara>
+           A pointer to the resource payload using the parameter name.
+          </simpara>
+         </listitem>
+         <listitem>
+          <simpara>
+           A <type>zval *</type> pointer for the actual resource variable
+           unsing the parameter name plus a <literal>_res</literal> postfix.
+           This needs to be used to free a resource using the 
+           <function>FREE_RESOURCE()</function> macro.
+          </simpara>
+         </listitem>
+         <listitem>
+          <simpara>
+           A <type>int</type> storing the numeric resource id using the
+           parameter name plus a <literal>_resid</literal> postfix.
+          </simpara>
+         </listitem>
+        </itemizedlist>
+        You'll usually only work on the actual payload data so you'll
+        need the <varname>name_res</varname> variable for calls to
+        <function>FREE_RESOURCE</function> only and you'll usually 
+        never have to touch the <varname>var_resid</varname> variable
+        at all.
+       </para>
+      </section>
+
+      <section>
+       <title><type>callback</type></title>
+       <para>
+        ... not fully implemented yet ...
+       </para>
+      </section>
+
+      <section>
+       <title><type>stream</type></title>
+       <para>
+        ... not fully implemented yet ...
+       </para>
+      </section>
+
+      <section>
+       <title><type>mixed</type></title>
+       <para>
+        <type>mixed</type> parameters may be of any type so they are
+        stored in generic <type>zval *</type> local variables only.
+        How to operate on a <type>zval</type> using the Zend API
+        is beyond the scope of this document.
+       </para>
+       <!-- TODO docs pointers, examples -->
+      </section>
+     </section>
+    
+    <section>
+     <title>Optional parameters</title>
+     <para>
+      Parameters at the end of the prototypes parameter list may be
+      declared as optional. Each optional parameter needs to be put
+      into square brackets. The simple types <type>bool</type>, 
+      <type>int</type>, <type>float</type> and <type>string</type>
+      may also be given a default value:
+     </para>
+     <example>
+      <title>Optional parameters</title>
+      <programlisting>
+        // simple optional parameter
+        int f1([int p1])
+
+        // optional parameter with default value 
+        int f2([int p1 = 23])
+
+        // mandatory and multiple optional parameters 
+        int f3(int p1 [, int p2 [, int p3]])
+      </programlisting>
+     </example>
+     <para>
+      Future versions may also support dependant optional 
+      parameters like:
+      <informalexample>
+       <programlisting>
+        int f4(int p1, [int p3, int p3 [,int p4]])
+       </programlisting>
+      </informalexample>
+      This function would exept either one, three or four
+      but not two parameters. For now this hasn't been 
+      implemented yet though.
+     </para>
+    </section>
+
+    <section>
+     <title>Varargs</title>
+     <para>
+      You may declare functions that accept a variable number of arguments
+      (like e.g. PHPs <function>max()</function> or <function>printf</function>)
+      by adding <literal>'...'</literal> to the end of your parameter list or as
+      the only parameter list entry by itself. You may also additionally prefix
+      the <literal>'...'</literal> by one of the types <type>bool</type>, 
+      <type>int</type>, <type>float</type>, <type>string</type> or <type>mixed</type>.
+      If no type is given it defaults to <type>mixed</type>.
+     </para>
+     <para> 
+      The number of varargs parameters is stored in the local variable
+      <varname>varargc</varname>. The actual values are stored in an
+      array named <varname>varargv</varname>. The parameter values are
+      stored using the associated C data type documented in the 
+      'Parameter types' section above. <!-- TODO link -->
+      For the <type>string</type> type an extra array 
+      <varname>varargv_len</varname> containing the string lengthes
+      is created.
+     </para>
+     <example>
+      <title>Varargs</title>
+      <programlisting>
+<![CDATA[
+       <function name="f_vararg1">
+        <proto>void f_vararg1(...)</proto>
+        <code>...</code>
+       </function>
+
+       <function name="f_vararg2">
+        <proto>void f_vararg2(string format, ...)</proto>
+        <code>...</code>
+       </function>
+
+       <function name="f_vararg3">
+        <proto>int f_vararg3(int...)</proto>
+        <code>
+          int i;
+          long sum = 0;
+
+          for (i = 0; i < varargc; i++) {
+            sum += varargv[i];
+          } 
+
+          RETURN_LONG(sum);
+        </code>
+       </function>       
+]]>
+      </programlisting>
+     </example>
+     <para>
+      For more examples see <filename>varargs.xml</filename>
+      in the <filename>docs/examples</filename> directory.
+     </para>
+    </section>
+
+    <section>
+     <title>Pass by reference</title>
+     <para>
+     </para>
+    </section>
+
+    <section>
+     <title>Return Values</title>
+     <para>
+     </para>
+     
+     <variablelist>
+      <varlistentry>
+       <term><type>bool</type></term>
+       <listitem>
+        <para>
+         Boolean values may be returned using the 
+         <function>RETURN_BOOL(b)</function>,
+         <function>RETURN_TRUE</function> and
+         <function>RETURN_FALSE</function> macros.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><type>int</type></term>
+       <listitem>
+        <para>
+         Integer values are returned using the
+         <function>RETURN_LONG(l)</function> macro.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><type>float</type></term>
+       <listitem>
+        <para>
+         Float values are returned using the
+         <function>RETURN_DOUBLE(d)</function> macro.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><type>string</type></term>
+       <listitem>
+        <para>
+         Strings may be returned using the
+         <function>RETURN_STRING(str, duplicate)</function>,
+         <function>RETURN_STRINGL(str, len, duplicate)</function>
+         or <function>RETURN_EMPTY_STRING()</function> macros.
+        </para>
+        <para>
+         <function>RETURN_STRING()</function> only works for zero
+         terminated strings, using <function>RETURN_STRINGL</function>
+         it is also possible to return binary strings containing null
+         bytes. Both macros take a <parameter>duplicate</parameter>
+         parameter which specifies whether the string data shall be
+         duplicated. You'll always set this parameter to 1 unless
+         you allocated the <parameter>str</parameter> value using
+         e.g. <function>emalloc()</function> or 
+         <function>estrdup()</function> yourself.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><type>resource</type></term>
+       <listitem>
+        <para>
+         For <type>resource</type> values a special local variable
+         <varname>return_res</varname> is created which is a pointer
+         to the resources payload type. Whether you need to allocate
+         the payload data yourself or just need to store values in
+         preallocated data pointed to by <varname>return_res</varname>
+         depends on the resources <literal>alloc</literal> attribute.
+        </para>
+        <para>
+         If allocation or initialization of the return resource fails
+         you may simply <function>RETURN_FALSE</function> or 
+         <function>RETURN_NULL</function> to return an error condition.
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><type>array</type></term>
+       <listitem>
+        <para>
+         To return an <type>array</type> you can add values to the
+         <varname>return_value</varname> variable which has already
+         been initialized as an empty array.
+        </para>
+        <para>
+         ...
+        </para>
+       </listitem>
+      </varlistentry>
+      <varlistentry>
+       <term><type>object</type></term>
+       <listitem>
+        <para>
+         ...
+        </para>
+       </listitem>
+      </varlistentry>
+     </variablelist>
+
+    </section>
+
    </section>
 
    <section>
     <title>Internal functions</title>
     <para>
-     The definition of an internal function requires just the
+     The definition of an internal function requires the
      <literal>role="internal"</literal> and <literal>name=...</literal>
-     attributes. The name can only be one of the following:
+     attributes to be set. The name can only be one of the following:
      <variablelist>
       <varlistentry>
        <term><literal>MINIT</literal></term>
@@ -834,9 +1234,7 @@ HASSQgRukwiZmpucmwYRADs=
     &lt;function role="internal" name="MINIT">
       &lt;code>
 &lt;![CDATA[
-  int dummy = 42;
-    
-  dummy = dummy;
+  library_init();
 ]]&gt;
       &lt;/code>
     &lt;/function>
@@ -854,6 +1252,20 @@ HASSQgRukwiZmpucmwYRADs=
          terminated.
          It may not be called on program crashes or other critical errors.
         </simpara>
+        <example>
+         <title><literal>MINIT()</literal></title>
+         <programlisting role="xml">
+...
+    &lt;function role="internal" name="MINIT">
+      &lt;code>
+&lt;![CDATA[
+  library_deinit();
+]]&gt;
+      &lt;/code>
+    &lt;/function>
+...
+         </programlisting>
+        </example>
        </listitem>
       </varlistentry>
       <varlistentry>
@@ -865,6 +1277,20 @@ HASSQgRukwiZmpucmwYRADs=
          right after <literal>MINIT()</literal> for standalone
          binaries (CGI or CLI).
         </simpara>
+        <example>
+         <title><literal>MINIT()</literal></title>
+         <programlisting role="xml">
+...
+    &lt;function role="internal" name="MINIT">
+      &lt;code>
+&lt;![CDATA[
+  global_buffer = malloc(global_buffer_size);
+]]&gt;
+      &lt;/code>
+    &lt;/function>
+...
+         </programlisting>
+        </example>
        </listitem>
       </varlistentry>
       <varlistentry>
@@ -878,6 +1304,20 @@ HASSQgRukwiZmpucmwYRADs=
          rely on it being called on critical errors or crashes on the
          C level.
         </simpara>
+        <example>
+         <title><literal>MINIT()</literal></title>
+         <programlisting role="xml">
+...
+    &lt;function role="internal" name="MINIT">
+      &lt;code>
+&lt;![CDATA[
+  free(global_buffer);
+]]&gt;
+      &lt;/code>
+    &lt;/function>
+...
+         </programlisting>
+        </example>
        </listitem>
       </varlistentry>
       <varlistentry>
@@ -924,13 +1364,12 @@ HASSQgRukwiZmpucmwYRADs=
     
    </section>
 
-  </section>
 
   <section>
    <title>Constants</title>
    <para>
     PHP constants are defined using <literal>&lt;constant&gt;</literal>
-    tags within the <literal>&lt;constants&gt;</literal> environment.
+    tags.
    </para>
    <para>
     The actual constant name, type and value are specified using the
@@ -1882,19 +2321,42 @@ sudo make install
   </section>
 
   <section>
-   <title>PEAR integration</title>
+   <title>PEAR/PECL integration</title>
    <para>
-    <literal>pecl-gen</literal> generates a <filename>package.xml</filename>
-    alongside with the other generated files. An extension may be configured,
+    <literal>pecl-gen</literal> generates PEAR package description files a
+    along with the other output files. Both the old <filename>package.xml</filename>
+    and the new <filename>package2.xml</filename> package formats are supported.
+   </para>
+   <para>
+    An extension may be configured,
     compiled and installed in a single operation using the PEAR installer:
    </para>
    <example>
     <title>Installation using <literal>pear</literal></title>
     <programlisting>
 cd my_extension
-pear install package.xml
+pear install package2.xml
     </programlisting>
    </example>
+   <para>
+    The above will perform all necessary configuration, compilation and 
+    installation steps for you. You can also create packages ready
+    to be submitted to the PECL repository or any other compatible 
+    distribution channel using:
+   </para>
+   <example>
+    <title>PEAR/PECL packaging</title>
+    <programlisting>
+cd my_extension
+pear package package2.xml
+    </programlisting>
+   </example>
+   <para>
+    If you want to release your package on a different channel then
+    <literal>pecl.php.net</literal> you need to add a 
+    <literal>&lt;channel&gt;</literal> tag containing the channel
+    name to your description file.
+   </para>
   </section>
 
 
