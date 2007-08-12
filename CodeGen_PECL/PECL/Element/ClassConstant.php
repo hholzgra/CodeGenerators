@@ -167,7 +167,7 @@ class CodeGen_PECL_Element_ClassConstant
     {
         switch ($this->type) {
         case "string":
-            $value = 'ZVAL_STRING(tmp, "'.$this->value.'", 1);';
+            $value = 'ZVAL_STRING(tmp, "'.$this->value.'", 0);';
             break;
         case "int":
             $value = 'ZVAL_LONG(tmp, '.$this->value.');';
