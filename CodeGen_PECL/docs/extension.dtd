@@ -127,6 +127,7 @@
   alloc      (yes|no) "no"
   if         CDATA #IMPLIED
 >
+<!ELEMENT init (#PCDATA)>
 <!ELEMENT destruct (#PCDATA)>
 
 <!ELEMENT streams (stream)*>
@@ -159,7 +160,7 @@
 <!ELEMENT makefile (#PCDATA)>
 
 
-<!ELEMENT class (summary?, description?, implements*, payload?, destruct?, property*, constant*, function*)>
+<!ELEMENT class (summary?, description?, implements*, payload?, init?, destruct?, property*, constant*, function*)>
 <!ATTLIST class 
   name     CDATA #REQUIRED
   extends  CDATA #IMPLIED
