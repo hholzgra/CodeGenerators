@@ -61,7 +61,7 @@ PECL extension.
   conditional compilation settings from these elements
 - disabled output of AC_CHECK_TYPE checks for resource
   types due to autoconf version conflicts
-    
+- varargs support    
  </notes>
  <contents>
   <dir name="/">

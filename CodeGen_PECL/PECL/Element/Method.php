@@ -177,12 +177,20 @@ class CodeGen_PECL_Element_Method
     /**
      * Hook for parameter parsing API function 
      *
-     * @param  string  C expr. for number of arguments
      * @param  string  Argument string
      * @param  array   Argument variable pointers
+     * @param  int     Return value for number of arguments
      */
-    protected function parseParameterHook($argc, $argString, $argPointers)
+    protected function parseParameterHook($argString, $argPointers, &$count)
     {
+        $count = count($this->params) - 1;
+
+        if ($this->varargs) {
+            $argc = sprintf("MIN(ZEND_NUM_ARGS(), %d)", $count);
+        } else {
+            $argc = "ZEND_NUM_ARGS()";
+        }
+
         if ($this->name == "__construct") {
             $code = parent::parseParameterHook($argc, $argString, $argPointers);
             $code.= "\n    _this_zval = getThis();\n";
