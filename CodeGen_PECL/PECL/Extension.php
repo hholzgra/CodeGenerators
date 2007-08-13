@@ -1393,13 +1393,6 @@ PHP_MINIT_FUNCTION({$this->name})
             $need_block = true;         
         }
 
-        if (count($this->classes)) {
-            foreach ($this->classes as $class) {
-                $code .= $this->codegen->block($class->minitCode($this));
-            }
-            $need_block = true;
-        }
-
         if (count($this->interfaces)) {
             foreach ($this->interfaces as $interface) {
                 $code .= $this->codegen->block($interface->minitCode($this));
@@ -1407,6 +1400,13 @@ PHP_MINIT_FUNCTION({$this->name})
             $need_block = true;
         }
             
+        if (count($this->classes)) {
+            foreach ($this->classes as $class) {
+                $code .= $this->codegen->block($class->minitCode($this));
+            }
+            $need_block = true;
+        }
+
         if (count($this->streams)) {
             foreach ($this->streams as $stream) {
                 $code .= $this->codegen->block($stream->minitCode($this));
