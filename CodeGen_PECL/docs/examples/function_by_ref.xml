@@ -2,7 +2,7 @@
 <!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="function_by_ref" version="1.0.0">
  <function name="int_by_ref">
-  <proto>void int_by_ref(int @foo)</proto>
+  <proto>void int_by_ref(int &amp;foo)</proto>
   <code>
    foo = 42;
   </code>
