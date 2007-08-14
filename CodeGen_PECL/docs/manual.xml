@@ -498,7 +498,7 @@ HASSQgRukwiZmpucmwYRADs=
       <programlisting> 
 <![CDATA[ 
 ... 
-    <with defaults='/usr:/usr/local' testfile='include/sample.h'>sample install</with> 
+  <with name="libz" defaults='/usr:/usr/local:/usr/local/zlib' testfile='include/zlib.h'>
 ... 
 ]]>
       </programlisting>
@@ -1194,7 +1194,10 @@ HASSQgRukwiZmpucmwYRADs=
          been initialized as an empty array.
         </para>
         <para>
-         ...
+         Values may be added to the <varname>return_value</varname>
+         result array using the various <function>add_assoc_...()</function>,
+         <function>add_index_...()</function> and 
+         <function>add_index_next_...()</function> from the Zend API.
         </para>
        </listitem>
       </varlistentry>
@@ -1214,6 +1217,11 @@ HASSQgRukwiZmpucmwYRADs=
 
    <section>
     <title>Internal functions</title>
+    <para>
+     Internal functions are called by the PHP extension API to initialize
+     and shut down your extension and to retrieve status information for
+     <function>phpinfo()</function> output.
+    </para>
     <para>
      The definition of an internal function requires the
      <literal>role="internal"</literal> and <literal>name=...</literal>
