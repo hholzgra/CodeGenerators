@@ -21,6 +21,7 @@ done
 for spec in $files
 do
   echo testing $spec
+  xmllint --valid --noout ../$spec
   rm -rf `basename $spec .xml`
   if pecl-gen ../$spec > /dev/null
   then
