@@ -414,8 +414,6 @@ AC_DEFUN([MYSQL_USE_PLUGIN_API], [
   # plugin interface is only availabe starting with MySQL 5.1
   MYSQL_NEED_VERSION([5.1.0])
 
-  AC_PROG_CXX
-
   # for plugins the recommended way to include plugin.h 
   # is <mysql/plugin.h>, not <plugin.h>, so we have to
   # strip the trailing /mysql from the include path
