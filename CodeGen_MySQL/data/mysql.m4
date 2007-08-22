@@ -414,9 +414,11 @@ AC_DEFUN([MYSQL_USE_PLUGIN_API], [
   # plugin interface is only availabe starting with MySQL 5.1
   MYSQL_NEED_VERSION([5.1.0])
 
+  AC_PROG_CXX
+
   # for plugins the recommended way to include plugin.h 
   # is <mysql/plugin.h>, not <plugin.h>, so we have to
-  # strip thetrailing /mysql from the include paht 
+  # strip the trailing /mysql from the include path
   # reported by mysql_config
   ADDFLAGS=`echo $MYSQL_CONFIG_INCLUDE | sed -e"s/\/mysql\$//g"` 
 
