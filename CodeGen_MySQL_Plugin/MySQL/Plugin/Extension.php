@@ -191,10 +191,6 @@ class CodeGen_MySQL_Plugin_Extension
 #include <mysql/plugin.h>
 ";
         
-        if ($this->needSource) {
-            echo "#include <mysql_priv.h>\n";
-        }
-
         echo "#include \"myplugin_{$this->name}.h\"\n";
 
         foreach ($this->headers as $header) {
