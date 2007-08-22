@@ -96,9 +96,6 @@ class CodeGen_MySQL_Plugin_Extension
         $this->setLang = "c++";
 
         $this->addConfigFragment("MYSQL_USE_PLUGIN_API()", "bottom");
-
-        // TODO fix mysql.m4 first
-        // $this->libdir = "@MYSQL_PLUGIN_DIR@";
     }
     
     // }}} 
