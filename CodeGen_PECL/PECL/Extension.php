@@ -1684,6 +1684,12 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
 
         echo "if test \"\$PHP_$upname\" != \"no\"; then\n";
 
+        if ($this->language === "cpp") {
+            echo "  PHP_REQUIRE_CXX\n";
+            echo "  AC_LANG_CPLUSPLUS\n";
+            echo "  PHP_ADD_LIBRARY(stdc++,,{$upname}_SHARED_LIBADD)\n";
+        }
+
         foreach ($this->configfragments['top'] as $fragment) {
             echo "$fragment\n";
         }
@@ -1700,12 +1706,6 @@ PHP_ARG_ENABLE({$this->name}, whether to enable {$this->name} functions,
        
         foreach (array_keys($pathes) as $path) {
             echo "  PHP_ADD_INCLUDE(\$PHP_{$upname}_DIR/$path)\n";
-        }
-
-        if ($this->language === "cpp") {
-            echo "  PHP_REQUIRE_CXX\n";
-            echo "  AC_LANG_CPLUSPLUS\n";
-            echo "  PHP_ADD_LIBRARY(stdc++,,{$upname}_SHARED_LIBADD)\n";
         }
 
         echo "  export OLD_CPPFLAGS=\"\$CPPFLAGS\"\n";
