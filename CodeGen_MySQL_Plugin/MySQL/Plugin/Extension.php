@@ -187,7 +187,8 @@ class CodeGen_MySQL_Plugin_Extension
 #define PEDANTIC_SAFEMALLOC
 #define SAFE_MUTEX
 #endif
-#include <mysql_version.h>
+#define MYSQL_SERVER
+#include <mysql_priv.h>
 #include <mysql/plugin.h>
 ";
         
