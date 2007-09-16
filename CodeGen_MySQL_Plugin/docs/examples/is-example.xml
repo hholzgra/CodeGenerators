@@ -19,7 +19,7 @@
   <deps language="c++"/>
 
  <infoschema name="is_dummy">
-  <summary>minimal example plugin</summary>
+  <summary>minimal information_schema plugin</summary>
 
   <field name="FOOBAR" type="LONG"/>
 
@@ -30,7 +30,7 @@
   table->field[FIELD_FOOBAR]->store(23);
   schema_table_store_record(thd, table);
 
-  table->field[FIELD_FOOBAR]->store(23);
+  table->field[FIELD_FOOBAR]->store(42);
   schema_table_store_record(thd, table);
 
   return 0;
