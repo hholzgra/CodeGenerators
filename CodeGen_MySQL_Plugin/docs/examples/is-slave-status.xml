@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<plugin name="is_slave_status">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.1</version>
+    <date>2007-09-16</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+  <deps language="c++"/>
+
+  <code role="header" position="top">
+<![CDATA[
+#include <sql/rpl_mi.h>
+
+#define STR(x) x, strlen(x)
+]]>
+  </code>
+
+  <infoschema name="SLAVE_STATUS">
+   <summary>I_S replacement for SHOW SLAVE STATUS, see also WL #3656</summary>
+
+   <field name="Slave_IO_State"                type="STRING"/>
+   <field name="Master_Host"                   type="STRING"/>
+   <field name="Master_User"                   type="STRING"/>
+   <field name="Master_Port"                   type="LONG"/>
+   <field name="Connect_Retry"                 type="LONG"/>
+   <field name="Master_Log_File"               type="STRING"/>
+   <field name="Read_Master_Log_Pos"           type="LONG"/>
+   <field name="Relay_Log_File"                type="STRING"/>
+   <field name="Relay_Log_Pos"                 type="LONG"/>
+   <field name="Relay_Master_Log_File"         type="STRING"/>
+   <field name="Slave_IO_Running"              type="STRING"/>
+   <field name="Slave_SQL_Running"             type="STRING"/>
+   <field name="Replicate_Do_DB"               type="STRING"/>
+   <field name="Replicate_Ignore_DB"           type="STRING"/>
+   <field name="Replicate_Do_Table"            type="STRING"/>
+   <field name="Replicate_Ignore_Table"        type="STRING"/>
+   <field name="Replicate_Wild_Do_Table"       type="STRING"/>
+   <field name="Replicate_Wild_Ignore_Table"   type="STRING"/>
+   <field name="Last_Errno"                    type="LONG"/>
+   <field name="Last_Error"                    type="STRING"/>
+   <field name="Skip_Counter"                  type="LONG"/>
+   <field name="Exec_Master_Log_Pos"           type="LONG"/>
+   <field name="Relay_Log_Space"               type="LONG"/>
+   <field name="Until_Condition"               type="STRING"/>
+   <field name="Until_Log_File"                type="STRING"/>
+   <field name="Until_Log_Pos"                 type="LONG"/>
+   <field name="Master_SSL_Allowed"            type="STRING"/>
+   <field name="Master_SSL_CA_File"            type="STRING"/>
+   <field name="Master_SSL_CA_Path"            type="STRING"/>
+   <field name="Master_SSL_Cert"               type="STRING"/>
+   <field name="Master_SSL_Cipher"             type="STRING"/>
+   <field name="Master_SSL_Key"                type="STRING"/>
+   <field name="Seconds_Behind_Master"         type="LONG"      null="yes"/>
+   <field name="Master_SSL_Verify_Server_Cert" type="STRING"/>
+   <field name="Last_IO_Errno"                 type="LONG"/>
+   <field name="Last_IO_Error"                 type="STRING"/>
+   <field name="Last_SQL_Errno"                type="LONG"/>
+   <field name="Last_SQL_Error"                type="STRING"/>
+
+   <code>
+<?data
+  TABLE* table= tables->table;
+ CHARSET_INFO *scs= system_charset_info;
+
+  if (active_mi->host[0]) {
+    // code borrowed from sql/slave.cc
+    /*
+      TODO: we read slave_running without run_lock, whereas these variables
+      are updated under run_lock and not data_lock. In 5.0 we should lock
+      run_lock on top of data_lock (with good order).
+    */
+    pthread_mutex_lock(&active_mi->data_lock);
+    pthread_mutex_lock(&active_mi->rli.data_lock);
+    // borrowed code ends
+
+
+    table->field[FIELD_Slave_IO_State]->store(STR(active_mi->io_thd ? active_mi->io_thd->proc_info : ""), scs);
+    table->field[FIELD_Master_Host]->store(STR(active_mi->host), scs);
+    table->field[FIELD_Master_User]->store(STR(active_mi->user), scs);
+    table->field[FIELD_Master_Port]->store(active_mi->port);
+    table->field[FIELD_Connect_Retry]->store(active_mi->connect_retry);
+    table->field[FIELD_Master_Log_File]->store(STR(active_mi->master_log_name), scs);
+    table->field[FIELD_Read_Master_Log_Pos]->store(active_mi->master_log_pos);
+    table->field[FIELD_Relay_Log_File]->store(STR(active_mi->rli.group_relay_log_name + dirname_length(active_mi->rli.group_relay_log_name)), scs);
+    table->field[FIELD_Relay_Log_Pos]->store(active_mi->rli.group_relay_log_pos);
+    table->field[FIELD_Relay_Master_Log_File]->store(STR(active_mi->rli.group_master_log_name), scs);
+    table->field[FIELD_Slave_IO_Running]->store(STR(active_mi->slave_running == MYSQL_SLAVE_RUN_CONNECT ? "Yes" : "No"), scs);
+    table->field[FIELD_Slave_SQL_Running]->store(STR(active_mi->rli.slave_running ? "Yes":"No"), scs);
+    table->field[FIELD_Replicate_Do_DB]->store(STR("" /*rpl_filter->get_do_db())*/), scs);
+    table->field[FIELD_Replicate_Ignore_DB]->store(STR(""), scs);
+    table->field[FIELD_Replicate_Do_Table]->store(STR(""), scs);
+    table->field[FIELD_Replicate_Ignore_Table]->store(STR(""), scs);
+    table->field[FIELD_Replicate_Wild_Do_Table]->store(STR(""), scs);
+    table->field[FIELD_Replicate_Wild_Ignore_Table]->store(STR(""), scs);
+    table->field[FIELD_Last_Errno]->store(active_mi->rli.last_error().number);
+    table->field[FIELD_Last_Error]->store(STR(active_mi->rli.last_error().message), scs);
+    table->field[FIELD_Skip_Counter]->store(active_mi->rli.slave_skip_counter);
+    table->field[FIELD_Exec_Master_Log_Pos]->store(active_mi->rli.group_master_log_pos);
+    table->field[FIELD_Relay_Log_Space]->store(active_mi->rli.log_space_total);
+    table->field[FIELD_Until_Condition]->store(STR(active_mi->rli.until_condition==Relay_log_info::UNTIL_NONE ? "None": ( active_mi->rli.until_condition==Relay_log_info::UNTIL_MASTER_POS? "Master": "Relay")), scs);
+    table->field[FIELD_Until_Log_File]->store(STR(active_mi->rli.until_log_name), scs);
+    table->field[FIELD_Until_Log_Pos]->store(active_mi->rli.until_log_pos);
+#ifdef HAVE_OPENSSL
+    table->field[FIELD_Master_SSL_Allowed]->store(STR(active_mi->ssl? "Yes":"No"), scs);
+#else
+    table->field[FIELD_Master_SSL_Allowed]->store(STR(active_mi->ssl? "Ignored":"No"), scs);
+#endif
+    table->field[FIELD_Master_SSL_CA_File]->store(STR(active_mi->ssl_ca), scs);
+    table->field[FIELD_Master_SSL_CA_Path]->store(STR(active_mi->ssl_capath), scs);
+    table->field[FIELD_Master_SSL_Cert]->store(STR(active_mi->ssl_cert), scs);
+    table->field[FIELD_Master_SSL_Cipher]->store(STR(active_mi->ssl_cipher), scs);
+    table->field[FIELD_Master_SSL_Key]->store(STR(active_mi->ssl_key), scs);
+    if ((active_mi->slave_running == MYSQL_SLAVE_RUN_CONNECT) && active_mi->rli.slave_running)
+    {
+      long time_diff= ((long)(time(0) - active_mi->rli.last_master_timestamp) - active_mi->clock_diff_with_master);
+      table->field[FIELD_Seconds_Behind_Master]->store(active_mi->rli.last_master_timestamp ? max(0, time_diff) : 0);
+      table->field[FIELD_Seconds_Behind_Master]->set_notnull();
+    }
+    table->field[FIELD_Master_SSL_Verify_Server_Cert]->store(STR(active_mi->ssl_verify_server_cert? "Yes":"No"), scs);
+    table->field[FIELD_Last_IO_Errno]->store(active_mi->last_error().number);
+    table->field[FIELD_Last_IO_Error]->store(STR(active_mi->last_error().message), scs);
+    table->field[FIELD_Last_SQL_Errno]->store(active_mi->rli.last_error().number);
+    table->field[FIELD_Last_SQL_Error]->store(STR(active_mi->rli.last_error().message), scs);
+
+
+
+    pthread_mutex_unlock(&active_mi->rli.data_lock);
+    pthread_mutex_unlock(&active_mi->data_lock);
+
+    schema_table_store_record(thd, table);
+  }
+  return 0;
+?>
+   </code>
+
+  </infoschema>
+
+</plugin>
