@@ -241,7 +241,7 @@ class CodeGen_MySQL_UDF_Extension
         echo $this->getLicenseComment();
 
         echo "// {{{ CREATE and DROP statements for this UDF\n\n";
-        echo "/*\n";
+        echo "#if 0\n";
         echo  "register the functions provided by this UDF module using\n";
         foreach ($this->functions as $function) {
             echo $function->createStatement($this)."\n";
@@ -251,7 +251,7 @@ class CodeGen_MySQL_UDF_Extension
         foreach ($this->functions as $function) {
             echo $function->dropStatement($this)."\n";
         }
-        echo "*/\n// }}}\n\n";
+        echo "#endif \n// }}}\n\n";
         
         foreach ($this->headers as $header) {
             echo $header->hCode(true);
@@ -807,19 +807,21 @@ you need to make them known to the MySQL server using
 
         $this->addPackageFile("test", "tests/create_functions.inc");
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/tests/create_functions.inc");		
-        echo "-- disable_warnings\n";
+        echo "--disable_warnings\n";
         foreach ($this->functions as $function) {
             echo $function->dropIfExistsStatement($this)."\n";
             echo $function->createStatement($this)."\n";
         }
-        echo "-- enable_warnings\n";
+        echo "--enable_warnings\n";
         $file->write();
 
         $this->addPackageFile("test", "tests/drop_functions.inc");
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/tests/drop_functions.inc");		
+        echo "--disable_warnings\n";
         foreach ($this->functions as $function) {
             echo $function->dropStatement($this)."\n";
         }
+        echo "--enable_warnings\n";
         $file->write();
 
         // function related tests

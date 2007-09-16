@@ -650,6 +650,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
 
         ob_start();
+        echo $this->ifConditionStart();
 
         // init function
         echo "/* {$this->name} init function */\n";
@@ -814,6 +815,8 @@ class CodeGen_MySQL_UDF_Element_Function
             echo "}\n\n";
         }
 
+        echo $this->ifConditionEnd();
+
         $code = ob_get_contents();
         ob_end_clean();
         return $code;
@@ -830,7 +833,9 @@ class CodeGen_MySQL_UDF_Element_Function
     {   
         $return = $this->returnType();
 
-        $result = "/* FUNCTION {$this->name} */\n";
+        $result = $this->ifConditionStart();
+
+        $result.= "/* FUNCTION {$this->name} */\n";
 
         $result.= "my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message);\n";
 
@@ -848,6 +853,8 @@ class CodeGen_MySQL_UDF_Element_Function
 
         $result.= "void {$this->name}_deinit(UDF_INIT *initid);\n";
 
+        $result.= $this->ifConditionEnd();
+
         return "$result\n";
     }
         
@@ -863,13 +870,17 @@ class CodeGen_MySQL_UDF_Element_Function
             return "";
         }
 
-        $return = "struct {$this->name}_t {\n";
+        $return = $this->ifConditionStart();
+
+        $return.= "struct {$this->name}_t {\n";
             
         foreach ($this->dataElements as $name => $data) {
             $return.= "  $data[type] $name;\n";
         }
 
         $return.= "};\n\n";
+
+        $return.= $this->ifConditionEnd();
 
         return $return;
     }
@@ -938,7 +949,14 @@ class CodeGen_MySQL_UDF_Element_Function
      */
     function createStatement($extension) 
     {
-        $create = "CREATE ";
+        $create = "";
+
+        // for conditionally compiled functions it is ok to fail here
+        if ($this->getIfCondition()) {
+            $create.= "--error 1583, 1126\n";
+        }
+
+        $create.= "CREATE ";
         $create.= $this->signature();
         $create.= ' SONAME "'.$extension->getName().'.so";';
 
@@ -953,6 +971,9 @@ class CodeGen_MySQL_UDF_Element_Function
      */
     function dropStatement($extension) 
     {
+        if ($this->getIfCondition()) {
+            return $this->dropIfExistsStatement($extension);
+        }
         return "DROP FUNCTION {$this->name};";
     }
 
@@ -967,7 +988,7 @@ class CodeGen_MySQL_UDF_Element_Function
         /* there is no DROP FUNCTION IF EXISTS in MySQL < 5.0 so we
          check for the error code for dropping a noneexistant function
          which is 1128 in 4.1 and 1305 in 5.0 ... */
-        return "--error 0, 1128, 1305\nDROP FUNCTION {$this->name};";
+        return "--error 0, 1128, 1305\nDROP FUNCTION /*!50000 IF EXISTS */ {$this->name};";
     }
 
 

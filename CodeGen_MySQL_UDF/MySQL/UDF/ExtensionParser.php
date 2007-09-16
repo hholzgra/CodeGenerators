@@ -98,6 +98,10 @@ class CodeGen_MySQL_UDF_ExtensionParser
             }
         }
         
+        if (isset($attr["if"])) {
+            $this->helper->setIfCondition($attr["if"]);
+        }
+        
         return true;
     }
 
