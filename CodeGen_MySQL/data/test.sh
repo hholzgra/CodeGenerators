@@ -38,6 +38,7 @@ mysql_install_db --datadir=$DATA > $DATA/test.err
 
 mysqld --skip-networking --skip-innodb \
        --datadir=$DATA --socket=$SOCK \
+       --loose-plugin-dir=../.libs \
        2>> $DATA/test.err &
 
 sleep 5
