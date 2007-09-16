@@ -119,7 +119,7 @@ AC_DEFUN([WITH_MYSQL_SRC], [
 
   if test "x$MYSQL_SRCDIR" != "x"
   then
-    MYSQL_CONFIG_INCLUDE="-I$MYSQL_SRCDIR/include -I$MYSQL_SRCDIR  -I$MYSQL_SRCDIR/sql "
+    MYSQL_CONFIG_INCLUDE="-I$MYSQL_SRCDIR/include -I$MYSQL_SRCDIR  -I$MYSQL_SRCDIR/sql -I$MYSQL_SRCDIR/regex"
     MYSQL_CONFIG_LIBS_R="-L$MYSQL_SRCDIR/libmysql_r/.libs -lmysqlclient_r -lz -lm"
   fi
 ])
