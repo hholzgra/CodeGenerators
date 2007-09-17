@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<plugin name="is_slave_status">
+<plugin name="is_replication_status">
   <maintainer>
     <name>Hartmut Holzgraefe</name>
     <email>hartmut@mysql.com</email>
@@ -8,11 +8,11 @@
   <license>GPL</license>
 
   <release>
-    <version>0.1</version>
-    <date>2007-09-16</date>
+    <version>0.2</version>
+    <date>2007-09-17</date>
     <state>beta</state>
     <notes>
-     First working release
+     Second working release, adding MASTER_STATUS
     </notes>
   </release>
 
@@ -23,55 +23,82 @@
 #include <sql/rpl_mi.h>
 
 #define STR(x) x, strlen(x)
+
+
+]]>
+  </code>
+
+  <code role="code" position="top">
+<![CDATA[
+int list_to_str(I_List<i_string>* str_list, char *buf, size_t bufsize)
+{
+  String tmp(buf, bufsize, &my_charset_bin);
+  uint32 len;
+  I_List_iterator<i_string> it(*str_list);
+  i_string* s;
+  
+  tmp.length(0);
+  while ((s=it++))
+  {
+    tmp.append(s->ptr);
+    tmp.append(',');
+  }
+  if ((len= tmp.length()))
+    len--;                                      // Remove last ','
+
+  return len;
+}
 ]]>
   </code>
 
   <infoschema name="SLAVE_STATUS">
    <summary>I_S replacement for SHOW SLAVE STATUS, see also WL #3656</summary>
 
-   <field name="Slave_IO_State"                type="STRING"/>
+   <field name="Slave_IO_State"                type="STRING" length="14"/>
    <field name="Master_Host"                   type="STRING"/>
    <field name="Master_User"                   type="STRING"/>
    <field name="Master_Port"                   type="LONG"/>
    <field name="Connect_Retry"                 type="LONG"/>
-   <field name="Master_Log_File"               type="STRING"/>
+   <field name="Master_Log_File"               type="STRING" length="FN_REFLEN"/>
    <field name="Read_Master_Log_Pos"           type="LONG"/>
-   <field name="Relay_Log_File"                type="STRING"/>
+   <field name="Relay_Log_File"                type="STRING" length="FN_REFLEN"/>
    <field name="Relay_Log_Pos"                 type="LONG"/>
-   <field name="Relay_Master_Log_File"         type="STRING"/>
-   <field name="Slave_IO_Running"              type="STRING"/>
-   <field name="Slave_SQL_Running"             type="STRING"/>
-   <field name="Replicate_Do_DB"               type="STRING"/>
-   <field name="Replicate_Ignore_DB"           type="STRING"/>
-   <field name="Replicate_Do_Table"            type="STRING"/>
-   <field name="Replicate_Ignore_Table"        type="STRING"/>
-   <field name="Replicate_Wild_Do_Table"       type="STRING"/>
-   <field name="Replicate_Wild_Ignore_Table"   type="STRING"/>
+   <field name="Relay_Master_Log_File"         type="STRING" length="FN_REFLEN"/>
+   <field name="Slave_IO_Running"              type="STRING" length="3"/>
+   <field name="Slave_SQL_Running"             type="STRING" length="3"/>
+   <field name="Replicate_Do_DB"               type="STRING" length="255"/>
+   <field name="Replicate_Ignore_DB"           type="STRING" length="255"/>
+   <field name="Replicate_Do_Table"            type="STRING" length="255"/>
+   <field name="Replicate_Ignore_Table"        type="STRING" length="255"/>
+   <field name="Replicate_Wild_Do_Table"       type="STRING" length="255"/>
+   <field name="Replicate_Wild_Ignore_Table"   type="STRING" length="255"/>
    <field name="Last_Errno"                    type="LONG"/>
-   <field name="Last_Error"                    type="STRING"/>
+   <field name="Last_Error"                    type="STRING" length="255"/>
    <field name="Skip_Counter"                  type="LONG"/>
    <field name="Exec_Master_Log_Pos"           type="LONG"/>
    <field name="Relay_Log_Space"               type="LONG"/>
-   <field name="Until_Condition"               type="STRING"/>
-   <field name="Until_Log_File"                type="STRING"/>
+   <field name="Until_Condition"               type="STRING" length="255"/>
+   <field name="Until_Log_File"                type="STRING" length="FN_REFLEN"/>
    <field name="Until_Log_Pos"                 type="LONG"/>
-   <field name="Master_SSL_Allowed"            type="STRING"/>
-   <field name="Master_SSL_CA_File"            type="STRING"/>
-   <field name="Master_SSL_CA_Path"            type="STRING"/>
-   <field name="Master_SSL_Cert"               type="STRING"/>
-   <field name="Master_SSL_Cipher"             type="STRING"/>
-   <field name="Master_SSL_Key"                type="STRING"/>
-   <field name="Seconds_Behind_Master"         type="LONG"      null="yes"/>
-   <field name="Master_SSL_Verify_Server_Cert" type="STRING"/>
+   <field name="Master_SSL_Allowed"            type="STRING" length="7"/>
+   <field name="Master_SSL_CA_File"            type="STRING" length="FN_REFLEN"/>
+   <field name="Master_SSL_CA_Path"            type="STRING" length="FN_REFLEN"/>
+   <field name="Master_SSL_Cert"               type="STRING" length="255"/>
+   <field name="Master_SSL_Cipher"             type="STRING" length="255"/>
+   <field name="Master_SSL_Key"                type="STRING" length="255"/>
+   <field name="Seconds_Behind_Master"         type="LONG"   null="yes"/>
+   <field name="Master_SSL_Verify_Server_Cert" type="STRING" length="3"/>
    <field name="Last_IO_Errno"                 type="LONG"/>
-   <field name="Last_IO_Error"                 type="STRING"/>
+   <field name="Last_IO_Error"                 type="STRING" length="255"/>
    <field name="Last_SQL_Errno"                type="LONG"/>
-   <field name="Last_SQL_Error"                type="STRING"/>
+   <field name="Last_SQL_Error"                type="STRING" length="255"/>
 
    <code>
 <?data
   TABLE* table= tables->table;
- CHARSET_INFO *scs= system_charset_info;
+  CHARSET_INFO *scs= system_charset_info;
+  char buf[256];
+  int len;
 
   if (active_mi->host[0]) {
     // code borrowed from sql/slave.cc
@@ -97,12 +124,34 @@
     table->field[FIELD_Relay_Master_Log_File]->store(STR(active_mi->rli.group_master_log_name), scs);
     table->field[FIELD_Slave_IO_Running]->store(STR(active_mi->slave_running == MYSQL_SLAVE_RUN_CONNECT ? "Yes" : "No"), scs);
     table->field[FIELD_Slave_SQL_Running]->store(STR(active_mi->rli.slave_running ? "Yes":"No"), scs);
+
+    // TODO the folloing replication filter entries are still missing ...
     table->field[FIELD_Replicate_Do_DB]->store(STR("" /*rpl_filter->get_do_db())*/), scs);
     table->field[FIELD_Replicate_Ignore_DB]->store(STR(""), scs);
     table->field[FIELD_Replicate_Do_Table]->store(STR(""), scs);
     table->field[FIELD_Replicate_Ignore_Table]->store(STR(""), scs);
     table->field[FIELD_Replicate_Wild_Do_Table]->store(STR(""), scs);
     table->field[FIELD_Replicate_Wild_Ignore_Table]->store(STR(""), scs);
+
+    len = list_to_str(rpl_filter->get_do_db(), buf, sizeof(buf));
+    if (len) {
+      table->field[FIELD_Replicate_Do_DB]->store(buf, len, scs);
+    }
+    len = list_to_str(rpl_filter->get_ignore_db(), buf, sizeof(buf));
+    if (len) {
+      table->field[FIELD_Replicate_Ignore_DB]->store(buf, len, scs);
+    }
+
+    String tmp(buf, sizeof(buf), &my_charset_bin);
+    rpl_filter->get_do_table(&tmp);
+    table->field[FIELD_Replicate_Do_Table]->store(buf, tmp.length(), scs);
+    rpl_filter->get_ignore_table(&tmp); 
+    table->field[FIELD_Replicate_Ignore_Table]->store(buf, tmp.length(), scs);
+    rpl_filter->get_wild_do_table(&tmp);
+    table->field[FIELD_Replicate_Wild_Do_Table]->store(buf, tmp.length(), scs);
+    rpl_filter->get_wild_ignore_table(&tmp);
+    table->field[FIELD_Replicate_Wild_Ignore_Table]->store(buf, tmp.length(), scs);
+
     table->field[FIELD_Last_Errno]->store(active_mi->rli.last_error().number);
     table->field[FIELD_Last_Error]->store(STR(active_mi->rli.last_error().message), scs);
     table->field[FIELD_Skip_Counter]->store(active_mi->rli.slave_skip_counter);
@@ -144,6 +193,50 @@
 ?>
    </code>
 
+  </infoschema>
+
+
+
+  <infoschema name="MASTER_STATUS">
+   <summary>I_S replacement for SHOW SLAVE STATUS, see also WL #3656</summary>
+
+   <field name="File"                type="STRING"/>
+   <field name="Position"            type="LONG"/>
+   <field name="Binlog_Do_DB"        type="STRING" length="255"/>
+   <field name="Binlog_Ignore_DB"    type="STRING" length="255"/>
+ 
+   <code>
+<![CDATA[
+  if (mysql_bin_log.is_open())
+  {
+    TABLE* table= tables->table;
+    CHARSET_INFO *scs= system_charset_info;
+    LOG_INFO li;
+    char buf[256];
+    int len;
+
+    mysql_bin_log.get_current_log(&li);
+    int dir_len = dirname_length(li.log_file_name);
+
+    table->field[FIELD_File]->store(STR(li.log_file_name + dir_len), scs);
+
+    table->field[FIELD_Position]->store(li.pos);
+
+    len = list_to_str(binlog_filter->get_do_db(), buf, sizeof(buf));
+    if (len) {
+      table->field[FIELD_Binlog_Do_DB]->store(buf, len, scs);
+    }
+
+    len = list_to_str(binlog_filter->get_ignore_db(), buf, sizeof(buf));
+    if (len) {
+      table->field[FIELD_Binlog_Do_DB]->store(buf, len, scs);
+    }
+
+
+    schema_table_store_record(thd, table);
+  }
+]]>
+   </code>
   </infoschema>
 
 </plugin>
