@@ -23,12 +23,12 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
 
- <date>2007-04-18</date>
- <time>18:06:26</time>
+ <date>2007-09-17</date>
+ <time>12:30:00</time>
 
  <version>
-  <release>0.1.3dev</release>
-  <api>0.1.3dev</api>
+  <release>0.9.1dev</release>
+  <api>0.9.1dev</api>
  </version>
 
  <stability>
@@ -38,7 +38,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
 
  <license uri="http://www.php.net/license">PHP</license>
 
- <notes>initial package for proposal process
+ <notes>
+  more stabelizing fixes towars release quality
  </notes>
 
  <contents>
@@ -89,21 +90,4 @@ http://pear.php.net/dtd/package-2.0.xsd">
   </filelist>
  </phprelease>
 
- <changelog>
-  <release>
-   <version>
-    <release>0.1.2dev</release>
-    <api>0.1.2dev</api>
-   </version>
-   <stability>
-    <release>alpha</release>
-    <api>alpha</api>
-   </stability>
-   <date>2006-11-24</date>
-   <license uri="http://www.php.net/license">PHP</license>
-   <notes>
-    initial package for proposal process
-   </notes>
-  </release>
- </changelog>
 </package>
