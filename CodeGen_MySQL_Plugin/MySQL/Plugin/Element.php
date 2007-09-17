@@ -178,6 +178,24 @@ abstract class CodeGen_MySQL_Plugin_Element
      */
     function getPluginRegistration(CodeGen_MySQL_Plugin_Extension $ext)
     {
+        ob_start();
+
+        foreach ($this->statusVariables as $variable) {
+            echo $variable->getDefinition();
+        }
+        echo "\n\n";
+
+        echo CodeGen_MySQL_Plugin_Element_StatusVariable::startRegistrations($this->name."_");
+        foreach ($this->statusVariables as $variable) {
+            echo $variable->getRegistration();
+        }
+        echo CodeGen_MySQL_Plugin_Element_StatusVariable::endRegistrations($this->name."_");
+
+        return ob_get_clean();
+    }
+
+    function getPluginDeclaration(CodeGen_MySQL_Plugin_Extension $ext)
+    {
         $name    = $this->name;
         $type    = $this->getPluginType();
         $desc    = $this->summary;
@@ -216,22 +234,7 @@ abstract class CodeGen_MySQL_Plugin_Element
         }
         $version = "0x".sprintf("%02d%02d", $version[0], $version[1]);
 
-        ob_start();
-
-        foreach ($this->statusVariables as $variable) {
-            echo $variable->getDefinition();
-        }
-        echo "\n\n";
-
-        echo CodeGen_MySQL_Plugin_Element_StatusVariable::startRegistrations();
-        foreach ($this->statusVariables as $variable) {
-            echo $variable->getRegistration();
-        }
-        echo CodeGen_MySQL_Plugin_Element_StatusVariable::endRegistrations($this->name);
-
-        echo "
-mysql_declare_plugin($name)
-{
+        return "{
   $type,
   &{$name}_descriptor, 
   \"$name\",
@@ -241,15 +244,12 @@ mysql_declare_plugin($name)
   {$name}_plugin_init,
   {$name}_plugin_deinit,
   $version,
-  status_variables,
+  {$name}_status_variables,
   NULL, /* placeholder for system variables, not available yet */
   NULL, /* placeholder for command line options, not available yet */
 }
-mysql_declare_plugin_end;
 ";
-        return ob_get_clean();
     }
-
 
     function getPluginCode()
     {  

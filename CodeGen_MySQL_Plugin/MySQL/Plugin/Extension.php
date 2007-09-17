@@ -208,6 +208,15 @@ class CodeGen_MySQL_Plugin_Extension
             echo $plugin->getPluginRegistration($this);
         }
 
+        $declarations = array();
+        foreach ($this->plugins as $plugin) {
+            $declarations[] = $plugin->getPluginDeclaration($this);
+        }
+        echo "\nmysql_declare_plugin({$this->name})\n";
+        echo join(",", $declarations);
+        echo "mysql_declare_plugin_end;\n\n";
+
+
         if (isset($this->code["code"]["bottom"])) {
             foreach ($this->code["code"]["bottom"] as $code) {
                 echo $this->codegen->block($code, 0);
