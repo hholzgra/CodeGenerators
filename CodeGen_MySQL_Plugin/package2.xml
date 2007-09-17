@@ -18,11 +18,11 @@ plugin project.
   <email>hartmut@php.net</email>
   <active>yes</active>
  </lead>
- <date>2007-04-20</date>
+ <date>2007-09-17</date>
  <time>12:30:00</time>
  <version>
-  <release>0.1.1dev</release>
-  <api>0.1.1dev</api>
+  <release>0.9.1dev</release>
+  <api>0.9.1dev</api>
  </version>
  <stability>
   <release>alpha</release>
@@ -74,12 +74,12 @@ plugin project.
    <package>
     <name>CodeGen</name>
     <channel>pear.php.net</channel>
-    <min>1.0.3</min>
+    <min>1.0.4</min>
    </package>
    <package>
     <name>CodeGen_MySQL</name>
     <channel>pear.php.net</channel>
-    <min>0.1.3dev</min>
+    <min>0.9.1dev</min>
    </package>
   </required>
  </dependencies>
