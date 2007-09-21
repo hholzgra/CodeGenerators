@@ -582,7 +582,23 @@ class CodeGen_PECL_Extension
         
         // make path absolute to be independant of working directory changes
         $this->dirpath = realpath($dirpath);
-        
+
+     
+        // add "unknown" author if no authors specified
+        if (empty($this->authors)) {
+            $author = new CodeGen_PECL_Maintainer;
+            $author->setUser("unknown");
+            $author->setName("Unknown User");
+            $author->setEmail("unknown@example.com");
+            $author->setRole("lead");
+            
+            $this->addAuthor($author);
+        }
+
+        if (empty($this->description)) {
+            $this->description = "none";
+        }
+
         echo "Creating '{$this->name}' extension in '$dirpath'\n";
 
         // generate complete source code

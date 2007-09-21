@@ -102,7 +102,7 @@ class CodeGen_PECL_Release
             $code.= "  <license>unknown</license>\n\n";
         }
 
-        $code .="  <notes>\n".htmlentities($this->notes)."\n  </notes>\n\n";
+        $code .="  <notes>\n".htmlentities(empty($this->notes) ? "none" : $this->notes)."\n  </notes>\n\n";
 
         return $code;
     }
