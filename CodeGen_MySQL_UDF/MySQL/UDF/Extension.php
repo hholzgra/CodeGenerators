@@ -259,6 +259,10 @@ class CodeGen_MySQL_UDF_Extension
             
         echo 
 "// {{{ standard header stuff
+#ifdef HAVE_CONFIG_H
+#include \"config.h\"
+#endif
+
 #ifdef STANDARD
 #include <stdio.h>
 #include <string.h>
