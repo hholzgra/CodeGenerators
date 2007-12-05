@@ -25,6 +25,7 @@
  */
 require_once "CodeGen/XmlParser.php";
 require_once "CodeGen/Tools/Indent.php";
+require_once "CodeGen/Tools/Group.php";
 
 /**
  * Parser for XML based extension desription files
@@ -48,6 +49,64 @@ abstract class CodeGen_ExtensionParser
      */
     protected $extension;
     
+    /**
+     * Group stack
+     *
+     * @var array
+     */
+    protected $groups = array();
+    
+    function pushGroup(CodeGen_Tools_Group $group) 
+    {
+        $currentGroup = end($this->groups);
+        if ($currentGroup) {
+            $group->parent = $currentGroup;
+        }
+        array_push($this->groups, $group);
+
+        return true;
+    }
+
+    function popGroup()
+    {
+        array_pop($this->groups);
+    }
+
+    function getGroupAttribute($name) 
+    {
+        $currentGroup = end($this->groups);
+        if ($currentGroup) {
+            return $currentGroup->getAttribute($name);
+        } else {
+            return false;
+        }
+    }
+
+    function tagstart_extension_group($attr)
+    {
+        $group = new CodeGen_Tools_Group();
+        $group->setAttributes($attr);
+        
+        return $this->pushGroup($group);
+    }
+
+    function tagstart_group_group($attr)
+    {
+        return $this->tagstart_extension_group($attr);
+    }
+
+    function tagend_extension_group($attr, $data)
+    {
+        $this->popGroup();
+
+        return true;
+    }
+
+    function tagend_group_group($attr, $data)
+    {
+        return $this->tagend_extension_group($attr, $data);
+    }
+
     /** 
      * Constructor
      *
@@ -169,10 +228,15 @@ abstract class CodeGen_ExtensionParser
 
 
     
-    function tagstart_maintainer($attr)
+    function tagstart_extension_maintainer($attr)
     {
         $this->pushHelper(new CodeGen_Maintainer);
         return $this->noAttributes($attr);;
+    }
+
+    function tagstart_group_maintainer($attr)
+    {
+        return $this->tagstart_extension_maintainer($attr);
     }
     
     function tagstart_maintainer_user($attr)
@@ -227,10 +291,15 @@ abstract class CodeGen_ExtensionParser
         return true;
     }
 
-    function tagstart_release($attr)
+    function tagstart_extension_release($attr)
     {
         $this->pushHelper(new CodeGen_Release);
         return $this->noAttributes($attr);;
+    }
+
+    function tagstart_group_release($attr)
+    {
+        $this->tagstart_extension_release($attr);
     }
 
     function tagstart_release_version($attr)
@@ -280,19 +349,24 @@ abstract class CodeGen_ExtensionParser
         return $err;
     }
 
-    function tagstart_extension_changelog($attr, $data) 
+    function tagstart_extension_changelog($attr) 
     {
         $this->verbatim();
         return $this->noAttributes($attr);;
     }
 
-    function tagend_extension_changelog($attr, $data) 
+    function tagstart_group_changelog($attr)
+    {
+        $this->tagstart_extension_changelog($attr);
+    }
+
+    function tagend_changelog($attr, $data) 
     {
         return $this->extension->setChangelog(CodeGen_Tools_Indent::linetrim($data));
     }
 
         
-    function tagend_license($attr, $data)
+    function tagend_extension_license($attr, $data)
     {
         $license = CodeGen_License::factory(trim($data));
         
@@ -301,6 +375,11 @@ abstract class CodeGen_ExtensionParser
         }
         
         return $this->extension->setLicense($license);
+    }
+
+    function tagend_group_license($attr, $data)
+    {
+        return $this->tagend_extension_license($attr, $data);
     }
 
     function tagend_extension_code($attr, $data) 
@@ -320,8 +399,12 @@ abstract class CodeGen_ExtensionParser
         }
     }
 
+    function tagend_group_code($attr, $data)
+    {
+        return $this->tagend_extension_code($attr, $data);
+    }
 
-    function tagstart_deps($attr)
+    function tagstart_extension_deps($attr)
     {
         $err = $this->checkAttributes($attr, array("platform", "language"));
         if (PEAR::isError($err)) {
@@ -342,6 +425,11 @@ abstract class CodeGen_ExtensionParser
             }
         }
 
+    }
+
+    function tagstart_group_deps($attr)
+    {
+        return $this->tagstart_extension_deps($attr);
     }
 
     function tagstart_deps_file($attr) 
@@ -422,14 +510,29 @@ abstract class CodeGen_ExtensionParser
         return $this->extension->addMakeFragment(CodeGen_Tools_IndentC::linetrim($data));
     }
 
+    function tagend_group_makefile($attr, $data)
+    {
+        return $this->tagend_extension_makefile($attr, $data);
+    }
+
     function tagend_extension_acinclude($attr, $data) {
         $position = isset($attr["position"]) ? $attr["position"] : "bottom";
         return $this->extension->addAcIncludeFragment($data, $position);
+    }
+
+    function tagend_group_acinclude($attr, $data)
+    {
+        return $this->tagend_extension_acinclude($attr, $data);
     }
     
     function tagend_deps_configm4($attr, $data) {
         return $this->extension->addConfigFragment(CodeGen_Tools_IndentC::linetrim($data), 
                                                    isset($attr['position']) ? $attr['position'] : "top");
+    }
+
+    function tagend_group_configm4($attr, $data)
+    {
+        return $this->tagend_extension_configm4($attr, $data);
     }
 }
 
