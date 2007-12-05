@@ -60,6 +60,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <file baseinstalldir="/" name="Code.php" role="php" />
      <file baseinstalldir="/" name="FileReplacer.php" role="php" />
      <file baseinstalldir="/" name="Getopt.php" role="php" />
+     <file baseinstalldir="/" name="Group.php" role="php" />
      <file baseinstalldir="/" name="Indent.php" role="php" />
      <file baseinstalldir="/" name="IndentC.php" role="php" />
      <file baseinstalldir="/" name="Outbuf.php" role="php" />
