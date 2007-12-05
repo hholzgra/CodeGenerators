@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE extension SYSTEM "extension.dtd">
-<extension name="mdbtools" version="0.9.0">
+<extension name="mdbtools" version="1.1.0">
 <!-- 
 for now there is no way to extend the generated config.m4
 file with additional custom tests so you need to set theese 
@@ -36,19 +36,22 @@ system
  </maintainers>
 
  <release>
-  <version>0.1</version>
-  <date>2004-03-25</date>
-  <state>alpha</state>
+  <version>1.0.0</version>
+  <date>2007-11-27</date>
+  <state>stable</state>
   <notes>
-   first tests
+   First stable release
   </notes>
  </release>
 
  <deps language="c" platform="all">
-  <with defaults='/usr:/usr/local' testfile='include/mdbtools.h'>mdbtools installation prefix</with>
-  <lib    name="mdb" function="mdb_init"/>
-  <header name="mdbtools.h"/>
-  <configm4>
+  <with defaults='/usr:/usr/local' testfile='include/mdbtools.h'> 
+   <lib    name="mdb" function="mdb_init"/>
+   <header name="mdbtools.h"/>
+   mdbtools installation prefix
+  </with>
+  <configm4 position="top">
+<![CDATA[
   AC_PATH_PROG(PKG_CONFIG, pkg-config, no)
 
   if test $PKG_CONFIG = "no"; then
@@ -67,6 +70,33 @@ system
   GLIB_LIBS=`$PKG_CONFIG --libs glib-2.0`' -lm'
   PHP_EVAL_LIBLINE($GLIB_LIBS)
   LDFLAGS="$CFLAGS $GLIB_LIBS"
+]]>
+  </configm4>
+  <configm4 position="bottom">
+<![CDATA[
+  AC_MSG_CHECKING([whether mdb_open() takes one or two parameters])
+  OLD_CFLAGS=$CFLAGS
+  CFLAGS="$CFLAGS -I$PHP_MDBTOOLS_DIR/include"
+  AC_TRY_COMPILE([#include <mdbtools.h>], [mdb_open("foo", MDB_NOFLAGS);], RESULT="two", RESULT="one")
+  if test "$RESULT" = "two"
+  then
+    AC_DEFINE(HAVE_MDB_OPEN_TWO_PARAMS, 1, [mdb_open() takes one or two parameters depending on the API version])  
+  fi
+  CFLAGS=$OLD_CFLAGS
+  AC_MSG_RESULT($RESULT)
+
+  AC_MSG_CHECKING([whether mdb_bind_column() takes three or four parameters])
+  OLD_CFLAGS=$CFLAGS
+  CFLAGS="$CFLAGS -I$PHP_MDBTOOLS_DIR/include"
+  AC_TRY_COMPILE([#include <mdbtools.h>], [mdb_bind_column(NULL, 1, NULL, NULL);], RESULT="four", RESULT="three")
+  if test "$RESULT" = "four"
+  then
+    AC_DEFINE(HAVE_MDB_BIND_COLUMN_FOUR_PARAMS, 1, [mdb_bind_column() takes three or four parameters depending on the API version])  
+  fi
+  CFLAGS=$OLD_CFLAGS
+  AC_MSG_RESULT($RESULT)
+
+]]>
   </configm4>
  </deps>
 
@@ -158,7 +188,11 @@ system
 ]]>
    </description>
    <code>
-    return_res = mdb_open(path, MDB_NOFLAGS);
+#if HAVE_MDB_OPEN_TWO_PARAMS
+    return_res = mdb_open((char *)path, MDB_NOFLAGS);
+#else
+    return_res = mdb_open((char *)path);
+#endif
 
     if (!return_res) RETURN_FALSE;
    </code>
@@ -176,7 +210,7 @@ system
 ]]>
    </description>
    <code>
-     zend_list_delete(Z_LVAL_P(db)); 
+     FREE_RESOURCE(db_res); 
    </code>
   </function>
 
@@ -194,7 +228,7 @@ system
    </description>
    <code>
 <![CDATA[ 
-     RETURN_LONG(res_db->f->jet_version);
+     RETURN_LONG(db->f->jet_version);
 ]]>
    </code>
   </function>
@@ -217,13 +251,13 @@ system
   MdbCatalogEntry *entry;
 
   /* read the catalog */
-  if (NULL == mdb_read_catalog (res_db, MDB_TABLE)) RETURN_FALSE;
+  if (NULL == mdb_read_catalog (db, MDB_TABLE)) RETURN_FALSE;
 
   array_init(return_value);
 
   /* loop over each entry in the catalog */
-  for (i=0; i < res_db->num_catalog; i++) {
-    entry = g_ptr_array_index (res_db->catalog, i);
+  for (i=0; i < db->num_catalog; i++) {
+    entry = g_ptr_array_index (db->catalog, i);
         
     if (!systabs && !strncmp("MSys", entry->object_name, 4)) {
         continue;
@@ -246,12 +280,12 @@ system
     MdbCatalogEntry *entry;
     MdbColumn *col;
  
-    mdb_read_catalog(res_db, MDB_TABLE);
+    mdb_read_catalog(db, MDB_TABLE);
 
     return_res->table = NULL;
 
-    for (i=0;i<res_db->num_catalog;i++) {
-        entry = g_ptr_array_index(res_db->catalog,i);
+    for (i=0;i<db->num_catalog;i++) {
+        entry = g_ptr_array_index(db->catalog,i);
         if (!strcmp(entry->object_name, table)) {
             return_res->table = mdb_read_table(entry);
             if (!return_res->table) RETURN_FALSE;
@@ -273,7 +307,11 @@ system
    
                 return_res->bound_values[j] = emalloc(MDB_BIND_SIZE);
                 return_res->bound_values[j][0] = '\0';
+#if HAVE_MDB_BIND_COLUMN_FOUR_PARAMS
                 mdb_bind_column(return_res->table, j+1, return_res->bound_values[j], return_res->bound_lengths+j);
+#else
+                mdb_bind_column(return_res->table, j+1, return_res->bound_values[j]);
+#endif
             }
         }
     }
@@ -302,14 +340,14 @@ system
 <![CDATA[
     int i;
 
-    if (!mdb_fetch_row(res_table->table)) {
+    if (!mdb_fetch_row(table->table)) {
         RETURN_FALSE;
     }
 
     array_init(return_value);
 
-    for (i = 0; i < res_table->num_cols; i++) {
-        add_next_index_stringl(return_value, res_table->bound_values[i], res_table->bound_lengths[i], 1);
+    for (i = 0; i < table->num_cols; i++) {
+        add_next_index_stringl(return_value, table->bound_values[i], table->bound_lengths[i], 1);
     }
 ]]>
    </code>
@@ -335,14 +373,14 @@ system
 <![CDATA[
     int i;
 
-    if (!mdb_fetch_row(res_table->table)) {
+    if (!mdb_fetch_row(table->table)) {
         RETURN_FALSE;
     }
 
     array_init(return_value);
 
-    for (i = 0; i < res_table->num_cols; i++) {
-        add_assoc_stringl(return_value, res_table->column_names[i], res_table->bound_values[i], res_table->bound_lengths[i], 1);
+    for (i = 0; i < table->num_cols; i++) {
+        add_assoc_stringl(return_value, table->column_names[i], table->bound_values[i], table->bound_lengths[i], 1);
     }
 
 ]]>
@@ -360,7 +398,7 @@ system
    </description>
    <code>
 <![CDATA[
-    RETURN_LONG(mdb_rewind_table(res_table->table));
+    RETURN_LONG(mdb_rewind_table(table->table));
 ]]>
    </code>
   </function>
@@ -376,7 +414,7 @@ system
 ]]>
    </description>
    <code>
-     zend_list_delete(Z_LVAL_P(table)); 
+     FREE_RESOURCE(table_res); 
    </code>
   </function>
 
@@ -396,7 +434,7 @@ system
 ]]>
    </description>
    <code>
-    RETURN_LONG(res_table->table->num_cols);
+    RETURN_LONG(table->table->num_cols);
    </code>
   </function>
 
@@ -416,7 +454,7 @@ system
 ]]>
    </description>
    <code>
-    RETURN_LONG(res_table->table->num_rows);
+    RETURN_LONG(table->table->num_rows);
    </code>
   </function>
 
@@ -467,12 +505,12 @@ system
 
     array_init(return_value);
     
-    for (i = 0; i < res_table->table->num_cols; i++)
+    for (i = 0; i < table->table->num_cols; i++)
     {
        MAKE_STD_ZVAL(row);
        array_init(row);
 
-       col = g_ptr_array_index (res_table->table->columns, i);
+       col = g_ptr_array_index (table->table->columns, i);
 
        add_assoc_string(row, "name", col->name, 1);
        add_assoc_long(row, "type", col->col_type);
@@ -505,12 +543,12 @@ system
 
     array_init(return_value);
     
-    for (i = 0; i < res_table->table->num_idxs; i++)
+    for (i = 0; i < table->table->num_idxs; i++)
     {
        MAKE_STD_ZVAL(row);
        array_init(row);
 
-       idx = g_ptr_array_index (res_table->table->indices, i);
+       idx = g_ptr_array_index (table->table->indices, i);
 
        add_assoc_long(  row, "num",   idx->index_num);
        add_assoc_string(row, "name",  idx->name, 1);
@@ -544,18 +582,8 @@ system
 ]]>
    </description>
    <code>
-    RETURN_STRING(mdb_get_coltype_string (res_db->default_backend, typecode), 1);
+    RETURN_STRING(mdb_get_coltype_string (db->default_backend, typecode), 1);
    </code>
   </function>
 
-  <test name="foo">
-	<title>foobar</title>
-    <code>
-echo "hallo";
-    </code>
-    <result>
-hallo
-    </result>
-  </test>
-	
 </extension>

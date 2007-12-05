@@ -1,0 +1,21 @@
+<?xml version="1.0" ?>
+<!DOCTYPE extension SYSTEM "../extension.dtd"> 
+<extension name="groups" version="1.1.0">
+  <group name="foo" if="HAVE_FOO">
+
+    <function name="foo">
+     <proto>int foo()</proto>
+     <code>
+     </code>
+    </function>
+
+  </group>
+
+  <function name="bar">
+   <proto>int bar()</proto>
+   <code>
+   </code>
+  </function>
+
+
+</extension>
