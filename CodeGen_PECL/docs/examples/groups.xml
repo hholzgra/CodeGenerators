@@ -2,8 +2,9 @@
 <!DOCTYPE extension SYSTEM "../extension.dtd"> 
 <extension name="groups" version="1.1.0">
   <group name="foo" if="HAVE_FOO">
-
-    <function name="foo">
+   <group name="foo2" if="HAVE_FOO2">
+    
+    <function name="foo" if="FOO = 42">
      <proto>int foo()</proto>
      <code>
      </code>
@@ -16,6 +17,8 @@
    <code>
    </code>
   </function>
+
+</group>
 
 
 </extension>

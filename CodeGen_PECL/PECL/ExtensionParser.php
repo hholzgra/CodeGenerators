@@ -95,12 +95,16 @@ class CodeGen_PECL_ExtensionParser
 
         if (isset($attr["if"])) {
             $this->helper->setIfCondition($attr["if"]);
-        } else {
-            $if = $this->getGroupAttribute("if");
-            if ($if) {
-                $this->helper->setIfCondition($if);
+        } 
+
+        
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $this->helper->addIfCondition($if);
             }
         }
+        
          
 
         return true;
