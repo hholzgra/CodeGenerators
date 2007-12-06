@@ -310,6 +310,13 @@ class CodeGen_PECL_ExtensionParser
             $this->helper->setIfCondition($attr["if"]);
         }
         
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $this->helper->addIfCondition($if);
+            }
+        }
+
         return true;
     }
 
@@ -450,6 +457,13 @@ class CodeGen_PECL_ExtensionParser
             $condition = ($attr["if"] == "yes") ? $attr["name"] : $attr["if"];
             $const->setIfCondition($condition);
         }                
+
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $const->addIfCondition($if);
+            }
+        }
         
         $const->setDesc(CodeGen_Tools_IndentC::linetrim($data));
 
@@ -506,6 +520,13 @@ class CodeGen_PECL_ExtensionParser
 
         if (isset($attr["if"])) {
             $global->setIfCondition($attr["if"]);
+        }
+
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $global->addIfCondition($if);
+            }
         }
 
         return $this->extension->addGlobal($global);
@@ -566,6 +587,13 @@ class CodeGen_PECL_ExtensionParser
 
         if (isset($attr["if"])) {
             $ini->setIfCondition($attr["if"]);
+        }
+
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $ini->addIfCondition($if);
+            }
         }
 
         $ini->setDesc(CodeGen_Tools_IndentC::linetrim($data));
@@ -962,6 +990,13 @@ class CodeGen_PECL_ExtensionParser
             $class->setIfCondition($attr["if"]);
         }
         
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $this->helper->addIfCondition($if);
+            }
+        }
+
         return true;
     }
 
@@ -1262,6 +1297,12 @@ class CodeGen_PECL_ExtensionParser
             $interface->setIfCondition($attr["if"]);
         }
 
+        $groupIfs = $this->getGroupAttributeStack("if");
+        if (is_array($groupIfs)) {
+            foreach($groupIfs as $if) {
+                $interface->addIfCondition($if);
+            }
+        }
         return true;
     }
 

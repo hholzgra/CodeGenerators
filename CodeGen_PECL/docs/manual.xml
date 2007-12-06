@@ -274,6 +274,27 @@ pecl-gen [-h] [--force] [--experimental] [--version]
   </section>
 
   <section>
+   <title>Grouping</title>
+   <para>
+    The &lt;group&gt; tag can be used to group tag elements that can
+    appear under the top level &lt;extension&gt; tag. &lt;group&gt;
+    tags may be nested and can take arbitrary attributes. 
+   </para>
+   <para>
+    The elements within a group may query the group stack for 
+    default values for an attribute supported by the tag but
+    not given for the tag itself or to add accumulated values
+    from all nested groups surrounding the tag itself.
+   </para>
+   <para>
+    Currently the only attribute that takes group values in account
+    is the 'if' attribute on the following element tags:
+    &lt;class&gt;, &lt;constant&gt;, &lt;function&gt;,&lt;global&gt;, 
+    &lt;interface&gt;, &lt;phpini&gt;, and &lt;resource&gt;.
+   </para>
+  </section>
+
+  <section>
    <title>Release information</title>
    <para>
     The release information for your extension should include the
