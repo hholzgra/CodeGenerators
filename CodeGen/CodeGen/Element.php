@@ -121,7 +121,30 @@ abstract class CodeGen_Element
      */
     function setIfCondition($code)
     {
-        $this->ifCondition = $code;
+        $this->ifCondition = trim($code);
+    }
+
+    /**
+     * ifCondition adder
+     *
+     * @param string preprocessor #if condition
+     */
+    function addIfCondition($code)
+    {
+        $if = trim($this->ifCondition);
+        if (strlen($if) == 0) {
+          return $this->setIfCondition($code);
+        }
+        if (($if{0} != '(') && strstr($if, ' ')) {
+            $if = "( $if )";
+        }
+
+        $code = trim($code);
+        if (($code{0} != '(')  && strstr($code, ' ')) {
+            $code = "( $code )";
+        }
+
+        $this->ifCondition= "$if && $code";
     }
 
     /**
