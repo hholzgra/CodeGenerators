@@ -52,6 +52,19 @@ class CodeGen_Tools_Group
 	return false;
   }
 
+  function getAttributeStack($name)
+  {
+	if ($this->parent) {
+	  $attrs = $this->parent->getAttributeStack($name);
+	} else {
+	  $attrs = array();
+	}
+    if (isset($this->attributes["$name"])) {
+	  $attrs[] = $this->attributes["$name"];
+    } 	
+	return $attrs;
+  }
+
   function setAttribute($name, $value) 
   {
 	// TODO disallow overwrites?

@@ -60,7 +60,7 @@ abstract class CodeGen_ExtensionParser
     {
         $currentGroup = end($this->groups);
         if ($currentGroup) {
-            $group->parent = $currentGroup;
+            $group->setParent($currentGroup);
         }
         array_push($this->groups, $group);
 
@@ -77,6 +77,16 @@ abstract class CodeGen_ExtensionParser
         $currentGroup = end($this->groups);
         if ($currentGroup) {
             return $currentGroup->getAttribute($name);
+        } else {
+            return false;
+        }
+    }
+
+    function getGroupAttributeStack($name) 
+    {
+        $currentGroup = end($this->groups);
+        if ($currentGroup) {
+            return $currentGroup->getAttributeStack($name);
         } else {
             return false;
         }
