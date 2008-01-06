@@ -3,11 +3,13 @@
 %include_class {
   protected $extension;
   protected $function;
+  protected $optParams;
 
   function __construct(CodeGen_PECL_Extension $extension, CodeGen_PECL_Element_Function $function)
   {
     $this->extension = $extension;
     $this->function  = $function;
+    $this->optParams = array();
   }
 }
 %syntax_error {
@@ -58,6 +60,12 @@ param_spec ::= SQUARE_OPEN param(P) optional_params SQUARE_CLOSE. {
   if ($stat !== true) {
 	throw new Exception($stat->getMessage());
   }
+  foreach ($this->optParams as $param) {
+	$stat = $this->function->addParam($param);
+	if ($stat !== true) {
+	  throw new Exception($stat->getMessage());
+	}
+  }
 }
 param_spec ::= ELLIPSE. { 
   $this->function->setVarargs(true); 
@@ -88,7 +96,14 @@ param_list ::= param_list COMMA param(P). {
 	throw new Exception($stat->getMessage());
   }
 }
-param_list ::= param_list optional_params.
+param_list ::= param_list optional_params. {
+  foreach ($this->optParams as $param) {
+	$stat = $this->function->addParam($param);
+	if ($stat !== true) {
+	  throw new Exception($stat->getMessage());
+	}
+  }
+}
 param_list ::= param(P). {
   $stat = $this->function->addParam(P);
   if ($stat !== true) {
@@ -97,17 +112,11 @@ param_list ::= param(P). {
 }
 optional_params ::= SQUARE_OPEN COMMA param(P) SQUARE_CLOSE. {
   P["optional"] = true;
-  $stat = $this->function->addParam(P);
-  if ($stat !== true) {
-	throw new Exception($stat->getMessage());
-  }
+  array_unshift($this->optParams, P);
 }
 optional_params ::= SQUARE_OPEN COMMA param(P) optional_params SQUARE_CLOSE. {
   P["optional"] = true;
-  $stat = $this->function->addParam(P);
-  if ($stat !== true) {
-	throw new Exception($stat->getMessage());
-  }
+  array_unshift($this->optParams, P);
 }
 
 param(P) ::= typespec(A) NAME(B). {
