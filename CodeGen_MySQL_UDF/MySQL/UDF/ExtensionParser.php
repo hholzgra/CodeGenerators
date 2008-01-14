@@ -40,6 +40,13 @@ require_once "CodeGen/MySQL/ExtensionParser.php";
 class CodeGen_MySQL_UDF_ExtensionParser 
     extends CodeGen_MySQL_ExtensionParser
 {
+    function __construct($extension)
+    {
+        parent::__construct($extension);
+
+        $this->addTagAlias("udf", "extension");
+    }
+
     function tagstart_udf($attr) 
     {
         return $this->tagstart_extension($attr);
