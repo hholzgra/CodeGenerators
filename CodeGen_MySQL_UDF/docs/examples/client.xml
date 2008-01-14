@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE udf SYSTEM "udf_extension.dtd">
 <udf name="client">
+  <summary>Recursive querie using the client API internally</summary>
+
+  <description>
+This UDF is doing something absolutely not supported: 
+it uses the MySQL client API to issue yet another query
+from within the user defined function
+
+Why isn't this supported?
+
+- it creates a real client connection, so the server is talking
+  to itself over TCP -> not very effective
+
+- it opens a can of worms when it comes to resource locking
+
+- the UDF interface was simply not designed and implemented
+  with this kind of tricks in mind
+
+If you really need to do stuff like this you should look into
+stored procedures and functions instead.
+  </description>
 
   <maintainer>
     <name>Hartmut Holzgraefe</name>
