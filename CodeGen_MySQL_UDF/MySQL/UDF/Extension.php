@@ -238,6 +238,12 @@ class CodeGen_MySQL_UDF_Extension
         
         $upname = strtoupper($this->name);
 
+        echo "#if defined(_WIN32) || defined(_WIN64) || defined(__WIN32__) || defined(WIN32)\n";
+        echo "#define DLLEXP __declspec(dllexport) \n";
+        echo "#else\n";
+        echo "#define DLLEXP\n";
+        echo "#endif\n";
+
         echo $this->getLicenseComment();
 
         echo "// {{{ CREATE and DROP statements for this UDF\n\n";
@@ -348,10 +354,30 @@ typedef long long longlong;
     // }}} 
 
 
+    /**
+     * Generate .def file
+     *
+     */
+     function writeDef()
+     {
+         $file = new CodeGen_Tools_Outbuf($this->dirpath."/".$this->name.".def");
+
+         echo "LIBRARY\t".$this->name."\n";
+         echo "VERSION\t".$this->release->getVersion()."\n";
+         echo "EXPORTS\n";
+
+         foreach ($this->functions as $function) {
+             foreach ($function->getDefSymbols() as $def) {
+                 echo "$def\n";
+             }
+         }
+
+         return $file->write();
+     }
+
     /** 
     * Generate README file (custom or default)
     *
-    * @param  protected
     */
     function writeReadme() 
     {

@@ -654,7 +654,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
         // init function
         echo "/* {$this->name} init function */\n";
-        echo "my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message)\n{\n";
+        echo "DLLEXP my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message)\n{\n";
         echo '    DBUG_ENTER("'.$extension->getName()."::{$this->name}_init\");\n";
             
         if (count($this->dataElements)) {
@@ -731,7 +731,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
         // deinit function
         echo "/* {$this->name} deinit function */\n";
-        echo "void {$this->name}_deinit(UDF_INIT *initid)\n{\n";
+        echo "DLLEXP void {$this->name}_deinit(UDF_INIT *initid)\n{\n";
         echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_deinit\");\n";
 
         if (count($this->dataElements)) {
@@ -754,7 +754,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
         // result function
         echo "/* {$this->name} actual processing function */\n";
-        echo $this->returnType()." {$this->name}(UDF_INIT *initid, UDF_ARGS *args,";
+        echo "DLLEXP ".$this->returnType()." {$this->name}(UDF_INIT *initid, UDF_ARGS *args,";
         if ($this->returnType() == "char *") {
             echo " char *result, unsigned long *length,";
         }
@@ -784,7 +784,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
             // add function
             echo "/* {$this->name} aggregate add function */\n";
-            echo "void {$this->name}_add(UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error )\n";
+            echo "DLLEXP void {$this->name}_add(UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error )\n";
             echo "{\n";
             echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_add\");\n";
             echo $dataCode;
@@ -795,7 +795,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
             // reset function
             echo "/* {$this->name} aggregate reset function */\n";
-            echo "void {$this->name}_reset(UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error )\n";
+            echo "DLLEXP void {$this->name}_reset(UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error )\n";
             echo "{\n";
             echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_reset\");\n";
             echo $dataCode;
@@ -806,7 +806,7 @@ class CodeGen_MySQL_UDF_Element_Function
 
             // clear function
             echo "/* {$this->name} aggregate clear function */\n";
-            echo "void {$this->name}_clear(UDF_INIT* initid, char* is_null, char *error )\n";
+            echo "DLLEXP void {$this->name}_clear(UDF_INIT* initid, char* is_null, char *error )\n";
             echo "{\n";
             echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_clear\");\n";
             echo $dataCode;
@@ -1174,6 +1174,28 @@ class CodeGen_MySQL_UDF_Element_Function
 
 
         return ob_get_clean();        
+    }
+
+    /**
+     * Get export symbols for .def file
+     *
+     * @return array
+     */
+    function getDefSymbols()
+    {
+        $def = array();
+        
+        $def[] = $this->name;
+        $def[] = $this->name."_init";
+        $def[] = $this->name."_deinit";
+
+        if ($this->type == "aggregate") {
+            $def[] = $this->name."_reset";
+            $def[] = $this->name."_add";
+            $def[] = $this->name."_clear";
+        }
+
+        return $def;
     }
 }
 
