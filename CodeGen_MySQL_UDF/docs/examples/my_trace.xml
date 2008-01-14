@@ -2,6 +2,14 @@
 <!DOCTYPE udf SYSTEM "udf_extension.dtd">
 <udf name="my_trace">
 
+ <summary>A simple function tracing UDF execution</summary>
+
+ <description>
+  This function traces the call to itself and its init and deinit
+  handler in the servers error log in a way that even works on a
+  non-debug server.
+ </description>
+
  <maintainer>
   <name>Hartmut Holzgraefe</name>
   <email>hartmut@mysql.com</email>
