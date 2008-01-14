@@ -126,6 +126,12 @@ class CodeGen_XmlParser
     protected $verbatimDepth = 0;
 
     /**
+     * Tag aliases 
+     *
+     */
+    protected $tagAliases = array();
+
+    /**
      * The constructor 
      *
      */
@@ -275,7 +281,7 @@ class CodeGen_XmlParser
      */
     protected function findHandler($prefix)
     {
-        for ($tags = $this->tagStack; count($tags); array_shift($tags)) {
+        for ($tags = array_keys($this->tagStack); count($tags); array_shift($tags)) {
             $method = "{$prefix}_".join("_", $tags);
             if (method_exists($this, $method)) {
                 return $method;
@@ -332,7 +338,12 @@ class CodeGen_XmlParser
         }
 
         // this *has* to be done *after* XInclude processing !!!
-        array_push($this->tagStack, $tag);
+        if (isset($this->tagAliases[$tag])) {
+            $this->tagStack[$this->tagAliases[$tag]] = $tag;
+        } else {
+            $this->tagStack[$tag] = $tag;
+        }
+
         array_push($this->attrStack, $attr);
 
         if ($this->verbatim) {
@@ -592,6 +603,17 @@ class CodeGen_XmlParser
             }
         }
         return true;
+    }
+
+    /**
+     * Add a tag alias
+     *
+     * @param string  Tag name 
+     * @param string  Alias for this tag
+     */
+    function addTagAlias($tag, $alias)
+    {
+        $this->tagAliases[$tag] = $alias;
     }
 }
 
