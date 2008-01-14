@@ -284,6 +284,13 @@ class CodeGen_PECL_Element_Method
 
         $code.= "ZEND_ACC_".strtoupper($this->access);
 
+        switch ($this->name) {
+        case "__construct": $code.=" | ZEND_ACC_CTOR";  break;
+        case "__desctruct": $code.=" | ZEND_ACC_DTOR";  break;
+        case "__clone":     $code.=" | ZEND_ACC_CLONE"; break;
+        default: break;
+        }
+
         if ($this->isStatic) {
             $code.= " | ZEND_ACC_STATIC";
         }
