@@ -321,6 +321,19 @@ This is a MySQL plugin generetad using CodeGen_Mysql_Plugin <?php echo self::ver
         return true;
     }
 
+    function writeConfig()
+    {
+        parent::writeConfig();
+
+        $file =  new CodeGen_Tools_Outbuf($this->dirpath."/plug.in");
+        
+        echo "MYSQL_PLUGIN({$this->name}, [{$this->name}], [{$this->summary}], [max])\n";
+        echo "MYSQL_PLUGIN_STATIC({$this->name}, [lib{$this->name}.la])\n";
+        echo "MYSQL_PLUGIN_DYNAMIC({$this->name}, [{$this->name}.la])\n";
+
+        return $file->write();
+    }
+
 }   
 
 
