@@ -39,6 +39,13 @@ require_once "CodeGen/MySQL/ExtensionParser.php";
 class CodeGen_MySQL_Plugin_ExtensionParser 
     extends CodeGen_MySQL_ExtensionParser
 {
+    function __construct($extension)
+    {
+        parent::__construct($extension);
+        
+        $this->addTagAlias("plugin", "extension");
+    }
+
     //   ____                      _        _                  
     //  / ___| ___ _ __   ___ _ __(_) ___  | |_ __ _  __ _ ___ 
     // | |  _ / _ \ '_ \ / _ \ '__| |/ __| | __/ _` |/ _` / __|
