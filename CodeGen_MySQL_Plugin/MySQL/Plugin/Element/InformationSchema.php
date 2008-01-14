@@ -147,12 +147,16 @@ ST_FIELD_INFO {$this->name}_field_info[] =
         }
 
         switch ($type) {
+            case "DECIMAL": 
+              $type = "NEWDECIMAL";
+              break;
+            case "NEWDECIMAL":
             case "LONG":
             case "STRING":
+              break;
             /* TODO support all types 
             case "TINY":
             case "SHORT":  
-            case "DECIMAL": 
             case "FLOAT":  
             case "DOUBLE":
             case "NULL":   
@@ -166,7 +170,6 @@ ST_FIELD_INFO {$this->name}_field_info[] =
             case "NEWDATE": 
             case "VARCHAR":
             case "BIT":
-            case "NEWDECIMAL":
             case "ENUM":
             case "SET":
             case "TINY_BLOB":
@@ -176,7 +179,6 @@ ST_FIELD_INFO {$this->name}_field_info[] =
             case "VAR_STRING":
             case "GEOMETRY":
             */
-                break;
             default:
                 return PEAR::raiseError("'$type' is not a valid information schema field type");
         }
@@ -188,6 +190,11 @@ ST_FIELD_INFO {$this->name}_field_info[] =
                     break;
                 case "STRING":
                     $length = "NAME_CHAR_LEN";
+                    break;
+                case "NEWDECIMAL":
+                    $length = "32";  
+                    break;
+                default:
                     break;
             }
         }

@@ -21,16 +21,18 @@
  <infoschema name="is_dummy">
   <summary>minimal information_schema plugin</summary>
 
-  <field name="FOOBAR" type="LONG"/>
+  <field name="FOO_INT"     type="LONG"/>
+  <field name="FOO_STRING"  type="STRING"/>
+  <field name="FOO_DECIMAL" type="DECIMAL"/>
 
   <code>
 <?data
   TABLE* table= tables->table;
 
-  table->field[FIELD_FOOBAR]->store(23);
+  table->field[FIELD_FOO_INT]->store(23);
   schema_table_store_record(thd, table);
 
-  table->field[FIELD_FOOBAR]->store(42);
+  table->field[FIELD_FOO_INT]->store(42);
   schema_table_store_record(thd, table);
 
   return 0;
