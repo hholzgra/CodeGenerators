@@ -38,43 +38,43 @@ class CodeGen_Tools_Group
 
   function setParent(Codegen_Tools_Group $parent)
   {
-	$this->parent = $parent;
+    $this->parent = $parent;
   }
 
   function getAttribute($name) 
   {
     if (isset($this->attributes["$name"])) {
-	  return $this->attributes["$name"];
+      return $this->attributes["$name"];
     } 
-	if ($this->parent) {
-	  return $this->parent->getAttribute($name);
-	}
-	return false;
+    if ($this->parent) {
+      return $this->parent->getAttribute($name);
+    }
+    return false;
   }
 
   function getAttributeStack($name)
   {
-	if ($this->parent) {
-	  $attrs = $this->parent->getAttributeStack($name);
-	} else {
-	  $attrs = array();
-	}
+    if ($this->parent) {
+      $attrs = $this->parent->getAttributeStack($name);
+    } else {
+      $attrs = array();
+    }
     if (isset($this->attributes["$name"])) {
-	  $attrs[] = $this->attributes["$name"];
-    } 	
-	return $attrs;
+      $attrs[] = $this->attributes["$name"];
+    }   
+    return $attrs;
   }
 
   function setAttribute($name, $value) 
   {
-	// TODO disallow overwrites?
-	$this->attributes[$name] = $value;
+    // TODO disallow overwrites?
+    $this->attributes[$name] = $value;
   }
 
   function setAttributes($attr)
   {
-	foreach ($attr as $key => $value) {
-	  $this->attributes[$key] = $value;
-	}
+    foreach ($attr as $key => $value) {
+      $this->attributes[$key] = $value;
+    }
   }
 }
