@@ -19,6 +19,7 @@ static double _gc_dist(double radius, double A_lat, double A_lon, double B_lat, 
  </code>
 
  <function name="gc_dist" returns="REAL">
+  <summary>Distance between two points on a sphere</summary>
   <param name="radius" type="REAL"/>
   <param name="A_lat"  type="REAL"/>
   <param name="A_lon"  type="REAL"/>
@@ -32,6 +33,7 @@ static double _gc_dist(double radius, double A_lat, double A_lon, double B_lat, 
  </function>
 
  <function name="earth_distance_miles" returns="REAL">
+  <summary>Distance in miles between two points on the earth surface</summary>
   <param name="A_lat"  type="REAL"/>
   <param name="A_lon"  type="REAL"/>
   <param name="B_lat"  type="REAL"/>
