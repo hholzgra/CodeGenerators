@@ -43,25 +43,21 @@ PECL extension.
   <active>yes</active>
  </helper>
  <date>2007-04-19</date>
- <time>18:15:40</time>
  <version>
-  <release>1.1.0</release>
-  <api>1.1.0</api>
+  <release>1.1.1</release>
+  <api>1.1.1</api>
  </version>
  <stability>
   <release>stable</release>
   <api>stable</api>
  </stability>
  <license uri="http://www.php.net/license">PHP</license>
- <notes>Changes since 1.0.4:
-- new function prototype parser
-- added PHP version check to config.m4
-- functions accepting/returning resources or classes 
-  or using constants for default values now &quot;inherit&quot;
-  conditional compilation settings from these elements
-- disabled output of AC_CHECK_TYPE checks for resource
-  types due to autoconf version conflicts
-- varargs support    
+ <notes>Changes since 1.1.0:
+- added appropriate ZEND_ACC_... attributes for __construct/__destruct/__clone
+- implemented nested &lt;group&gt; tag support
+- add generic "unknown" author if none specified to ensure valid package.xml 
+- fixed PROP_SET_STRING to actually use the stringl api function instead of the plain string one
+- fixed handling of optional parameters in prototypes
  </notes>
  <contents>
   <dir name="/">
@@ -138,6 +134,30 @@ PECL extension.
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <date>2007-04-19</date>
+   <time>18:15:40</time>
+   <version>
+    <release>1.1.0</release>
+    <api>1.1.0</api>
+   </version>
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+   <license uri="http://www.php.net/license">PHP</license>
+   <notes>
+Changes since 1.0.4:
+- new function prototype parser
+- added PHP version check to config.m4
+- functions accepting/returning resources or classes 
+  or using constants for default values now &quot;inherit&quot;
+  conditional compilation settings from these elements
+- disabled output of AC_CHECK_TYPE checks for resource
+  types due to autoconf version conflicts
+- varargs support    
+   </notes>
+  </release>
   <release>
    <version>
     <release>1.0.4</release>
