@@ -921,7 +921,7 @@ HASSQgRukwiZmpucmwYRADs=
         postfix appended to the parameter name.
        </para>
        <example>
-        <title><type>bool</type> parameter</title>
+        <title><type>string</type> parameter</title>
         <programlisting>
 <![CDATA[
 <function name="f_string">
@@ -1282,10 +1282,10 @@ HASSQgRukwiZmpucmwYRADs=
          It may not be called on program crashes or other critical errors.
         </simpara>
         <example>
-         <title><literal>MINIT()</literal></title>
+         <title><literal>MSHUTDOWN()</literal></title>
          <programlisting role="xml">
 ...
-    &lt;function role="internal" name="MINIT">
+    &lt;function role="internal" name="MSHUTDOWN">
       &lt;code>
 &lt;![CDATA[
   library_deinit();
@@ -1301,16 +1301,16 @@ HASSQgRukwiZmpucmwYRADs=
        <term><literal>RINIT</literal></term>
        <listitem>
         <simpara>
-         The request shutdown function. This is called by PHP server
+         The request initialization function. This is called by PHP server
          modules before actually executing a PHP script request or once
          right after <literal>MINIT()</literal> for standalone
          binaries (CGI or CLI).
         </simpara>
         <example>
-         <title><literal>MINIT()</literal></title>
+         <title><literal>RINIT()</literal></title>
          <programlisting role="xml">
 ...
-    &lt;function role="internal" name="MINIT">
+    &lt;function role="internal" name="RINIT">
       &lt;code>
 &lt;![CDATA[
   global_buffer = malloc(global_buffer_size);
@@ -1334,10 +1334,10 @@ HASSQgRukwiZmpucmwYRADs=
          C level.
         </simpara>
         <example>
-         <title><literal>MINIT()</literal></title>
+         <title><literal>RSHUTDOWN()</literal></title>
          <programlisting role="xml">
 ...
-    &lt;function role="internal" name="MINIT">
+    &lt;function role="internal" name="RSHUTDOWN">
       &lt;code>
 &lt;![CDATA[
   free(global_buffer);
@@ -1447,7 +1447,7 @@ HASSQgRukwiZmpucmwYRADs=
   <constant name="SAMPLE_STRING" type="string" value="Hello World!">
    A sample string constant.
   </constant>
-  <constant name="SAMPLE_INT2" type="int" value="23>
+  <constant name="SAMPLE_INT2" type="int" value="23">
    This also adds a <literal>#define SAMPLE_INT2 23</literal>
    definition to the generated header file.
   </constant>
