@@ -985,7 +985,7 @@ $moduleHeader
     PHP_RINIT($name),     /* Replace with NULL if there is nothing to do at request start */
     PHP_RSHUTDOWN($name), /* Replace with NULL if there is nothing to do at request end   */
     PHP_MINFO($name),
-    \"".$this->release->getVersion()."\", 
+    PHP_".$upname."_VERSION, 
     STANDARD_MODULE_PROPERTIES
 };
 /* }}} */
@@ -1239,7 +1239,12 @@ $moduleHeader
 #include <php.h>
 
 #ifdef HAVE_'.$upname.'
+';
 
+       
+       echo '#define PHP_'.$upname.'_VERSION "'.$this->release->getVersion().'"'."\n\n";
+
+       echo '
 #include <php_ini.h>
 #include <SAPI.h>
 #include <ext/standard/info.h>
