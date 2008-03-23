@@ -198,6 +198,17 @@ class CodeGen_PECL_Extension
      */
     protected $channel = "pecl.php.net";
 
+    /**
+     * phpdoc reference purpose
+     *
+     * See http://doc.php.net/php/en/dochowto/x1257.php for details
+     *
+     * @var    string
+     * @access private
+     */
+    protected $docPurpose = "utilspec";
+
+
     // }}} 
 
     
@@ -770,7 +781,25 @@ pdf: manual.tex
         $fp->puts(
 "<?xml version='1.0' encoding='iso-8859-1'?>
 <!-- ".'$'."Revision: 1.1 $ -->
- <reference id='ref.$idName'>
+");
+
+        // phpdoc comments according to http://doc.php.net/php/de/dochowto/x1257.php
+        $fp->puts("<!-- Purpose: ".$this->docPurpose." -->\n");
+
+        $fp->puts("<!-- Membership: pecl");
+        if (count($this->with)) {
+            $fp->puts(", external");
+        }
+        $fp->puts(" -->\n");
+
+        if ($this->release->getState() !== 'stable') {
+            $fp->puts("<!-- State: experimental -->\n");
+        }
+        
+
+
+        $fp->puts("
+ <reference xml:id='ref.$idName' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>
   <title>{$this->summary}</title>
   <titleabbrev>$idName</titleabbrev>
 
