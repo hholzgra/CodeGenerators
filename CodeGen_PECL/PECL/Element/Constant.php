@@ -298,19 +298,7 @@ class CodeGen_PECL_Element_Constant
      */
     static function docHeader($name) 
     {
-        return
-            "    <table>
-     <title>$name constants</title>
-      <tgroup cols='3'>
-       <thead>
-        <row>
-         <entry>name</entry>
-         <entry>type</entry>
-         <entry>descrpition</entry>
-        </row>
-       </thead>
-      <tbody>
-";
+        return "  <variablelist>\n";
     }
             
     /** 
@@ -322,14 +310,21 @@ class CodeGen_PECL_Element_Constant
      */
     function docEntry($base) 
     {
+	  // TODO: indent desc.
+
         return "
-        <row>
-         <entry>
-          <constant id='constant".strtolower(str_replace("_", "-", $this->name))."'>{$this->name}</constant>
-         </entry>
-         <entry>{$this->type}</entry>
-         <entry>{$this->desc}</entry>
-        </row>\n\n";
+   <varlistentry>
+    <term>
+     <constant>{$this->name}</constant> 
+     (<type>{$this->type}</type>)
+    </term>
+    <listitem>
+     <simpara>
+      {$this->desc}     
+     </simpara>
+    </listitem>
+   </varlistentry>\n";
+
     }
 
     /** 
@@ -341,11 +336,7 @@ class CodeGen_PECL_Element_Constant
      */
     static function docFooter() 
     {
-        return
-            "     </tbody>
-    </tgroup>
-   </table>
-";
+        return "  </variablelist>\n";
     }
 }
 

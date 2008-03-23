@@ -392,13 +392,14 @@ class CodeGen_PECL_Element_Ini
     {
         return
             "    <table>
-     <title>$name runtime configuration</title>
-      <tgroup cols='3'>
+     <title>$name &ConfigureOptions;</title>
+      <tgroup cols='4'>
        <thead>
         <row>
-         <entry>directive</entry>
-         <entry>default value</entry>
-         <entry>descrpition</entry>
+         <entry>&Name;</entry>
+         <entry>&Default;</entry>
+         <entry>&Changeable;</entry>
+         <entry>Changelog</entry>
         </row>
        </thead>
       <tbody>
@@ -418,7 +419,8 @@ class CodeGen_PECL_Element_Ini
             "    <row>
      <entry>$this->name</entry>
      <entry>$this->value</entry>
-     <entry>$this->desc</entry>
+     <entry>$this->access</entry>
+     <entry></entry>
     </row>
 ";
     }

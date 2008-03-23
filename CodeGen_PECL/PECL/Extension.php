@@ -811,7 +811,15 @@ pdf: manual.tex
     </para>
    </section>
    
+   <section xml:id='$idName.requirements'>
+    &reftitle.required;
+    <para>
+     
+    </para>
+   </section>
+
    &reference.$idName.configure;
+   &reference.extname.ini;
 
    <section id='$idName.resources'>
     &reftitle.resources;
@@ -825,41 +833,10 @@ pdf: manual.tex
             }
         }
 
-
         $fp->puts(
 "   </section>
 
-   <section id='$idName.constants'>
-    &reftitle.constants;
-");
-
-        if (empty($this->constants)) {
-            $fp->puts("    &no.constants;\n");
-        } else {
-            $const_groups = array();
-
-            foreach ($this->constants as $constant) {
-                $const_groups[$constant->getGroup()][] = $constant;
-            }
-
-            foreach ($const_groups as $group => $constants) {
-                if ($group == "default") {
-                    $group = $idName;
-                }
-
-                $fp->puts(CodeGen_PECL_Element_Constant::docHeader($group));
-
-                foreach ($constants as $constant) {
-                    $fp->puts($constant->docEntry($group));
-                }
-
-                $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
-            }
-        }
-
-        $fp->puts(
-"   </section>
-   
+   &reference.extname.constants;
   </partintro>
 
 &reference.$idName.functions;
@@ -871,9 +848,108 @@ pdf: manual.tex
 
         $fp->close();
   
+
+
+        // 
+        // constants.xml
+        //
+
+        $entities->puts("<!ENTITY reference.$idName.constants SYSTEM './$idName/constants.xml'>\n");
+
+        $fp = new CodeGen_Tools_FileReplacer("$docdir/$idName/constants.xml");
+
+        $fp->puts(
+"<?xml version='1.0' encoding='iso-8859-1'?>
+<!-- ".'$'."Revision: 1.1 $ -->
+");
+
+        $fp->puts("<section id='$idName.constants' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>\n");
+
+        $fp->puts(" &reftitle.constants;\n");
+        $fp->puts(" &extension.constants;\n");
+
+        $fp->puts(" <para>\n");
+
+        if (empty($this->constants)) {
+            $fp->puts("    &no.constants;\n");
+        } else {
+            $const_groups = array();
+            foreach ($this->constants as $constant) {
+                $const_groups[$constant->getGroup()][] = $constant;
+            }
+            foreach ($const_groups as $group => $constants) {
+                if ($group == "default") {
+                    $group = $idName;
+                }
+                $fp->puts(CodeGen_PECL_Element_Constant::docHeader($group));
+                foreach ($constants as $constant) {
+                    $fp->puts($constant->docEntry($group));
+                }
+                $fp->puts(CodeGen_PECL_Element_Constant::docFooter());
+            }
+        }
+        
+        // TODO: 2nd half missing, see http://doc.php.net/php/de/dochowto/c578.php
+
+        $fp->puts(" </para>\n");
+        $fp->puts("</section>\n");
+
+        $fp->puts($this->docEditorSettings());
+        $fp->close();
+
+
+
+        // 
+        // ini.xml
+        //
+
+        $entities->puts("<!ENTITY reference.$idName.ini SYSTEM './$idName/ini.xml'>\n");
+
+        $fp = new CodeGen_Tools_FileReplacer("$docdir/$idName/ini.xml");
+
+        $fp->puts(
+"<?xml version='1.0' encoding='iso-8859-1'?>
+<!-- ".'$'."Revision: 1.1 $ -->
+");
+
+        $fp->puts("<section id='$idName.configuration' xmlns='http://docbook.org/ns/docbook' xmlns:xlink='http://www.w3.org/1999/xlink'>\n");
+
+        $fp->puts(" &reftitle.runtime;\n");
+        $fp->puts(" &extension.runtime;\n");
+
+        $fp->puts(" <para>\n");
+
+        if (empty($this->phpini)) {
+            $fp->puts("    &no.config;\n");
+        } else {
+            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name)); 
+            foreach ($this->phpini as $phpini) {
+                $fp->puts($phpini->docEntry($idName));
+            }
+            $fp->puts(CodeGen_PECL_Element_Ini::docFooter()); 
+        }
+        
+        $fp->puts(" </para>\n");
+        $fp->puts("</section>\n");
+
+        $fp->puts($this->docEditorSettings());
+        $fp->close();
+
+
+
+        //
+        // configure.xml
+        // 
+
         // configure options and dependencies have their own file
         $entities->puts("<!ENTITY reference.$idName.configure SYSTEM './$idName/configure.xml'>\n");
+
         $fp = new CodeGen_Tools_FileReplacer("$docdir/$idName/configure.xml");
+
+        $fp->puts(
+"<?xml version='1.0' encoding='iso-8859-1'?>
+<!-- ".'$'."Revision: 1.1 $ -->
+");
 
         $fp->puts("\n   <section id='$idName.requirements'>\n    &reftitle.required;\n");
 
@@ -920,20 +996,14 @@ pdf: manual.tex
         }
         $fp->puts("\n   </section>\n\n");
 
-        $fp->puts("\n   <section id='$idName.configuration'>\n    &reftitle.runtime;\n");
-        if (empty($this->phpini)) {
-            $fp->puts("    &no.config;\n");
-        } else {
-            $fp->puts(CodeGen_PECL_Element_Ini::docHeader($this->name)); 
-            foreach ($this->phpini as $phpini) {
-                $fp->puts($phpini->docEntry($idName));
-            }
-            $fp->puts(CodeGen_PECL_Element_Ini::docFooter()); 
-        }
-        $fp->puts("\n   </section>\n\n");
             
         $fp->puts($this->docEditorSettings());
         $fp->close();
+
+
+        // 
+
+
 
 
         $function_entities = array();
