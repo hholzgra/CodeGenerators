@@ -197,7 +197,7 @@ class CodeGen_PECL_Element_Constant
     }
 
     /**
-     * Get group thsi constant belongs to
+     * Get group this constant belongs to
      *
      * @access public
      * @return string group name
