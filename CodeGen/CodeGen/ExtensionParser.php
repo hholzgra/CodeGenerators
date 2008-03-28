@@ -234,14 +234,15 @@ abstract class CodeGen_ExtensionParser
         return $this->extension->setDescription(CodeGen_Tools_Indent::linetrim($data));
     }
 
-        
-
-
-    
     function tagstart_extension_maintainer($attr)
     {
         $this->pushHelper(new CodeGen_Maintainer);
         return $this->noAttributes($attr);;
+    }
+
+    function tagstart_maintainers_maintainer($attr)
+    {
+        return $this->tagstart_extension_maintainer($attr);
     }
 
     function tagstart_group_maintainer($attr)
