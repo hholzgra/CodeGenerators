@@ -456,7 +456,9 @@ class CodeGen_PECL_ExtensionParser
         if (isset($attr["if"])) {
             $condition = ($attr["if"] == "yes") ? $attr["name"] : $attr["if"];
             $const->setIfCondition($condition);
-        }                
+        } else if (is_array($this->helper) && isset($this->helper["if"])) {
+            $const->setIfCondition($this->helper["if"]);
+        }
 
         $groupIfs = $this->getGroupAttributeStack("if");
         if (is_array($groupIfs)) {
