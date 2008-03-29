@@ -84,6 +84,13 @@ class CodeGen_XmlParser
     protected $tagStack = array();
 
     /** 
+     * We also need to maintain a stack for tag aliases
+     *
+     * @var    array
+     */
+    protected $tagAliasStack = array();
+
+    /** 
      * We keep track of tag attributes so that we can also provide them to the end tag handlers
      *
      * @var    array
@@ -281,7 +288,7 @@ class CodeGen_XmlParser
      */
     protected function findHandler($prefix)
     {
-        for ($tags = array_keys($this->tagStack); count($tags); array_shift($tags)) {
+        for ($tags = $this->tagAliasStack; count($tags); array_shift($tags)) {
             $method = "{$prefix}_".join("_", $tags);
             if (method_exists($this, $method)) {
                 return $method;
@@ -338,12 +345,8 @@ class CodeGen_XmlParser
         }
 
         // this *has* to be done *after* XInclude processing !!!
-        if (isset($this->tagAliases[$tag])) {
-            $this->tagStack[$this->tagAliases[$tag]] = $tag;
-        } else {
-            $this->tagStack[$tag] = $tag;
-        }
-
+        array_push($this->tagStack, $tag);
+        array_push($this->tagAliasStack, isset($this->tagAliases[$tag]) ? $this->tagAliases[$tag] : $tag);
         array_push($this->attrStack, $attr);
 
         if ($this->verbatim) {
@@ -395,8 +398,9 @@ class CodeGen_XmlParser
         // this *has* to be done *before* popping the tag stack!!!
         $method = $this->findHandler("tagend");
 
-        $oldtag = array_pop($this->tagStack);
-        $attr   = array_pop($this->attrStack);
+        $oldTag   = array_pop($this->tagStack);
+        $oldAlias = array_pop($this->tagAliasStack);
+        $attr     = array_pop($this->attrStack);
 
         if ($this->verbatim) {
             if (--$this->verbatimDepth > 0) {
