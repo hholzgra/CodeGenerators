@@ -52,9 +52,9 @@ class CodeGen_Release
      */
     function setVersion($version) 
     {
-	    if (!preg_match($version, '/^\d+\.\d+(\.\d+)?((a|alpha|b|beta|rc|dev|pl)\d*)?$/i') {
+        if (!preg_match($version, '/^\d+\.\d+(\.\d+)?((a|alpha|b|beta|rc|dev|pl)\d*)?$/i')) {
             return PEAR::raiseError("'$version' is not a valid version number'");
-	    }
+        }
 
         $this->version = $version;
         
@@ -86,7 +86,7 @@ class CodeGen_Release
      * Set method for release date
      *
      * @access public
-     * @param  int    timestamp
+     * @param  mixed  either a UNIX timestamp or a strtotime() parsable string
      * @return bool   true on success
      */
     function setDate($date)
@@ -95,7 +95,10 @@ class CodeGen_Release
             $date = strtotime($date);
         }
 
-        // TODO check valid dates
+        if (!$date) {
+            return PEAR::raiseError("'$date' is not a valid release date'");
+        }
+
         $this->date = $date;
         
         return true;
