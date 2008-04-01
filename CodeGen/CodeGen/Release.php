@@ -41,7 +41,7 @@ class CodeGen_Release
      * @access private
      * @var     string
      */
-    protected $version = "0.0.1";
+    protected $version = "0.0.1dev";
     
     /**
      * Set method for version number
@@ -52,7 +52,10 @@ class CodeGen_Release
      */
     function setVersion($version) 
     {
-        // TODO check format
+	    if (!preg_match($version, '/^\d+\.\d+(\.\d+)?((a|alpha|b|beta|rc|dev|pl)\d*)?$/i') {
+            return PEAR::raiseError("'$version' is not a valid version number'");
+	    }
+
         $this->version = $version;
         
         return true;
