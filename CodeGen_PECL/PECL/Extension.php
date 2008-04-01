@@ -1621,7 +1621,7 @@ PHP_RSHUTDOWN_FUNCTION({$this->name})
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION({$this->name})
 {
-"
+";
 
         if (!empty($this->logos)) {
             $code.= "    if (!sapi_module.phpinfo_as_text) {\n";
@@ -1643,13 +1643,13 @@ PHP_MINFO_FUNCTION({$this->name})
         }
 
         if (count($this->authors)) {
-            $code.= '    php_info_print_table_row(2, "Authors",';
+            $code.= '    php_info_print_table_row(2, "Authors", "';
      
             foreach ($this->authors as $author) {
-                $code.= $this->codegen->block($author->phpinfoCode($this->name))."\n";
+                $code.= $author->phpinfoCode($this->name).'\\n';
             }
 
-            $code.= ")\n";
+            $code.= "\");\n";
         }
 
         $code.=

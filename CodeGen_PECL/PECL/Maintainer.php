@@ -47,7 +47,7 @@ class CodeGen_PECL_Maintainer
      */
     function phpinfoCode()
     {
-        return "{$this->name} &lt;{$this->email}&gt; ({$this->role})";
+        return "{$this->name} '{$this->email}' ({$this->role})";
     }
 
      

@@ -123,10 +123,10 @@ class CodeGen_PECL_Release
         $id      = '$Id: $';
    
         $code = '    php_info_print_table_row(2, "Version",';
-        $code.= sprintf("%s \" (%s)\")\n", $version, $state);
+        $code.= sprintf("%s \" (%s)\");\n", $version, $state);
 
-        $code.= "    php_info_print_table_row(2, \"Released\", $date)\n";
-        $code.= "    php_info_print_table_row(2, \"CVS Revision\", $id)\n";
+        $code.= "    php_info_print_table_row(2, \"Released\", \"$date\");\n";
+        $code.= "    php_info_print_table_row(2, \"CVS Revision\", \"$id\");\n";
       
         return $code;
     }
