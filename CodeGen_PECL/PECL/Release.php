@@ -117,10 +117,18 @@ class CodeGen_PECL_Release
      */
     function phpinfoCode($name) 
     {
-        return sprintf('    php_printf("<p>Version %%s %s (%s) $Id: $</p>\n", %s);'."\n",
-                       $this->state,
-                       date("Y-m-d", $this->date),
-                       "PHP_".strtoupper($name)."_VERSION");
+        $version = 'PHP_'.strtoupper($name).'_VERSION';
+        $state   = $this->state;
+        $date    = date("Y-m-d", $this->date);
+        $id      = '$Id: $';
+   
+        $code = '    php_info_print_table_row(2, "Version",';
+        $code.= sprintf("%s \" (%s)\")\n", $version, $state);
+
+        $code.= "    php_info_print_table_row(2, \"Released\", $date)\n";
+        $code.= "    php_info_print_table_row(2, \"CVS Revision\", $id)\n";
+      
+        return $code;
     }
 }
 

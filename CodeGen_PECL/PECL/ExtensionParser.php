@@ -47,7 +47,6 @@ class CodeGen_PECL_ExtensionParser
 
     function tagstart_extension_maintainer($attr)
     {
-        // check: never popped?
         $this->pushHelper(new CodeGen_PECL_Maintainer);
         return $this->noAttributes($attr);
     }

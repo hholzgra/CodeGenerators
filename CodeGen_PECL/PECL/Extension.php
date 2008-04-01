@@ -1621,30 +1621,39 @@ PHP_RSHUTDOWN_FUNCTION({$this->name})
 /* {{{ PHP_MINFO_FUNCTION */
 PHP_MINFO_FUNCTION({$this->name})
 {
-    php_info_print_box_start(0);
-";
+"
 
-        foreach ($this->logos as $logo) {
-            $code.= $logo->phpinfoCode($this->name);
+        if (!empty($this->logos)) {
+            $code.= "    if (!sapi_module.phpinfo_as_text) {\n";
+            foreach ($this->logos as $logo) {
+                $code.= $logo->phpinfoCode($this->name);
+            }
+            echo "    }\n";
         }
 
         if (!empty($this->summary)) {
-            $summary = strtr(trim($this->summary), array('"'=>'\\"', "\n"=>"<br />"));
-            $code .= "    php_printf(\"<p>$summary</p>\\n\");\n";
+            $summary = strtr(trim($this->summary), array('"'=>'\\"'));
+            $code .= "    php_printf(\"$summary\\n\");\n";
         }
+
+        $code.= "    php_info_print_table_start();\n";
+
         if (!empty($this->release)) {
             $code .= $this->release->phpinfoCode($this->name);
         }
 
         if (count($this->authors)) {
-            $code .= "    php_printf(\"<p><b>Authors:</b></p>\\n\");\n";
+            $code.= '    php_info_print_table_row(2, "Authors",';
+     
             foreach ($this->authors as $author) {
-                $code.= $this->codegen->block($author->phpinfoCode($this->name));
+                $code.= $this->codegen->block($author->phpinfoCode($this->name))."\n";
             }
+
+            $code.= ")\n";
         }
 
         $code.=
-"    php_info_print_box_end();
+"    php_info_print_table_end();
 ";
 
         // TODO move this decision up?
