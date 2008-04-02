@@ -13,7 +13,7 @@
  * @category   Tools and Utilities
  * @package    CodeGen_MySQL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id: Extension.php,v 1.17 2007/05/06 20:59:53 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen_MySQL
@@ -46,7 +46,7 @@ require_once "CodeGen/MySQL/Element/Test.php";
  * @category   Tools and Utilities
  * @package    CodeGen_MySQL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen_MySQL

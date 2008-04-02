@@ -13,7 +13,7 @@
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id: Function.php,v 1.46 2007/04/25 13:59:09 hholzgra Exp $
  * @link       http://pear.php.net/package/CodeGen
@@ -35,7 +35,7 @@ require_once "CodeGen/PECL/Tools/ProtoParser.php";
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen

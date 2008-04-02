@@ -20,11 +20,10 @@ http://talks.php.net/show/UDF_Gen
   <email>hartmut@php.net</email>
   <active>yes</active>
  </lead>
- <date>2007-04-19</date>
- <time>18:15:23</time>
+ <date>2007-05-10</date>
  <version>
-  <release>0.9.7dev</release>
-  <api>0.9.7dev</api>
+  <release>0.9.8</release>
+  <api>0.9.8</api>
  </version>
  <stability>
   <release>beta</release>
@@ -32,8 +31,10 @@ http://talks.php.net/show/UDF_Gen
  </stability>
  <license uri="http://www.php.net/license">PHP</license>
  <notes>still trying to stabelize for release
-changes since 0.9.6:
-- packaging fixes
+changes since 0.9.7:
+- now generates meaningfull INSTALL and README
+- started to generate DocBook documentation from
+  which html and pdf may be generated
  </notes>
  <contents>
   <dir name="/">
@@ -42,8 +43,6 @@ changes since 0.9.6:
      <file baseinstalldir="/" name="corr.xml" role="doc" />
      <file baseinstalldir="/" name="example.xml" role="doc" />
      <file baseinstalldir="/" name="gc_dist.xml" role="doc" />
-     <file baseinstalldir="/" name="oracle_date.l" role="doc" />
-     <file baseinstalldir="/" name="ora_funcs.xml" role="doc" />
      <file baseinstalldir="/" name="rlimit.xml" role="doc" />
     </dir> <!-- /docs/examples -->
     <file baseinstalldir="/" name="manual.html" role="doc" />
@@ -82,17 +81,33 @@ changes since 0.9.6:
    <package>
     <name>CodeGen</name>
     <channel>pear.php.net</channel>
-    <min>0.9</min>
+    <min>1.0.4</min>
    </package>
    <package>
     <name>CodeGen_MySQL</name>
     <channel>pear.php.net</channel>
-    <min>0.1.2dev</min>
+    <min>0.9.0</min>
    </package>
   </required>
  </dependencies>
  <phprelease />
  <changelog>
+  <release>
+   <date>2007-04-19</date>
+   <version>
+    <release>0.9.7dev</release>
+    <api>0.9.7dev</api>
+   </version>
+   <stability>
+    <release>beta</release>
+    <api>beta</api>
+   </stability>
+   <notes>
+    still trying to stabelize for release
+    changes since 0.9.6:
+    - packaging fixes
+   </notes>
+  </release>
   <release>
    <version>
     <release>0.9.6dev</release>

@@ -29,10 +29,17 @@
 <?data
   TABLE* table= tables->table;
 
+  my_decimal d;
+  str2my_decimal(0, "1234567", 7, system_charset_info, &d);
+
   table->field[FIELD_FOO_INT]->store(23);
+  table->field[FIELD_FOO_STRING]->store("foobar", 7, system_charset_info);
+  table->field[FIELD_FOO_DECIMAL]->store_decimal(&d);
   schema_table_store_record(thd, table);
 
   table->field[FIELD_FOO_INT]->store(42);
+  table->field[FIELD_FOO_STRING]->store("barfoo", 7, system_charset_info);
+  table->field[FIELD_FOO_DECIMAL]->set_null();
   schema_table_store_record(thd, table);
 
   return 0;

@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <!DOCTYPE udf SYSTEM "udf_extension.dtd">
-<udf name="rlimit">
+<extension name="rlimit">
+
+  <summary>get/setrlimit functions for MySQL</summary>
 
   <maintainer>
     <name>Hartmut Holzgraefe</name>
@@ -19,23 +21,76 @@
 ]]>
   </code>
 
+  <code role="code" position="top">
+static int which_resource(char *resource, int resource_len) 
+{
+    if (!strncmp(resource, "AS",         resource_len)) return RLIMIT_AS;
+    if (!strncmp(resource, "CORE",       resource_len)) return RLIMIT_CORE;
+    if (!strncmp(resource, "CPU",        resource_len)) return RLIMIT_CPU;
+    if (!strncmp(resource, "DATA",       resource_len)) return RLIMIT_DATA;
+    if (!strncmp(resource, "FSIZE",      resource_len)) return RLIMIT_FSIZE;
+    if (!strncmp(resource, "LOCKS",      resource_len)) return RLIMIT_LOCKS;
+    if (!strncmp(resource, "MEMLOCK",    resource_len)) return RLIMIT_MEMLOCK;
+    if (!strncmp(resource, "MSGQUEUE",   resource_len)) return RLIMIT_MSGQUEUE;
+    if (!strncmp(resource, "NOFILE",     resource_len)) return RLIMIT_NOFILE;
+    if (!strncmp(resource, "NPROC",      resource_len)) return RLIMIT_NPROC;
+    if (!strncmp(resource, "RSS",        resource_len)) return RLIMIT_RSS;
+    if (!strncmp(resource, "SIGPENDING", resource_len)) return RLIMIT_SIGPENDING;
+    if (!strncmp(resource, "STACK",      resource_len)) return RLIMIT_STACK;
+
+    return -1;
+}
+  </code>
+
   <function name="GETRLIMIT" returns="int">
-<!--
-    <param name="resource" type="int"/>
-    <param name="max" type="int" optional="yes"/>
--->
+    <param name="resource"   type="string"/>
+    <param name="hard_limit" type="int"   optional="yes" default="0"/>
     <code>
 <![CDATA[
 struct rlimit r;
-int status;
+int status, what;
 
-status = getrlimit(/* resource */ RLIMIT_DATA, &r);
+what = which_resource(resource, resource_len);
+if (what == -1) {
+    RETURN_NULL;
+}
 
-/*return max ? r.rlim_max : r.rlim_cur; */
+if (getrlimit(what, &r)) {
+    RETURN_NULL;
+}
 
-return r.rlim_cur;
+RETURN_INT(hard_limit ? r.rlim_max : r.rlim_cur);
 ]]>
     </code>
   </function>
 
-</udf>
+  <function name="SETRLIMIT" returns="int">
+    <param name="resource"   type="string"/>
+    <param name="value"      type="int"/>
+    <param name="hard_limit" type="int"   optional="yes" default="0"/>
+    <code>
+<![CDATA[
+struct rlimit r;
+int status, what;
+
+what = which_resource(resource, resource_len);
+if (what == -1) {
+    RETURN_NULL;
+}
+
+if (getrlimit(what, &r)) {
+    RETURN_NULL;
+}
+
+if (hard_limit) {
+    r.rlim_max = value;
+} else {
+    r.rlim_cur = value;
+}
+
+RETURN_INT(setrlimit(what, &r));
+]]>
+    </code>
+  </function>
+
+</extension>

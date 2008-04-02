@@ -13,7 +13,7 @@
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    CVS: $Id: Extension.php,v 1.75 2007/04/16 09:28:03 hholzgra Exp $
  * @version    CVS: $Id: Extension.php,v 1.75 2007/04/16 09:28:03 hholzgra Exp $
@@ -53,7 +53,7 @@ require_once "CodeGen/PECL/Dependency/Platform.php";
  * @category   Tools and Utilities
  * @package    CodeGen_PECL
  * @author     Hartmut Holzgraefe <hartmut@php.net>
- * @copyright  2005, 2006 Hartmut Holzgraefe
+ * @copyright  2005-2008 Hartmut Holzgraefe
  * @license    http://www.php.net/license/3_0.txt  PHP License 3.0
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen_PECL
