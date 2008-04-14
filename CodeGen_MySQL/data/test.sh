@@ -21,7 +21,7 @@ for a in mysql mysqld mysqladmin mysql_install_db mysqltest
 do
   if ! which $a 
   then
-    echo no '$a' binary in PATH
+    echo "no '$a' binary in PATH"
     exit 3
   fi
 done
