@@ -17,6 +17,9 @@ HERE=`pwd`
 DATA=$HERE/var
 SOCK=$DATA/sock
 
+ECHO_N = @ECHO_N@
+ECHO_C = @ECHO_C@
+
 for a in mysql mysqld mysqladmin mysql_install_db mysqltest
 do
   if ! which $a 
@@ -43,14 +46,14 @@ mysqld --skip-networking --skip-innodb \
 
 sleep 5
 
-mysql --socket=$SOCK -e "CREATE DATABASE IF NOT EXISTS test;"
+mysql --user=root --socket=$SOCK -e "CREATE DATABASE IF NOT EXISTS test;"
 
 for test in t/*.test
 do
 	name=`basename $test .test`
-	echo -n "[$name] "
+	echo $ECHO_N  "[$name] $ECHO_C"
 	result=r/$name.result
-	mysqltest --socket=$SOCK --database test --test-file=$test --result-file=$result 
+	mysqltest --user=root --socket=$SOCK --database test --test-file=$test --result-file=$result 
 done
 echo
 

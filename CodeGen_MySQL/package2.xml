@@ -47,7 +47,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <dir name="data">
     <file baseinstalldir="CodeGen" name="ax_compare_version.m4" role="data" />
     <file baseinstalldir="CodeGen" name="mysql.m4" role="data" />
-    <file baseinstalldir="CodeGen" name="test.sh" role="data" />
+    <file baseinstalldir="CodeGen" name="test.sh.in" role="data" />
    </dir> <!-- /data -->
    <dir name="MySQL">
     <dir name="Element">
@@ -86,7 +86,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <filelist>
    <install as="ax_compare_version.m4" name="data/ax_compare_version.m4" />
    <install as="mysql.m4" name="data/mysql.m4" />
-   <install as="test.sh" name="data/test.sh" />
+   <install as="test.sh.in" name="data/test.sh.in" />
   </filelist>
  </phprelease>
 
