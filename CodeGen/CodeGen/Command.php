@@ -90,7 +90,7 @@ class CodeGen_Command
      */
     function commandOptions()
     {
-        $shortOptions = "fd=hlqx";
+        $shortOptions = "fd=hlqr=x";
 
         $longOptions = array( "help",
                               "dir=",
@@ -98,6 +98,7 @@ class CodeGen_Command
                               "force",
                               "lint",
                               "quiet", 
+                              "run=",
                               "version", 
                               );
 
@@ -136,6 +137,8 @@ class CodeGen_Command
   -d|--dir           output directory
   -f|--force         overwrite existing files/directories
   -l|--lint          check syntax only, don't create output
+  -r|--run           perform extra steps after source / project generation, 
+                     e.g. 'configure', 'make', 'test'
   --version          show version info
 ");
 
@@ -239,7 +242,10 @@ class CodeGen_Command
         
         if (!$this->options->have("q", "quiet")) {
             echo $this->extension->successMsg($this->extension->getName());
+        }        
+
+        if ($this->options->value("r", "run")) {
+          $this->extension->runExtra($this->options->value("r", "run"));
         }
-        
     }
 }

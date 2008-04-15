@@ -407,7 +407,7 @@ abstract class CodeGen_Extension
     {
         return $this->authors;
     }
-	
+    
 
     /** 
      * Set release info
@@ -459,7 +459,7 @@ abstract class CodeGen_Extension
         return $this->license;
     }
 
-	
+    
 
 
     /**
@@ -681,25 +681,25 @@ abstract class CodeGen_Extension
         return $this->addPackageFile('copy', $filename, $dir);
     }
 
-	/**
-	 * Add up front define
-	 *
-	 * @access public
-	 * @param  string  #define name
-	 * @param  string  value
-	 * @param  string  comment
-	 */
-	function addDefine($name, $value, $comment) {
-		 if (! CodeGen_Element::isName($name)) {
+    /**
+     * Add up front define
+     *
+     * @access public
+     * @param  string  #define name
+     * @param  string  value
+     * @param  string  comment
+     */
+    function addDefine($name, $value, $comment) {
+         if (! CodeGen_Element::isName($name)) {
             return PEAR::raiseError("'$name' is not a valid define name");
-		 }
-		 
-		 // TODO check for invalid comment characters
-		 
-		 $this->defines[] = array("name" => $name, "value" => $value, "comment" => $comment);
-		 
-		 return true;
-	}
+         }
+         
+         // TODO check for invalid comment characters
+         
+         $this->defines[] = array("name" => $name, "value" => $value, "comment" => $comment);
+         
+         return true;
+    }
 
     /**
      * Add makefile fragment
@@ -847,6 +847,16 @@ Debug_TS
     static function docEditorSettings($level=3) 
     {
         return "";
+    }
+
+    /**
+     * Run extra commands on generated source
+     *
+     * @param  string  token identifying what to run
+     */
+    function runExtra($what)
+    {
+        return PEAR::raiseError("don't know how to run '$what'");   
     }
 }
 
