@@ -626,7 +626,7 @@ recompilation of source files.
     <para>
      without options. This requires that the <command>mysql_config</command> 
      binary of the server installation you want to compile this UDF module
-     for is in your environments <literal>$PATH</literal>.
+     for is in your environments binary search <literal>$PATH</literal>.
     </para>
     <para>
      You may specify an explicit mysql installation to compile 
@@ -645,6 +645,8 @@ recompilation of source files.
     </para>
     <informalexample>
      <programlisting>
+  PATH=/usr/local/mysql/bin:$PATH configure
+
   configure --with-mysql=/usr/local/mysql
 
   configure --with-mysql=/usr/local/mysql/bin/mysql_config
@@ -662,34 +664,58 @@ recompilation of source files.
       configure --help
      </programlisting>
     </informalexample>
+    <note>
+     <para>
+      If there is no <command>configure</command> file yet you may 
+      need to generate it using 
+     </para>
+    <informalexample>
+     <programlisting>
+      autoreconf -i
+     </programlisting>
+    </informalexample>
+    </note>
     <warning>
      <para>
       By default the UDF library created by this package will install
       into <filename>/usr/local/lib</filename>. The mysql server may 
-      not be able to load it from there though as this directory may 
-      not be in its library search path. 
+      not be able to load it from there though. Up to MySQL 5.0
+      the directory the UDF shared object is in needs to be in the
+      library search path, and starting with MySQL 5.1 the server
+      will only load UDF shared objects from the configured 
+      <option>plugin_dir</option>.
      </para>
      <para>
-      You may solve this by:
+      With MySQL 5.1 and above you should explicitly specify
+      the servers <option>plugin_dir</option> as installation
+      path using the <option>--libdir=...</option> <command>configure</command>
+      option. There is no clever way to have <command>configure</command> check
+      for this as it is a runtime server configuration option.
+     </para>
+     <para>
+      With MySQL 5.0 and below you can deal with this by:
       <itemizedlist>
-       <listitem>
-        <para>
-         adding <filename>/usr/local/lib</filename> to the 
-         <literal>LD_LIBRARY_PATH</literal> before invoking the mysql 
-         server
-        </para>
-       </listitem>
        <listitem>
         <para>
          changing the UDF install prefix by using either the
          <option>--prefix</option> or <option>--libdir</option>
          configure option so that the UDF library gets installed 
-         into a directory that is in the servers load path
+         into a directory that is in the servers libary load path
         </para>
        </listitem>
        <listitem>
         <para>
-         or both of the above
+         adding <filename>/usr/local/lib</filename> to the 
+         <literal>LD_LIBRARY_PATH</literal> before invoking the mysql 
+         server if you want to change the library search path for this
+         process only
+        </para>
+       </listitem>
+       <listitem>
+        <para>
+         adding <filename>/usr/local/lib</filename> as a search path
+         in <filename>ld.so.conf</filename> and running 
+         <filename>ldconfig</filename> to pick up the change
         </para>
        </listitem>
       </itemizedlist>
@@ -707,6 +733,11 @@ recompilation of source files.
      make
      </programlisting>
     </informalexample>
+    <para>
+     You may see warnings about <literal>VERSION</literal> and 
+     <literal>PACKAGE</literal> preprocessor macros being redefined,
+     you can ignore these though.
+    </para>
    </section>
    <section>
     <title>Testing</title>
@@ -730,6 +761,18 @@ recompilation of source files.
      <listitem><para><command>mysqltest</command> - the actual test framework tool</para></listitem>
     </itemizedlist>
    </para>
+   <para>
+    So if you have e.g. compiled and installed the server using the default
+    <option>--prefix</option> you would have to make sure that both the <filename>$prefix/bin</filename>
+    and <filename>$prefix/libexec</filename> directories are in the <literal>$PATH</literal>:
+   </para>
+   <informalexample>
+    <programlisting>
+     PATH=/usr/local/mysql/bin:/usr/local/mysql/libexec:$PATH
+     export PATH
+     make test
+    </programlisting>
+   </informalexample>
   </section>
   <section>
    <title>Installing the library</title>
@@ -754,9 +797,8 @@ recompilation of source files.
      <para>
       Remember that the mysql server will only be able to load the
       library if it is installed in a directory in its library load
-      path, you may modify this search path by invoking the server
-      with the <literal>$LD_LIBRARY_PATH</literal> environment variable 
-      set appropriately before starting.
+      path (up to MySQL 5.0) or the servers <option>plugin_dir</option>
+      (beginning with MySQL 5.1).
      </para>
     </note>
    </section>
@@ -802,7 +844,7 @@ you need to make them known to the MySQL server using
      and then regenerate the project from the spec file instead.
     </para>
     <para>
-     The udf-gen tool will only overwrite files that actually 
+     The <command>udf-gen</command> tool will only overwrite files that actually 
      changed, so preserving file system time stamps of unmodified
      files, to play nice with <command>make</command> and to avoid 
      unnecessary recompilation of source files.
