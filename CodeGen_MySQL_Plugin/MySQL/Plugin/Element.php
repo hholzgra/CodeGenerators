@@ -289,7 +289,7 @@ static int {$this->name}_plugin_deinit(void *data)
 
     function uninstallStatement($extension) 
     {
-        return "FLUSH TABLES;\nUNINSTALL PLUGIN `{$this->name}`;\n";
+        return "UNINSTALL PLUGIN `{$this->name}`;\n";
     }
 
     function isValid()

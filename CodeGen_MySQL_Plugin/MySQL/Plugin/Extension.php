@@ -260,9 +260,89 @@ This is a MySQL plugin generetad using CodeGen_Mysql_Plugin <?php echo self::ver
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/INSTALL");
 
 ?>
-This is a MySQL plugin generetad using CodeGen_Mysql_Plugin <?php echo self::version(); ?>
+This is a MySQL plugin library generetad using CodeGen_Mysql_Plugin <?php echo self::version(); ?>
 
-...
+To build the library configure it with:
+
+<?php
+
+         if ($this->needSource) {
+             echo "    ./configure --with-mysql-src=... [--libdir=...]\n";
+         } else {
+             echo "    ./configure [--with-mysql=...] [--libdir=...]\n";
+         }
+
+?>
+    make
+    sudo make install
+
+<?php
+        if ($this->needSource) {
+?>
+You need to specify where to find the MySQL source for the server
+you are running, this plugin library depends on server internals
+not found in the public header files.
+<?php
+        } else {
+?>
+You can either specify the MySQL installation prefix or the absolute 
+path to the mysql_config binary with --with-mysql=... or you can
+just rely on the mysql_config being found in your PATH environment
+variable.
+<?php
+        }
+?>
+
+With --libdir=... you can specify your MySQL servers plugin_dir path.
+As this is a runtime configuration setting in the server the configure
+script is not reliably able to detect where it is so you should set
+it manually.
+
+If there is no 'configure' file yet you may need to generate it using
+
+  autoreconf -i
+
+
+To register the actual plugins within this library 
+execute the following SQL statements:
+
+<?php
+
+        foreach ($this->plugins as $plugin) {
+            echo "    ".$plugin->installStatement($this)."\n";
+        }
+
+?>
+To unregister the plugins execute
+
+    FLUSH TABLES;   /* to make sure plugins are no longer referenced */
+<?php
+
+        foreach ($this->plugins as $plugin) {
+            echo "    ".$plugin->uninstallStatement($this)."\n";
+        }
+?>
+
+To test the plugin before installing it you need to make sure that the
+following binaries and scripts are available via your $PATH:
+
+ * mysql
+ * mysql_install_db
+ * mysqladmin 
+ * mysqltest
+ * mysqld
+
+If you are using a binary tarball distribution or installed from source
+yourself without changing the install prefix you can arrange for that 
+using:
+
+    PATH=/usr/local/mysql/bin:/usr/local/mysql/libexec:$PATH
+    export PATH
+
+You can then test the plugin using a simple
+
+    make test
+
 <?php
 
         $file->write();
@@ -299,6 +379,7 @@ This is a MySQL plugin generetad using CodeGen_Mysql_Plugin <?php echo self::ver
 
         $this->addPackageFile("test", "tests/uninstall_plugins.inc");
         $file = new CodeGen_Tools_Outbuf($this->dirpath."/tests/uninstall_plugins.inc");        
+        echo "FLUSH TABLES;\n";
         foreach ($this->plugins as $plugin) {
             echo $plugin->uninstallStatement($this)."\n";
         }
