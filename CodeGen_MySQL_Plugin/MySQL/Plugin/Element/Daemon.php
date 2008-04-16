@@ -53,4 +53,9 @@ class CodeGen_MySQL_Plugin_Element_Daemon
     {
       return "MYSQL_DAEMON_PLUGIN";
     }
+
+	function getPluginCode()
+	{
+	  return parent::getPluginCode()."void *{$this->name}_descriptor = NULL;\n";
+	}
 }
