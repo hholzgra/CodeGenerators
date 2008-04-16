@@ -52,7 +52,7 @@ class CodeGen_Release
      */
     function setVersion($version) 
     {
-        if (!preg_match($version, '/^\d+\.\d+(\.\d+)?((a|alpha|b|beta|rc|dev|pl)\d*)?$/i')) {
+        if (!preg_match('/^\d+\.\d+(\.\d+)?((a|alpha|b|beta|rc|dev|pl)\d*)?$/i', $version)) {
             return PEAR::raiseError("'$version' is not a valid version number'");
         }
 
