@@ -151,15 +151,15 @@ class CodeGen_MySQL_Plugin_ExtensionParser
         return $this->tagstart_extension($attr);
     }
     
-    function tagend_plugin_code($attr, $data) {
+    function tagend_extension_code($attr, $data) {
         return $this->tagend_extension_code($attr, $data);
     }
 
-    function tagend_plugin_acinclude($attr, $data) {
+    function tagend_extension_acinclude($attr, $data) {
         return $this->tagend_extension_acinclude($attr, $data);
     }
 
-    function tagend_plugin_configure($attr, $data) {
+    function tagend_extension_configure($attr, $data) {
         return $this->tagend_deps_configm4($attr, $data);
     }
 
@@ -180,12 +180,12 @@ class CodeGen_MySQL_Plugin_ExtensionParser
     
     // default plugin tags
 
-    function tagstart_plugin_daemon($attr)
+    function tagstart_extension_daemon($attr)
     {
         return $this->start_generic_plugin("Daemon", $attr);
     }
 
-    function tagend_plugin_daemon($attr, $data)
+    function tagend_extension_daemon($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
     }
@@ -225,12 +225,12 @@ class CodeGen_MySQL_Plugin_ExtensionParser
 
     // default plugin tags
 
-    function tagstart_plugin_fulltext($attr)
+    function tagstart_extension_fulltext($attr)
     {
         return $this->start_generic_plugin("Fulltext", $attr);
     }
 
-    function tagend_plugin_fulltext($attr, $data)
+    function tagend_extension_fulltext($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
     }
@@ -293,12 +293,12 @@ class CodeGen_MySQL_Plugin_ExtensionParser
         
     // default plugin tags
 
-    function tagstart_plugin_storage($attr)
+    function tagstart_extension_storage($attr)
     {
         return $this->start_generic_plugin("Storage", $attr);
     }
 
-    function tagend_plugin_storage($attr, $data)
+    function tagend_extension_storage($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
     }
@@ -365,12 +365,12 @@ class CodeGen_MySQL_Plugin_ExtensionParser
  
     // default plugin tags
 
-    function tagstart_plugin_infoschema($attr)
+    function tagstart_extension_infoschema($attr)
     {
         return $this->start_generic_plugin("InformationSchema", $attr);
     }
 
-    function tagend_plugin_infoschema($attr, $data)
+    function tagend_extension_infoschema($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
     }
