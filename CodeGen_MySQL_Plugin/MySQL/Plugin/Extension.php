@@ -188,11 +188,12 @@ class CodeGen_MySQL_Plugin_Extension
 #define SAFE_MUTEX
 #endif
 #define MYSQL_SERVER
-#include <mysql_priv.h>
+
 #include <mysql/plugin.h>
-";
         
-        echo "#include \"myplugin_{$this->name}.h\"\n";
+#include \"myplugin_{$this->name}.h\"
+
+";
 
         foreach ($this->headers as $header) {
             echo $header->hCode(true);
