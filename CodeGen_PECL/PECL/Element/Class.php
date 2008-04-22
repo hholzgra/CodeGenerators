@@ -542,7 +542,7 @@ static zend_object_value {$this->name}_obj_create(zend_class_entry *class_type T
         }
 
         if ($this->extends) {
-            echo "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, NULL, \"{$this->extends}\" TSRMLS_CC);\n";
+            echo "    {$this->name}_ce_ptr = zend_register_internal_class_ex(&ce, {$this->extends}_ce_ptr, NULL TSRMLS_CC);\n";
         } else {
             echo "    {$this->name}_ce_ptr = zend_register_internal_class(&ce);\n";
         }
