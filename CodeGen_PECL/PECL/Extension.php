@@ -1243,8 +1243,9 @@ $moduleHeader
      */
     function setLicense($license) 
     {
-        if ($license->getShortName() == "GPL") {
-            return PEAR::raiseError("The GPL is no valid choice for PHP extensions due to license incompatibilities");
+        if (preg_match("|^GPL|", $license->getShortName())) {
+            return PEAR::raiseError("The ".$license->getShortName().
+                                    "is not a valid choice for PHP extensions due to license incompatibilities");
         }
  
         $this->license = $license;
