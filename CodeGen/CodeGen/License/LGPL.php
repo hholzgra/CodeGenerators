@@ -19,6 +19,7 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
+require_once "CodeGen/License/LGPL21.php";
 
 /**
  * The LGPL License

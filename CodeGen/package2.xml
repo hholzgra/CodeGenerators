@@ -55,7 +55,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
     <dir name="License">
      <file baseinstalldir="/" name="BSD.php" role="php" />
      <file baseinstalldir="/" name="GPL.php" role="php" />
+     <file baseinstalldir="/" name="GPL2.php" role="php" />
+     <file baseinstalldir="/" name="GPL3.php" role="php" />
      <file baseinstalldir="/" name="LGPL.php" role="php" />
+     <file baseinstalldir="/" name="LGPL21.php" role="php" />
+     <file baseinstalldir="/" name="LGPL3.php" role="php" />
      <file baseinstalldir="/" name="PHP.php" role="php" />
     </dir> <!-- //CodeGen/License -->
     <dir name="Tools">

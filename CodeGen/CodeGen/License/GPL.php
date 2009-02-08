@@ -19,7 +19,7 @@
  * @link       http://pear.php.net/package/CodeGen
  */
 
-require_once "CodeGen/License/GPL2.php"
+require_once "CodeGen/License/GPL2.php";
 
 /**
  * The GPL License

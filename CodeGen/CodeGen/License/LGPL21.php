@@ -31,7 +31,7 @@
  * @version    Release: @package_version@
  * @link       http://pear.php.net/package/CodeGen
  */
-class CodeGen_License_LGPL extends CodeGen_License 
+class CodeGen_License_LGPL21 extends CodeGen_License 
 {
     /**
      * Get short name 
