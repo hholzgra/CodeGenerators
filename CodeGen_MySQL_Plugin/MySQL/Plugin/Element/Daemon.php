@@ -56,6 +56,12 @@ class CodeGen_MySQL_Plugin_Element_Daemon
 
 	function getPluginCode()
 	{
-	  return parent::getPluginCode()."void *{$this->name}_descriptor = NULL;\n";
+	  return parent::getPluginCode().
+"
+static struct st_mysql_daemon {$this->name}_descriptor=
+{
+    MYSQL_DAEMON_INTERFACE_VERSION
+};
+";
 	}
 }
