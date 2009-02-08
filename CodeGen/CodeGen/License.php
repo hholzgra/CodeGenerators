@@ -62,7 +62,7 @@ abstract class CodeGen_License
         $classfile = str_replace("_", "/", $classname).".php";
 
         if (!class_exists($classname)) {
-            if (!@include_once "$classfile")
+            if (!include_once "$classfile")
                 PEAR::raiseError("Unknown license type '$name' ", E_USER_WARNING);
         }
 
