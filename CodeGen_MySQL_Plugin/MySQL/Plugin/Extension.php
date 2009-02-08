@@ -167,19 +167,17 @@ class CodeGen_MySQL_Plugin_Extension
         
         echo $this->getLicenseComment();
 
-        foreach ($this->headers as $header) {
-            echo $header->hCode(false);
-        }
-        
         echo "
 #ifdef HAVE_CONFIG_H
 #include \"config.h\"
 #endif
 
+#include <mysql_priv.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 #include <my_global.h>
+#include <mysql_version.h>
 
 // TODO configure should take care of this
 #ifdef DBUG_ON
@@ -187,6 +185,7 @@ class CodeGen_MySQL_Plugin_Extension
 #define PEDANTIC_SAFEMALLOC
 #define SAFE_MUTEX
 #endif
+
 #define MYSQL_SERVER
 
 #include <mysql/plugin.h>
@@ -194,6 +193,11 @@ class CodeGen_MySQL_Plugin_Extension
 #include \"myplugin_{$this->name}.h\"
 
 ";
+
+        foreach ($this->headers as $header) {
+            echo $header->hCode(false);
+        }
+        
 
         foreach ($this->headers as $header) {
             echo $header->hCode(true);
@@ -205,8 +209,8 @@ class CodeGen_MySQL_Plugin_Extension
             }
         }
         foreach ($this->plugins as $plugin) {
-            echo $plugin->getPluginCode()."\n";
             echo $plugin->getPluginRegistration($this);
+            echo $plugin->getPluginCode()."\n";
         }
 
         $declarations = array();
