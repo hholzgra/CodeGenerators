@@ -607,6 +607,12 @@ class CodeGen_MySQL_UDF_Element_Function
 
             echo "$ind    {$name}_is_null = (args->args[$n]==NULL);\n";
 
+            // TODO make configurable/optional?
+            if (false) {
+                echo "$ind    {$name}_attribute     = $args->attributes[$n];\n";
+                echo "$ind    {$name}_attribute_len = $args->attributes_lengths[$n];\n";
+            }
+
             switch ($param['type']) {
             case 'string':
                 echo "$ind    $name = (char *)args->args[$n];\n";
