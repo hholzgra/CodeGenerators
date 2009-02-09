@@ -560,7 +560,7 @@ changed, so preserving file system time stamps of unmodified
 files, to play nice with "make" and to avoid unnecessary
 recompilation of source files.
 
-<?
+<?php
 
         $file->write();
     }
@@ -853,7 +853,7 @@ you need to make them known to the MySQL server using
  </chapter>
  <chapter>
   <title>Functions provided by this UDF module</title>
-<?
+<?php
 
         foreach ($this->functions as $function) {
             echo $function->docbook($this);
