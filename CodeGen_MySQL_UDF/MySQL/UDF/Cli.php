@@ -1,4 +1,3 @@
-#!/usr/local/bin/php
 <?php
 
 /**
@@ -23,4 +22,3 @@ $parser = new CodeGen_MySQL_UDF_ExtensionParser($extension);
 
 $command->execute($parser);
 
-?>
