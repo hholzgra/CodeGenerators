@@ -171,14 +171,19 @@ class CodeGen_MySQL_Plugin_Extension
 #ifdef HAVE_CONFIG_H
 #include \"config.h\"
 #endif
+
 ";
         // prepended header files
         foreach ($this->headers as $header) {
             echo $header->hCode(true);
         }
-        
-        echo "
+
+/* TODO
+needed for --with-mysql-src builds? 
 #include <mysql_priv.h>
+*/
+
+        echo "
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
