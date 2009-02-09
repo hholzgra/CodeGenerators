@@ -171,7 +171,13 @@ class CodeGen_MySQL_Plugin_Extension
 #ifdef HAVE_CONFIG_H
 #include \"config.h\"
 #endif
-
+";
+        // prepended header files
+        foreach ($this->headers as $header) {
+            echo $header->hCode(true);
+        }
+        
+        echo "
 #include <mysql_priv.h>
 #include <stdlib.h>
 #include <string.h>
@@ -194,13 +200,9 @@ class CodeGen_MySQL_Plugin_Extension
 
 ";
 
+        // non-prepended header files
         foreach ($this->headers as $header) {
             echo $header->hCode(false);
-        }
-        
-
-        foreach ($this->headers as $header) {
-            echo $header->hCode(true);
         }
         
         if (isset($this->code["code"]["top"])) {
