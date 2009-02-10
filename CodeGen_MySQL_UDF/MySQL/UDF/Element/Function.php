@@ -594,7 +594,10 @@ class CodeGen_MySQL_UDF_Element_Function
 
         }
         echo "\n";
+        $paramDeclareCode = ob_get_contents();
+        ob_end_clean();
 
+	ob_start();
         //parameter value access
         $n = 0;
         foreach ($this->params as $name => $param) {
@@ -650,7 +653,7 @@ class CodeGen_MySQL_UDF_Element_Function
             $n++;
         }
 
-        $paramCode = ob_get_contents();
+        $paramAccessCode = ob_get_contents();
         ob_end_clean();
 
 
@@ -660,14 +663,17 @@ class CodeGen_MySQL_UDF_Element_Function
 
         // init function
         echo "/* {$this->name} init function */\n";
-        echo "DLLEXP my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message)\n{\n";
+	echo "DLLEXP my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message)\n{\n";
+
+	echo $paramDeclareCode;
+
         echo '    DBUG_ENTER("'.$extension->getName()."::{$this->name}_init\");\n";
             
         if (count($this->dataElements)) {
             echo "    struct {$this->name}_t *data = (struct {$this->name}_t *)calloc(sizeof(struct {$this->name}_t), 1);\n\n";
         }
 
-        echo $paramCode;
+        echo $paramAccessCode;
 
         if (count($this->dataElements)) {
             echo "    if (!data) {\n";
@@ -767,12 +773,12 @@ class CodeGen_MySQL_UDF_Element_Function
         echo " char *is_null, char *error)\n";
         echo "{\n";
 
+	echo $paramDeclareCode;
+        echo $dataCode;
+
         echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}\");\n";
 
-
-        echo $dataCode;
-            
-        echo $paramCode;
+        echo $paramAccessCode;
 
         if ($this->type == "aggregate") {
             echo $codegen->varblock($this->resultCode, 1);
@@ -792,9 +798,10 @@ class CodeGen_MySQL_UDF_Element_Function
             echo "/* {$this->name} aggregate add function */\n";
             echo "DLLEXP void {$this->name}_add(UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error )\n";
             echo "{\n";
-            echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_add\");\n";
             echo $dataCode;
-            echo $paramCode;
+            echo $paramDeclareCode;
+            echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_add\");\n";
+            echo $paramAccessCode;
             echo $codegen->varblock($this->addCode, 1);             
             echo "    DBUG_VOID_RETURN;\n";
             echo "}\n\n";
@@ -803,9 +810,10 @@ class CodeGen_MySQL_UDF_Element_Function
             echo "/* {$this->name} aggregate reset function */\n";
             echo "DLLEXP void {$this->name}_reset(UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error )\n";
             echo "{\n";
-            echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_reset\");\n";
             echo $dataCode;
-            echo $paramCode;
+            echo $paramDeclareCode;
+	    echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_reset\");\n";
+	    echo $paramAccessCode;
             echo $codegen->varblock($this->startCode, 1);
             echo "    DBUG_VOID_RETURN;\n";
             echo "}\n\n";
@@ -814,8 +822,8 @@ class CodeGen_MySQL_UDF_Element_Function
             echo "/* {$this->name} aggregate clear function */\n";
             echo "DLLEXP void {$this->name}_clear(UDF_INIT* initid, char* is_null, char *error )\n";
             echo "{\n";
-            echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_clear\");\n";
             echo $dataCode;
+            echo "    DBUG_ENTER(\"".$extension->getName()."::{$this->name}_clear\");\n";
             echo $codegen->varblock($this->clearCode, 1);
             echo "    DBUG_VOID_RETURN;\n";
             echo "}\n\n";
@@ -843,21 +851,21 @@ class CodeGen_MySQL_UDF_Element_Function
 
         $result.= "/* FUNCTION {$this->name} */\n";
 
-        $result.= "my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message);\n";
+        $result.= "DLLEXP my_bool {$this->name}_init(UDF_INIT *initid, UDF_ARGS *args, char *message);\n";
 
         if ($this->type == "aggregate") {
-            $result.= "void {$this->name}_reset( UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error );\n";
-            $result.= "void {$this->name}_add( UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error );\n";
-            $result.= "void {$this->name}_clear( UDF_INIT* initid, char* is_null, char* error);\n";
+            $result.= "DLLEXP void {$this->name}_reset( UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error );\n";
+            $result.= "DLLEXP void {$this->name}_add( UDF_INIT* initid, UDF_ARGS* args, char* is_null, char *error );\n";
+            $result.= "DLLEXP void {$this->name}_clear( UDF_INIT* initid, char* is_null, char* error);\n";
         } 
 
-        $result.= "{$return} {$this->name}(UDF_INIT *initid, UDF_ARGS *args,";
+        $result.= "DLLEXP {$return} {$this->name}(UDF_INIT *initid, UDF_ARGS *args,";
         if ($this->returnType() == "char *") {
             $result.= " char *result, unsigned long *length,";
         }
         $result.= " char *is_null, char *error);\n";
 
-        $result.= "void {$this->name}_deinit(UDF_INIT *initid);\n";
+        $result.= "DLLEXP void {$this->name}_deinit(UDF_INIT *initid);\n";
 
         $result.= $this->ifConditionEnd();
 
