@@ -56,6 +56,16 @@ plugin project.
     <tasks:replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
    </file>
+   <file name="scripts/mysql-plugin-gen.sh" role="script">
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:unixeol/>
+   </file>
+   <file name="scripts/mysql-plugin-gen.bat" role="script">
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:windowseol/>
+   </file>
   </dir> <!-- / -->
  </contents>
  <dependencies>
@@ -74,16 +84,31 @@ plugin project.
    <package>
     <name>CodeGen</name>
     <channel>pear.php.net</channel>
-    <min>1.0.4</min>
+    <min>1.0.6</min>
    </package>
    <package>
     <name>CodeGen_MySQL</name>
     <channel>pear.php.net</channel>
-    <min>0.9.1dev</min>
+    <min>1.0.0RC1</min>
    </package>
   </required>
  </dependencies>
- <phprelease />
+ <phprelease>
+  <installconditions>
+   <os><name>windows</name></os>
+  </installconditions>
+  <filelist>
+   <install name="scripts/mysql-plugin-gen.bat" as="mysql-plugin-gen.bat"/>
+   <ignore name="scripts/mysql-plugin-gen.sh"/>
+  </filelist>
+ </phprelease>
+ <phprelease>
+  <!-- all non-windows systems -->
+  <filelist>
+   <install name="scripts/mysql-plugin-gen.sh" as="mysql-plugin-gen"/>
+   <ignore name="scripts/mysql-plugin-gen.bat"/>
+  </filelist>
+ </phprelease>
  <changelog>
   <release>
    <date>2007-04-18</date>
