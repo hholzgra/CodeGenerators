@@ -69,36 +69,37 @@ pear install -o CodeGen_MySQL_UDF
 	 The actual installation is once again performed by the PEAR installer:
     </para>
     <programlisting>
-pear install CogeGen-0.9.0.tgz
-pear install CogeGen_MySQL-0.9.0.tgz
-pear install CogeGen_MySQL-UDF-0.9.0.tgz
+pear install CogeGen-1.0.6.tgz
+pear install CogeGen_MySQL-1.0.0RC1.tgz
+pear install CogeGen_MySQL-UDF-1.0.0RC1.tgz
     </programlisting>
    </section>
 
    <section>
-    <title>Installing from PEAR CVS</title>
+    <title>Installing from source repository</title>
     <para>
-     You can also install CodeGen_MySQL_UDF snapshots from PEAR CVS. CVS snapshots may
-     include features not yet available in any release package, but the code in
-     CVS may not be as well tested as the release packages (or even broken at 
-     times). Be warned, your milage may vary. Use the following sequence of 
-     commands in your PEAR CVS checkout to install the latest
+     You can also install CodeGen_MySQL_UDF snapshots from the subversion
+     repository on <literal>php-groupies.de</literal>. There is only one
+     subversion project for all the PEAR code generator packages right now
+     which can be checked out using:
+    </para>
+    <programlisting>
+svn checkout svn://php-baustelle.de/CodeGenerators/trunk CodeGenerators
+    </programlisting>
+    <para>
+     Subversion snapshots may include features not yet available in any 
+     release package, but the code in SVN may not be as well tested as the 
+     release packages (or even broken at  times). Be warned, your milage 
+     may vary. Use the following sequence of commands in your 
+     <filename>CodeGenerators/</filename> checkout to install the latest
      <literal>CodeGen_MySQL_UDF</literal> snapshot:
     </para>
     <programlisting>
-cd pear
-cd CodeGen
-cvs update
-pear install -f package.xml
-cd ..
-cd CodeGen_MySQL
-cvs update
-pear install -f package.xml
-cd ..
-cd CodeGen_MySQL_UDF
-cvs update
-pear install -f package.xml
-cd ..
+cd CodeGenerators
+svn update
+( cd CodeGen          ; pear install -f package2.xml )
+( cd CodeGen_MySQL    ; pear install -f package2.xml )
+( cd CodeGen_MySQL_UDF; pear install -f package2.xml )
     </programlisting>
    </section>
   </section>
@@ -122,16 +123,19 @@ cd ..
    </para>
    <screen>
 <![CDATA[
-udf-gen 0.9.1dev,Copyright (c) 2003-2005 Hartmut Holzgraefe
+udf-gen 1.0.0RC1, Copyright (c) 2003-2009 Hartmut Holzgraefe
+
 Usage:
 
-/usr/local/bin/udf-gen [-hxf] [-d dir] [--version] specfile.xml
+/usr/local/bin/udf-gen [-hxfl] [-d dir] [--version] specfile.xml
 
   -h|--help          this message
   -x|--experimental  enable experimental features
   -d|--dir           output directory
   -f|--force         overwrite existing files/directories
   -l|--lint          check syntax only, don't create output
+  -r|--run           perform extra steps after source / project generation, 
+                     e.g. 'configure', 'make', 'test'
   --version          show version info
 ]]>
    </screen>
@@ -250,7 +254,8 @@ Usage:
     its <literal>package.xml</literal> counterpart as it is used to
     decide which license text should actually be written to the
     <literal>LICENSE</literal>. For now you have to specify either
-    <literal>GPL</literal>, <literal>LGPL</literal> or
+    <literal>GPL</literal>, <literal>GPL2</literal>, <literal>GPL3</literal>, 
+    <literal>LGPL</literal>, <literal>LGPL21</literal>, <literal>LGPL3</literal> or
     <literal>BSD</literal>, any other value is taken as
     '<emphasis>unknown</emphasis>'.
    </para>
