@@ -23,17 +23,16 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
 
- <date>2007-09-17</date>
- <time>12:30:00</time>
+ <date>2009-02-11</date>
 
  <version>
-  <release>0.9.1dev</release>
-  <api>0.9.1dev</api>
+  <release>1.0.0RC1</release>
+  <api>1.0.0RC1</api>
  </version>
 
  <stability>
-  <release>alpha</release>
-  <api>alpha</api>
+  <release>beta</release>
+  <api>beta</api>
  </stability>
 
  <license uri="http://www.php.net/license">PHP</license>
@@ -77,7 +76,7 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <package>
     <name>CodeGen</name>
     <channel>pear.php.net</channel>
-    <min>1.0.3</min>
+    <min>1.0.6</min>
    </package>
   </required>
  </dependencies>
