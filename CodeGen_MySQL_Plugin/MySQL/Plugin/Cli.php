@@ -18,7 +18,7 @@ require_once "CodeGen/MySQL/Plugin/ExtensionParser.php";
 // create extension object
 $extension = new CodeGen_MySQL_Plugin_Extension;
 
-$command = new CodeGen_Command($extension);
+$command = new CodeGen_Command($extension, "mysql-plugin-gen");
 
 $parser = new CodeGen_MySQL_Plugin_ExtensionParser($extension);
 $command->execute($parser);

@@ -11,7 +11,7 @@ require_once "CodeGen/PECL/Command.php";
 // create extension object
 $extension = new CodeGen_PECL_Extension;
 
-$command = new CodeGen_PECL_Command($extension);
+$command = new CodeGen_PECL_Command($extension, "pecl-gen");
 
 if ($command->options->have("experimental", "x")) {
 	echo "the --experimental (-x) option has been deprecated

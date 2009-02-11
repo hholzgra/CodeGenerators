@@ -16,7 +16,7 @@ require_once "CodeGen/MySQL/UDF/ExtensionParser.php";
 // create extension object
 $extension = new CodeGen_MySQL_UDF_Extension;
 
-$command = new CodeGen_Command($extension);
+$command = new CodeGen_Command($extension, "udf-gen");
 
 $parser = new CodeGen_MySQL_UDF_ExtensionParser($extension);
 
