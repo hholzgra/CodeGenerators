@@ -21,11 +21,11 @@ http://pear.php.net/dtd/package-2.0.xsd">
   <active>yes</active>
  </lead>
 
- <date>2008-03-05</date>
+ <date>2009-02-12</date>
 
  <version>
-  <release>1.0.5</release>
-  <api>1.0.5</api>
+  <release>1.0.6</release>
+  <api>1.0.6</api>
  </version>
 
  <stability>
@@ -36,12 +36,13 @@ http://pear.php.net/dtd/package-2.0.xsd">
  <license uri="http://www.php.net/license">PHP</license>
 
  <notes>
-  Changes since 1.0.4:
+  Changes since 1.0.5:
 
-  - added support for nested &lt;group&gt; tags
-    for more general grouping
-  - added support for multiple #if conditions
-  - added tag alias support  
+  * support for XML tag aliases
+  * added -r/--run command line option 
+  * added support for new FSF license versions
+  * setVersion() now validates version string format
+  * setDate() now checks for valid date string
  </notes>
 
 
@@ -105,10 +106,30 @@ http://pear.php.net/dtd/package-2.0.xsd">
    </package>
   </required>
  </dependencies>
-
+0
  <phprelease />
 
  <changelog>
+  <release>
+   <version>
+    <release>1.0.5</release>
+    <api>1.0.5</api>
+   </version>
+
+   <stability>
+    <release>stable</release>
+    <api>stable</api>
+   </stability>
+
+   <notes>
+    Changes since 1.0.4:
+
+    - added support for nested &lt;group&gt; tags
+      for more general grouping
+    - added support for multiple #if conditions
+    - added tag alias support  
+   </notes>
+  </release>
   <release>
    <date>2007-05-10</date>
    <version>
