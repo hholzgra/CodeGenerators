@@ -51,11 +51,20 @@ class CodeGen_Command
     protected $extension;
 
     /**
+     * The command name 
+     *
+     * e.g. for usage output
+     *
+     * @var string
+     */
+    protected $commandName = '$command';
+
+    /**
      * Command constructor
      *
      * @param object  Extension to work on
      */
-    function __construct(CodeGen_Extension $extension)
+    function __construct(CodeGen_Extension $extension, $commandName = false)
     {
         $this->extension = $extension;
 
@@ -66,6 +75,17 @@ class CodeGen_Command
         set_error_handler(array($this, "errorHandler"));
 
         list($shortOptions, $longOptions) = $this->commandOptions();
+
+	// set the command name
+	// Unix shells store the invoking script name in 
+	// the "_" environment variable. If this is not
+	// set we take the constructor parameter or the
+	// default value as a last resort
+	if (isset($_SERVER["_"])) {
+	  $this->commandName = basename($_SERVER["_"]);
+	} else if ($commandName) {
+	  $this->commandName = $commandName;
+	}
 
         $this->options = new CodeGen_Tools_Getopt($shortOptions, 
                                                    $longOptions,
@@ -81,6 +101,7 @@ class CodeGen_Command
             $this->showVersion();
             exit(0);
         }
+
     }
 
     /**
@@ -112,7 +133,7 @@ class CodeGen_Command
     function showVersion() 
     {
         $fp = fopen("php://stderr", "w");
-        fputs($fp, basename($_SERVER["argv"][0]) . " ". $this->extension->version() . ", " . $this->extension->copyright() . "\n");
+        fputs($fp, $this->commandName . " ". $this->extension->version() . ", " . $this->extension->copyright() . "\n");
         fclose($fp);
     }
 
@@ -130,7 +151,7 @@ class CodeGen_Command
         
         fputs($fp, "\nUsage:
 
-". $_SERVER["argv"][0] ." [-hxfl] [-d dir] [--version] specfile.xml
+". $this->commandName ." [-hxfl] [-d dir] [--version] specfile.xml
 
   -h|--help          this message
   -x|--experimental  enable experimental features
