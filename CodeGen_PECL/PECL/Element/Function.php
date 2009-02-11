@@ -978,12 +978,18 @@ class CodeGen_PECL_Element_Function
 
         if ($this->varargs) {
             $argc = sprintf("MIN(ZEND_NUM_ARGS(), %d)", $count);
-        } else {
+        } else if ($count > 0) {
             $argc = "ZEND_NUM_ARGS()";
+        } 
+       
+        if (isset($argc)) {
+            $parse_call = "zend_parse_parameters($argc TSRMLS_CC, \"$argString\", ".join(", ", $argPointers).")";
+        } else {
+            $parse_call = "zend_parse_parameters_none()";
         }
-
+        
         return "
-    if (zend_parse_parameters($argc TSRMLS_CC, \"$argString\", ".join(", ", $argPointers).") == FAILURE) {
+    if ($parse_call == FAILURE) {
         return;
     }
 ";
