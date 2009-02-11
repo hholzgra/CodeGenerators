@@ -20,7 +20,7 @@ http://talks.php.net/show/UDF_Gen
   <email>hartmut@php.net</email>
   <active>yes</active>
  </lead>
- <date>2007-05-10</date>
+ <date>2009-02-11</date>
  <version>
   <release>1.0.0RC1</release>
   <api>1.0.0RC1</api>
@@ -39,6 +39,11 @@ changes since 0.9.8:
 - added "html" and "pdf" make targets
 - rely on "autreconf" instead of running autotools one by one
 - support of &lt;group&gt; tags and conditional compilation
+- now generating variables for parameter attributes
+- udf-gen script now works on windows, too
+- Windows related code generation fixes
+- generating .def file for Windows builds now
+- &lt;udf&gt; is now an alias of &lt;extension&gt;
  </notes>
  <contents>
   <dir name="/">
