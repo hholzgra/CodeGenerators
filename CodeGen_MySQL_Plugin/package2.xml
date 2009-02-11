@@ -52,10 +52,6 @@ plugin project.
      <file baseinstalldir="CodeGen" name="ExtensionParser.php" role="php" />
     </dir> <!-- //MySQL/Plugin -->
    </dir> <!-- //MySQL -->
-   <file baseinstalldir="/" name="mysql-plugin-gen" role="script">
-    <tasks:replace from="/usr/local/bin" to="PHP_BINDIR" type="php-const" />
-    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
-   </file>
    <file name="scripts/mysql-plugin-gen.sh" role="script">
     <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
