@@ -54,6 +54,15 @@ PECL extension.
  <license uri="http://www.php.net/license">PHP</license>
  <notes>
   Changes since 1.1.2:
+  - support "if" attribute in &lt;constant&gt;
+  - changed generated docs to new docs structure 
+  - changed generated version information to match PECL proposal
+  - pecl-gen script can now also be invoked on windows
+
+  Bug fixes:
+  - Bug #13502 &lt;maintainers&gt; tag no longer works
+  - Bug #13531 nested &lt;group&gt; tags confuse the XML parser
+  - Bug #13639 "codeGen for zend_register_internal_class_ex not working"
  </notes>
  <contents>
   <dir name="/">
@@ -98,13 +107,20 @@ PECL extension.
     <file baseinstalldir="CodeGen" name="Extension.php" role="php">
      <tasks:replace from="@package_version@" to="version" type="package-info" />
     </file>
+    <file baseinstalldir="CodeGen" name="Cli.php" role="php" />
     <file baseinstalldir="CodeGen" name="ExtensionParser.php" role="php" />
     <file baseinstalldir="CodeGen" name="Maintainer.php" role="php" />
     <file baseinstalldir="CodeGen" name="Release.php" role="php" />
    </dir> <!-- /PECL -->
-   <file baseinstalldir="/" name="pecl-gen" role="script">
-    <tasks:replace from="/usr/local/bin/php" to="php_bin" type="pear-config" />
+   <file name="scripts/pecl-gen.sh" role="script">
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
     <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:unixeol/>
+   </file>
+   <file name="scripts/pecl-gen.bat" role="script">
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:windowseol/>
    </file>
   </dir> <!-- / -->
  </contents>
@@ -128,7 +144,22 @@ PECL extension.
    </package>
   </required>
  </dependencies>
- <phprelease />
+ <phprelease>
+  <installconditions>
+   <os><name>windows</name></os>
+  </installconditions>
+  <filelist>
+   <install name="scripts/pecl-gen.bat" as="pecl-gen.bat"/>
+   <ignore name="scripts/pecl-gen.sh"/>
+  </filelist>
+ </phprelease>
+ <phprelease>
+  <!-- all non-windows systems -->
+  <filelist>
+   <install name="scripts/pecl-gen.sh" as="pecl-gen"/>
+   <ignore name="scripts/pecl-gen.bat"/>
+  </filelist>
+ </phprelease>
  <changelog>
   <release>
    <date>2008-03-05</date>
