@@ -215,6 +215,8 @@ abstract class CodeGen_MySQL_Plugin_Element
         if ($license) {
             switch ($license->getShortName()) {
             case 'GPL':
+            case 'GPL2':
+            case 'GPL3':
                 $license = "PLUGIN_LICENSE_GPL";
                 break;
             case 'BSD':
