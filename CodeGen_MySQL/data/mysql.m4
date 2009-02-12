@@ -4,9 +4,6 @@ dnl
  
 dnl TODO: fix "mutual exclusive" stuff
 
-dnl 3rd party macro for version number comparisons
-m4_include([ax_compare_version.m4])
-
 MYSQL_VERSION=none
 
 dnl check for a --with-mysql configure option and set up
