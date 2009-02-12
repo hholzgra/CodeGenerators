@@ -50,6 +50,7 @@ plugin project.
       <tasks:replace from="@package_version@" to="version" type="package-info" />
      </file>
      <file baseinstalldir="CodeGen" name="ExtensionParser.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Cli.php" role="php" />
     </dir> <!-- //MySQL/Plugin -->
    </dir> <!-- //MySQL -->
    <file name="scripts/mysql-plugin-gen.sh" role="script">
