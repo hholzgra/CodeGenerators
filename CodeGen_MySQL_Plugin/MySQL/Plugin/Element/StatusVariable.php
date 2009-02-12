@@ -100,7 +100,7 @@ class CodeGen_MySQL_Plugin_Element_StatusVariable
       $value = "&".$prefix.$this->value;
       break;
     case "ARRAY": 
-      $value = "&".$prefix.$this->value."_status_variables";
+      $value = "&array_".$this->value."_status_variables";
       break;
     case "UNDEF": 
     default:
@@ -163,11 +163,11 @@ class CodeGen_MySQL_Plugin_Element_StatusVariable
       }
       echo "\n\n";
       
-      echo CodeGen_MySQL_Plugin_Element_StatusVariable::startRegistrations($this->value."_");
+      echo CodeGen_MySQL_Plugin_Element_StatusVariable::startRegistrations("array_".$this->value."_");
       foreach ($this->statusVariables as $variable) {
         echo $variable->getRegistration($this->name."_");
       }
-      echo CodeGen_MySQL_Plugin_Element_StatusVariable::endRegistrations($this->value-"_");   
+      echo CodeGen_MySQL_Plugin_Element_StatusVariable::endRegistrations("array_".$this->value."_");   
       return ob_get_clean();
       break;
 
