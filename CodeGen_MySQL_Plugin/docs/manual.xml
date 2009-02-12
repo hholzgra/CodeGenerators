@@ -46,7 +46,7 @@
   <section>
    <title>Installation</title>
    <para>
-	<literal>CodeGen_MySQL_Plugin</literal> is available in PEAR, the
+    <literal>CodeGen_MySQL_Plugin</literal> is available in PEAR, the
     PHP Extension and Application Repository, on <literal>http://pear.php.net/</literal>.
    </para>
 
@@ -274,6 +274,85 @@ Usage:
 ]]>
     </programlisting>
    </example>
+  </section>
+
+  <section>
+   <title>Plugin types</title>
+
+   <section>
+    <title>Tags common to all plugin types</title>
+    <!--
+	* <init>
+	* <deinit>
+	* <summary>
+	* <statusvar>
+     -->
+    <section>
+     <title><sgmltag>&lt;summary&gt;</sgmltag></title>
+     <para>
+       The content of this tag should be a short single line
+       description of the plugin. The summary given here will
+       be shown in the <literal>PLUGIN_DESCRIPTION</literal>
+       column of the plugins <literal>PLUGINS</literal> table
+       entry in <literal>INFORMATION_SCHEMA</literal>.
+     </para>
+    </section>
+
+    <section>
+     <title><sgmltag>&lt;init&gt;</sgmltag></title>
+     <para>
+       This tag contains the initialization code for this
+       plugin which is executed when installing the plugin
+       or starting the server while the plugin is installed.
+     </para>
+    </section>
+
+    <section>
+     <title><sgmltag>&lt;deinit&gt;</sgmltag></title>
+     <para>
+       This tag contains the deinitialization code for this
+       plugin which is executed when uninstalling the plugin
+       or shutting down the server while the plugin is installed.
+     </para>
+    </section>
+
+    <section>
+     <title><sgmltag>&lt;statusvar&gt;</sgmltag></title>
+
+     <para>...</para>
+    </section>
+   </section>
+      
+   <section>
+    <title>Daemon plugins</title>
+    <para>...</para>
+   </section>
+
+   <section>
+    <title>Fulltext parser plugins</title>
+    <!--
+        * <parser>
+	** <code>
+	** <init>
+	** <deinit>
+    -->
+    <para>...</para>
+   </section>
+
+   <section>
+    <title>INFORMATION_SCHEMA plugins</title>
+    <para>...</para>
+    <!--
+	* <field>+
+	* <code>
+    -->
+   </section>
+
+   <section>
+    <title>Storage engine plugins</title>
+    <para>...</para>
+   </section>
+
   </section>
 
  </chapter>
