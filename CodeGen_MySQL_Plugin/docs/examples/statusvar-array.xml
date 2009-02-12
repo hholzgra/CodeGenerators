@@ -16,8 +16,14 @@
     </notes>
   </release>
 
- <daemon name="dummy">
-  <summary>minimal example plugin</summary>
+ <daemon name="statusvar-array">
+  <summary>Array statusvar example</summary>
+
+  <statusvar type="array" name="dummy">
+   <statusvar type="int" name="foo" init="23"/> <!-- C variable will be named "dummy_foo" --> 
+   <statusvar type="int" name="bar" init="42"/> <!-- C variable will be named "dummy_foo" -->
+  </statusvar>
+
  </daemon>
 
 </plugin>

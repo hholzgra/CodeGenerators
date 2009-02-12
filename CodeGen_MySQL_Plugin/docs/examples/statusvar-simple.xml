@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<plugin name="minimal">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.0.1</version>
+    <date>2004-05-25</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+ <daemon name="statusvar_simple"">
+  <summary>Example defining simple scalar status varibles</summary>
+
+  <statusvar type="int"      name="dummy_int"      init="42"/>
+  <statusvar type="long"     name="dummy_long"     init="100000000L"/>
+  <statusvar type="longlong" name="dummy_llong"    init="12000000000LL"/>
+  <statusvar type="char"     name="dummy_char"     init="'q'"/>
+  <statusvar type="char_ptr" name="dummy_char_ptr" init='"hello world!"'/>
+
+ </daemon>
+
+</plugin>
