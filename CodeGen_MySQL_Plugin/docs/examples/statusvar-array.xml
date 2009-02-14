@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<plugin name="minimal">
+<plugin name="statusvar_array">
   <maintainer>
     <name>Hartmut Holzgraefe</name>
     <email>hartmut@mysql.com</email>
@@ -16,7 +16,7 @@
     </notes>
   </release>
 
- <daemon name="statusvar-array">
+ <daemon name="statusvar_array">
   <summary>Array statusvar example</summary>
 
   <statusvar type="array" name="dummy">
