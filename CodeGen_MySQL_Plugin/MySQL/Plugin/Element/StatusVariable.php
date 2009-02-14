@@ -186,8 +186,8 @@ class CodeGen_MySQL_Plugin_Element_StatusVariable
 
   function addStatusVariable($var)
   {
-    if ($this->type !== "ARRAY") {
-      return PEAR::raiseError("only variables of type ARRAY can have sub-variables");
+    if ($this->type !== "ARRAY" && $this->type !== "FUNC") {
+      return PEAR::raiseError("only variables of type ARRAY or FUNC can have sub-variables");
     }
 
     if (isset($this->statusVariables[$var->getName()])) {

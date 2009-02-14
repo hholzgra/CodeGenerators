@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<plugin name="systemvar_simple">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.0.1</version>
+    <date>2004-05-25</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+ <daemon name="systemvar_simple">
+  <summary>Example defining simple scalar status varibles</summary>
+
+  <systemvar type="int" name="foo" min="23" max="42" default="37" scope="session"/>
+  <systemvar type="int" name="bar" min="23" max="42" default="38" scope="global"/>
+  <systemvar type="str" name="baz" default="foobar" scope="global"/>
+
+ </daemon>
+
+</plugin>

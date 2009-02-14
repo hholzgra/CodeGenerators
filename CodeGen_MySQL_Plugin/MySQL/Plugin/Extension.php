@@ -29,6 +29,7 @@ require_once "CodeGen/MySQL/Extension.php";
 require_once "CodeGen/MySQL/Plugin/Element.php";
 
 require_once "CodeGen/MySQL/Plugin/Element/StatusVariable.php";
+require_once "CodeGen/MySQL/Plugin/Element/SystemVariable.php";
 
 require_once "CodeGen/MySQL/Plugin/Element/Fulltext.php";
 require_once "CodeGen/MySQL/Plugin/Element/Storage.php";
@@ -93,7 +94,7 @@ class CodeGen_MySQL_Plugin_Extension
     {
         parent::__construct();
 
-        $this->setLang = "c++";
+        $this->setLanguage("c++");
 
         $this->addConfigFragment("MYSQL_USE_PLUGIN_API()", "bottom");
     }

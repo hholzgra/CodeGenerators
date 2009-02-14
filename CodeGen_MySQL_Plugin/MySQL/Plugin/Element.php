@@ -87,6 +87,13 @@ abstract class CodeGen_MySQL_Plugin_Element
      * @var array
      */
     protected $statusVariables = array();
+
+    /**
+     * System variables for this plugin
+     *
+     * @var array
+     */
+    protected $systemVariables = array();
     
     /**
      * Constructor
@@ -154,10 +161,22 @@ abstract class CodeGen_MySQL_Plugin_Element
     function addStatusVariable($var)
     {
         if (isset($this->statusVariables[$var->getName()])) {
-            return PEAR::raiseError("status variable '".$var->getName()."' already defined (x)");
+            return PEAR::raiseError("status variable '".$var->getName()."' already defined");
         }
 
         $this->statusVariables[$var->getName()] = $var;
+
+        return true;
+    }
+
+
+    function addSystemVariable($var)
+    {
+        if (isset($this->systemVariables[$var->getName()])) {
+            return PEAR::raiseError("system variable '".$var->getName()."' already defined");
+        }
+
+        $this->systemVariables[$var->getName()] = $var;
 
         return true;
     }
@@ -180,17 +199,35 @@ abstract class CodeGen_MySQL_Plugin_Element
     {
         ob_start();
 
-        foreach ($this->statusVariables as $variable) {
-            echo $variable->getDefinition();
-        }
-        echo "\n\n";
+        if (count($this->statusVariables)) {
+            echo "// Status variables\n";
+            foreach ($this->statusVariables as $variable) {
+                echo $variable->getDefinition();
+            }
+            echo "\n\n";
 
-        echo CodeGen_MySQL_Plugin_Element_StatusVariable::startRegistrations($this->name."_");
-        foreach ($this->statusVariables as $variable) {
-            echo $variable->getRegistration();
+            echo CodeGen_MySQL_Plugin_Element_StatusVariable::startRegistrations($this->name."_");
+            foreach ($this->statusVariables as $variable) {
+                echo $variable->getRegistration();
+            }
+            echo CodeGen_MySQL_Plugin_Element_StatusVariable::endRegistrations($this->name."_");
+            
         }
-        echo CodeGen_MySQL_Plugin_Element_StatusVariable::endRegistrations($this->name."_");
+        
+        if (count($this->systemVariables)) {
+            echo "// System variables\n";
+            foreach ($this->systemVariables as $variable) {
+                echo $variable->getDefinition();
+            }
+            echo "\n\n";
 
+            echo CodeGen_MySQL_Plugin_Element_SystemVariable::startRegistrations($this->name."_");
+            foreach ($this->systemVariables as $variable) {
+                echo $variable->getRegistration();
+            }
+            echo CodeGen_MySQL_Plugin_Element_SystemVariable::endRegistrations($this->name."_");
+        }
+        
         return ob_get_clean();
     }
 
@@ -236,7 +273,7 @@ abstract class CodeGen_MySQL_Plugin_Element
         }
         $version = "0x".sprintf("%02d%02d", $version[0], $version[1]);
 
-        return "{
+        $code = "{
   $type,
   &{$name}_descriptor, 
   \"$name\",
@@ -246,11 +283,23 @@ abstract class CodeGen_MySQL_Plugin_Element
   {$name}_plugin_init,
   {$name}_plugin_deinit,
   $version,
-  {$name}_status_variables,
-  NULL, /* placeholder for system variables, not available yet */
-  NULL, /* placeholder for command line options, not available yet */
-}
 ";
+
+        if (count($this->statusVariables)) {
+            $code.= "  {$name}_status_variables,\n";
+        } else {
+            $code.= "  NULL, /* no status variables declared */\n";
+        }
+
+        if (count($this->systemVariables)) {
+            $code.= "  {$name}_system_variables,\n";
+        } else {
+            $code.= "  NULL, /* no system variables declared */\n";
+        }
+
+        $code .= "  NULL, /* placeholder for command line options, not available yet */\n}\n";
+
+        return $code;
     }
 
     function getPluginCode()

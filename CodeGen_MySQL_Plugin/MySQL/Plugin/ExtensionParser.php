@@ -133,6 +133,60 @@ class CodeGen_MySQL_Plugin_ExtensionParser
         return $this->helper->addStatusVariable($var);
     }
 
+    function start_generic_systemvar($attr)
+    {
+        $err = $this->checkAttributes($attr, array("scope", "type", "name", "comment", "min", "max", "default"));
+        if (PEAR::isError($err)) {
+            return $err;
+        }
+        
+        if (!isset($attr["scope"])) {
+            return PEAR::raiseError("scope attribut for system variable missing");
+        }
+        if (!isset($attr["type"])) {
+            return PEAR::raiseError("type attribut for system variable missing");
+        }
+        if (!isset($attr["name"])) {
+            return PEAR::raiseError("name attribut for system variable missing");
+        }
+        if (!isset($attr["default"])) {
+            $attr["0"] = false;
+        }
+
+        $err = CodeGen_MySQL_Plugin_Element_SystemVariable::isName($attr["name"]);
+        if ($err !== true) {
+            return PEAR::raiseError("'$name' is not a valid system variable name");
+        }
+
+        $err = CodeGen_MySQL_Plugin_Element_SystemVariable::isValidType($attr["type"]);
+        if ($err !== true) {
+            return $err;
+        }
+
+        $err = CodeGen_MySQL_Plugin_Element_SystemVariable::isValidScope($attr["scope"]);
+        if ($err !== true) {
+            return $err;
+        }
+
+        $var = new CodeGen_MySQL_Plugin_Element_SystemVariable($attr['scope'],
+                                                               $attr['type'], 
+                                                               $attr['name']);
+
+        if (isset($attr["default"]))  $var->setDefault($attr["default"]);
+        if (isset($attr["min"]))      $var->setMin($attr["min"]);
+        if (isset($attr["max"]))      $var->setMax($attr["max"]);
+        if (isset($attr["readonly"])) $var->setReadonly($this->toBool($attr["readonly"]));
+
+        return $this->pushHelper($var);
+    }
+
+    function end_generic_systemvar($attr)
+    {
+        $var = $this->helper;
+        $this->popHelper();
+        return $this->helper->addSystemVariable($var);
+    }
+
     function end_generic_summary($attr, $data)
     {
         return $this->helper->setSummary($data);
@@ -210,6 +264,16 @@ class CodeGen_MySQL_Plugin_ExtensionParser
         return $this->end_generic_statusvar($attr, $data);
     }
 
+    function tagstart_daemon_systemvar($attr)
+    {
+        return $this->start_generic_systemvar($attr);
+    }
+
+    function tagend_daemon_systemvar($attr, $data)
+    {
+        return $this->end_generic_systemvar($attr, $data);
+    }
+
     function tagend_daemon_summary($attr, $data)
     {
         return $this->end_generic_summary($attr, $data);
@@ -253,6 +317,16 @@ class CodeGen_MySQL_Plugin_ExtensionParser
     function tagend_fulltext_statusvar($attr, $data)
     {
         return $this->end_generic_statusvar($attr, $data);
+    }
+
+    function tagstart_fulltext_systemvar($attr)
+    {
+        return $this->start_generic_systemvar($attr);
+    }
+
+    function tagend_fulltext_systemvar($attr, $data)
+    {
+        return $this->end_generic_systemvar($attr, $data);
     }
 
     function tagend_fulltext_summary($attr, $data)
@@ -321,6 +395,16 @@ class CodeGen_MySQL_Plugin_ExtensionParser
     function tagend_storage_statusvar($attr, $data)
     {
         return $this->end_generic_statusvar($attr, $data);
+    }
+
+    function tagstart_storage_systemvar($attr)
+    {
+        return $this->start_generic_systemvar($attr);
+    }
+
+    function tagend_storage_systemvar($attr, $data)
+    {
+        return $this->end_generic_systemvar($attr, $data);
     }
 
     function tagend_storage_summary($attr, $data)
@@ -393,6 +477,16 @@ class CodeGen_MySQL_Plugin_ExtensionParser
     function tagend_infoschema_statusvar($attr, $data)
     {
         return $this->end_generic_statusvar($attr, $data);
+    }
+
+    function tagstart_infoschema_systemvar($attr)
+    {
+        return $this->start_generic_systemvar($attr);
+    }
+
+    function tagend_infoschema_systemvar($attr, $data)
+    {
+        return $this->end_generic_systemvar($attr, $data);
     }
 
     function tagend_infoschema_summary($attr, $data)

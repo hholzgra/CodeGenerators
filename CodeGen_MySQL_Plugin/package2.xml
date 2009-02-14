@@ -43,6 +43,7 @@ plugin project.
       <file baseinstalldir="CodeGen" name="InformationSchema.php" role="php" />
       <file baseinstalldir="CodeGen" name="StatusVariable.php" role="php" />
       <file baseinstalldir="CodeGen" name="Storage.php" role="php" />
+      <file baseinstalldir="CodeGen" name="SystemVariable.php" role="php" />
       <file baseinstalldir="CodeGen" name="Test.php" role="php" />
      </dir> <!-- //MySQL/Plugin/Element -->
      <file baseinstalldir="CodeGen" name="Element.php" role="php" />
