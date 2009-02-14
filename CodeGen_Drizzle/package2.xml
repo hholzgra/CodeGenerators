@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.4.11" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+
+ <name>CodeGen_Drizzle</name>
+ <channel>pear.php.net</channel>
+
+ <summary>Drizzle plugin code generator</summary>
+ <description>
+  ...
+ </description>
+
+ <lead>
+  <name>Hartmut Holzgraefe</name>
+  <user>hholzgra</user>
+  <email>hartmut@php.net</email>
+  <active>yes</active>
+ </lead>
+
+ <date>2009-02-11</date>
+
+ <version>
+  <release>0.0.1</release>
+  <api>0.0.1</api>
+ </version>
+
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+
+ <license uri="http://www.php.net/license">PHP</license>
+
+ <notes>
+  initial port
+ </notes>
+
+ <contents>
+  <dir name="/">
+   <dir name="data">
+    <file baseinstalldir="CodeGen" name="ax_compare_version.m4" role="data" />
+    <file baseinstalldir="CodeGen" name="drizzle.m4" role="data" />
+    <file baseinstalldir="CodeGen" name="test.sh.in" role="data" />
+   </dir> <!-- /data -->
+   <dir name="Drizzle">
+    <dir name="Element">
+     <file baseinstalldir="CodeGen" name="Daemon.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Fulltext.php" role="php" />
+     <file baseinstalldir="CodeGen" name="InformationSchema.php" role="php" />
+     <file baseinstalldir="CodeGen" name="StatusVariable.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Storage.php" role="php" />
+     <file baseinstalldir="CodeGen" name="SystemVar.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Test.php" role="php" />
+    </dir> <!-- /Drizzle/Element -->
+    <file baseinstalldir="CodeGen" name="Cli.php" role="php"/>
+    <file baseinstalldir="CodeGen" name="Element.php" role="php"/>
+    <file baseinstalldir="CodeGen" name="Extension.php" role="php">
+     <tasks:replace from="@DATADIR@" to="data_dir" type="pear-config" />
+    </file>
+    <file baseinstalldir="CodeGen" name="ExtensionParser.php" role="php" />
+   </dir> <!-- /Drizzle -->
+   <file name="scripts/drizzle-gen.sh" role="script">
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:unixeol/>
+   </file>
+   <file name="scripts/drizzle-gen.bat" role="script">
+    <tasks:replace from="@php_bin@" to="php_bin" type="pear-config" />
+    <tasks:replace from="@php_dir@" to="php_dir" type="pear-config" />
+    <tasks:windowseol/>
+   </file>
+  </dir> <!-- / -->
+ </contents>
+
+ <dependencies>
+  <required>
+   <php>
+    <min>5.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>PEAR</name>
+    <channel>pear.php.net</channel>
+    <min>1.2</min>
+   </package>
+   <package>
+    <name>CodeGen</name>
+    <channel>pear.php.net</channel>
+    <min>1.0.6</min>
+   </package>
+  </required>
+ </dependencies>
+
+ <phprelease>
+  <installconditions>
+   <os><name>windows</name></os>
+  </installconditions>
+  <filelist>
+   <install name="scripts/drizzle-gen.bat" as="drizzle-gen.bat"/>
+   <ignore name="scripts/drizzle-gen.sh"/>
+   <ignore name="data/ax_compare_version.m4" />
+   <ignore name="data/drizzle.m4" />
+   <ignore name="data/test.sh.in" />
+  </filelist>
+ </phprelease>
+ <phprelease>
+  <!-- all non-windows systems -->
+  <filelist>
+   <install name="scripts/drizzle-gen.sh" as="drizzle-gen"/>
+   <ignore name="scripts/drizzle-gen.bat"/>
+   <install as="ax_compare_version.m4" name="data/ax_compare_version.m4" />
+   <install as="drizzle.m4" name="data/drizzle.m4" />
+   <install as="test.sh.in" name="data/test.sh.in" />
+  </filelist>
+ </phprelease>
+
+</package>
+
