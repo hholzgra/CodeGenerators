@@ -47,12 +47,10 @@ http://pear.php.net/dtd/package-2.0.xsd">
    <dir name="Drizzle">
     <dir name="Element">
      <file baseinstalldir="CodeGen" name="Daemon.php" role="php" />
-     <file baseinstalldir="CodeGen" name="Fulltext.php" role="php" />
+     <file baseinstalldir="CodeGen" name="ErrMsg.php" role="php" />
      <file baseinstalldir="CodeGen" name="InformationSchema.php" role="php" />
      <file baseinstalldir="CodeGen" name="StatusVariable.php" role="php" />
-     <file baseinstalldir="CodeGen" name="Storage.php" role="php" />
      <file baseinstalldir="CodeGen" name="SystemVar.php" role="php" />
-     <file baseinstalldir="CodeGen" name="Test.php" role="php" />
     </dir> <!-- /Drizzle/Element -->
     <file baseinstalldir="CodeGen" name="Cli.php" role="php"/>
     <file baseinstalldir="CodeGen" name="Element.php" role="php"/>

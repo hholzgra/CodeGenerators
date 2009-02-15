@@ -314,6 +314,11 @@ static int {$this->name}_plugin_deinit(void *data __attribute((unused)))
 ";
     }
 
+    function getPluginIncludes()
+    {
+        return "";
+    }
+
     function getPluginHeader()
     {
         return "";

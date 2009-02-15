@@ -286,6 +286,55 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->end_generic_summary($attr, $data);
     }
 
+    // ErrMsg
+    
+    // default plugin tags
+
+    function tagstart_extension_errmsg($attr)
+    {
+        return $this->start_generic_plugin("Errmsg", $attr);
+    }
+
+    function tagend_extension_errmsg($attr, $data)
+    {
+        return $this->end_generic_plugin($attr, $data);
+    }
+
+    function tagend_errmsg_init($attr, $data)
+    {
+        return $this->end_generic_init($attr, $data);
+    }
+
+    function tagend_errmsg_deinit($attr, $data)
+    {
+        return $this->end_generic_deinit($attr, $data);
+    }
+
+    function tagstart_errmsg_statusvar($attr)
+    {
+        return $this->start_generic_statusvar($attr);
+    }
+
+    function tagend_errmsg_statusvar($attr, $data)
+    {
+        return $this->end_generic_statusvar($attr, $data);
+    }
+
+    function tagstart_errmsg_systemvar($attr)
+    {
+        return $this->start_generic_systemvar($attr);
+    }
+
+    function tagend_errmsg_systemvar($attr, $data)
+    {
+        return $this->end_generic_systemvar($attr, $data);
+    }
+
+    function tagend_errmsg_summary($attr, $data)
+    {
+        return $this->end_generic_summary($attr, $data);
+    }
+
 
     //  ___        __          ____       _                          
     // |_ _|_ __  / _| ___    / ___|  ___| |__   ___ _ __ ___   __ _ 

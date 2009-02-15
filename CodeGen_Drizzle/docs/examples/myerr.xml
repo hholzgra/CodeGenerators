@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<plugin name="myerr">
+  <maintainer>
+    <name>Hartmut Holzgraefe</name>
+    <email>hartmut@mysql.com</email>
+  </maintainer>
+
+  <license>GPL</license>
+
+  <release>
+    <version>0.0.1</version>
+    <date>2004-05-25</date>
+    <state>beta</state>
+    <notes>
+     First working release
+    </notes>
+  </release>
+
+ <errmsg name="myerr">
+  <summary>minimal example plugin</summary>
+ </errmsg>
+
+</plugin>
