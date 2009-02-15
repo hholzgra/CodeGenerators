@@ -34,13 +34,10 @@ require_once "CodeGen/Tools/Platform.php";
 require_once "CodeGen/Tools/Indent.php";
 
 require_once "CodeGen/Drizzle/Element.php";
-require_once "CodeGen/Drizzle/Element/Test.php";
 
 require_once "CodeGen/Drizzle/Element/StatusVariable.php";
 require_once "CodeGen/Drizzle/Element/SystemVar.php";
 
-require_once "CodeGen/Drizzle/Element/Fulltext.php";
-require_once "CodeGen/Drizzle/Element/Storage.php";
 require_once "CodeGen/Drizzle/Element/Daemon.php";
 require_once "CodeGen/Drizzle/Element/InformationSchema.php";
 
