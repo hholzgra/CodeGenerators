@@ -54,14 +54,4 @@ class CodeGen_Drizzle_Element_Daemon
       return "DRIZZLE_DAEMON_PLUGIN";
     }
 
-	function getPluginCode()
-	{
-	  return parent::getPluginCode().
-"
-static struct st_drizzle_daemon {$this->name}_descriptor=
-{
-    DRIZZLE_DAEMON_INTERFACE_VERSION
-};
-";
-	}
 }

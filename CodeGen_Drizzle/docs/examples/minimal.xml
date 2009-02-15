@@ -18,6 +18,8 @@
 
  <daemon name="dummy">
   <summary>minimal example plugin</summary>
+  <init>fprintf(stderr,"deamon init\n"); return 0;</init>
+  <deinit>fprintf(stderr,"deamon deinit\n"); return 0;</deinit>
  </daemon>
 
 </plugin>

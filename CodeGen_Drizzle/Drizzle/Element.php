@@ -267,22 +267,17 @@ abstract class CodeGen_Drizzle_Element
             $license = "PLUGIN_LICENSE_PROPRIETARY";
         }
 
-        $version = explode(".", $ext->getRelease()->getVersion());
-        if (!isset($version[1])) {
-            $version[1] = 0;
-        }
-        $version = "0x".sprintf("%02d%02d", $version[0], $version[1]);
+        $version = $ext->getRelease()->getVersion();
 
         $code = "{
   $type,
-  &{$name}_descriptor, 
   \"$name\",
+  \"$version\",
   \"$authors\",
-  \"$desc\",
+  N_(\"$desc\"),
   $license,
   {$name}_plugin_init,
   {$name}_plugin_deinit,
-  $version,
 ";
 
         if (count($this->statusVariables)) {
@@ -305,13 +300,13 @@ abstract class CodeGen_Drizzle_Element
     function getPluginCode()
     {  
         return "
-static int {$this->name}_plugin_init(void *data)
+static int {$this->name}_plugin_init(void *data __attribute((unused)))
 {
 {$this->initPrefix}
 {$this->initCode}
 }
 
-static int {$this->name}_plugin_deinit(void *data)
+static int {$this->name}_plugin_deinit(void *data __attribute((unused)))
 {
 {$this->deinitPrefix}
 {$this->deinitCode}
