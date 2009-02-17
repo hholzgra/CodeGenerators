@@ -36,11 +36,12 @@ require_once "CodeGen/Tools/Indent.php";
 require_once "CodeGen/Drizzle/Element.php";
 
 require_once "CodeGen/Drizzle/Element/StatusVariable.php";
-require_once "CodeGen/Drizzle/Element/SystemVar.php";
+require_once "CodeGen/Drizzle/Element/SystemVariable.php";
 
 require_once "CodeGen/Drizzle/Element/Daemon.php";
 require_once "CodeGen/Drizzle/Element/ErrMsg.php";
 require_once "CodeGen/Drizzle/Element/InformationSchema.php";
+require_once "CodeGen/Drizzle/Element/Udf.php";
 
 // }}} 
 

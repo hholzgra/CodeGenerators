@@ -50,7 +50,8 @@ http://pear.php.net/dtd/package-2.0.xsd">
      <file baseinstalldir="CodeGen" name="ErrMsg.php" role="php" />
      <file baseinstalldir="CodeGen" name="InformationSchema.php" role="php" />
      <file baseinstalldir="CodeGen" name="StatusVariable.php" role="php" />
-     <file baseinstalldir="CodeGen" name="SystemVar.php" role="php" />
+     <file baseinstalldir="CodeGen" name="SystemVariable.php" role="php" />
+     <file baseinstalldir="CodeGen" name="Udf.php" role="php" />
     </dir> <!-- /Drizzle/Element -->
     <file baseinstalldir="CodeGen" name="Cli.php" role="php"/>
     <file baseinstalldir="CodeGen" name="Element.php" role="php"/>

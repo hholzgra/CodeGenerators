@@ -304,12 +304,16 @@ static int {$this->name}_plugin_init(void *data __attribute((unused)))
 {
 {$this->initPrefix}
 {$this->initCode}
+
+  return 0;
 }
 
 static int {$this->name}_plugin_deinit(void *data __attribute((unused)))
 {
 {$this->deinitPrefix}
 {$this->deinitCode}
+ 
+  return 0;
 }
 ";
     }

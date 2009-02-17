@@ -113,7 +113,7 @@ class CodeGen_Drizzle_Element_StatusVariable
 
   static function startRegistrations($prefix="")
   {
-    return "struct st_drizzle_show_var {$prefix}status_variables[] = {\n";
+    return "static SHOW_VAR {$prefix}status_variables[] = {\n";
   }
   
   static function endRegistrations($prefix) 
@@ -132,7 +132,7 @@ class CodeGen_Drizzle_Element_StatusVariable
       break;
 
     case "INT": 
-      $code = "uint32 $prefix{$this->value}";
+      $code = "int32_t $prefix{$this->value}";
       break;
 
     case "LONG":
@@ -140,7 +140,19 @@ class CodeGen_Drizzle_Element_StatusVariable
       break;
 
     case "LONGLONG": 
-      $code = "longlong $prefix{$this->value}";
+      $code = "long long $prefix{$this->value}";
+      break;
+
+    case "UINT": 
+      $code = "uint32_t $prefix{$this->value}";
+      break;
+
+    case "ULONG":
+      $code = "unsigned long $prefix{$this->value}";
+      break;
+
+    case "ULONGLONG": 
+      $code = "unsigned long long $prefix{$this->value}";
       break;
 
     case "CHAR": 

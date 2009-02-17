@@ -335,6 +335,185 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->end_generic_summary($attr, $data);
     }
 
+    // UDF function
+    
+    // default plugin tags
+
+    function tagstart_extension_udf($attr)
+    {
+        return $this->start_generic_plugin("Udf", $attr);
+    }
+
+    function tagend_extension_udf($attr, $data)
+    {
+        return $this->end_generic_plugin($attr, $data);
+    }
+
+    function tagend_udf_init($attr, $data)
+    {
+        return $this->end_generic_init($attr, $data);
+    }
+
+    function tagend_udf_deinit($attr, $data)
+    {
+        return $this->end_generic_deinit($attr, $data);
+    }
+
+    function tagstart_udf_statusvar($attr)
+    {
+        return $this->start_generic_statusvar($attr);
+    }
+
+    function tagend_udf_statusvar($attr, $data)
+    {
+        return $this->end_generic_statusvar($attr, $data);
+    }
+
+    function tagstart_udf_systemvar($attr)
+    {
+        return $this->start_generic_systemvar($attr);
+    }
+
+    function tagend_udf_systemvar($attr, $data)
+    {
+        return $this->end_generic_systemvar($attr, $data);
+    }
+
+    function tagend_udf_summary($attr, $data)
+    {
+        return $this->end_generic_summary($attr, $data);
+    }
+
+    function tagstart_udf_function($attr)
+    {
+        if (isset($attr["name"])) {
+            $err = $this->helper->setName($attr["name"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        } else {
+            return PEAR::raiseError("name attribut for function missing");
+        }
+        
+        if (isset($attr['type'])) {
+            $err = $this->helper->setType($attr['type']);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr["returns"])) {
+            $err = $this->helper->setReturns($attr["returns"]);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr['null'])) {
+            $null = $this->helper->toBool($attr["null"], "null");
+            if (PEAR::isError($null)) {
+                return $null;
+            }
+            $err = $this->setNull($null);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+
+        if (isset($attr['length'])) {
+            $err = $this->helper->setLength($attr['length']);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr['decimals'])) {
+            $err = $this->helper->setDecimals($attr['decimals']);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
+        }
+        
+        if (isset($attr["if"])) {
+            $this->helper->setIfCondition($attr["if"]);
+        }
+        
+        return true;
+    }
+
+    function tagend_udf_function_summary($attr, $data) 
+    {
+        return $this->helper->setSummary(trim($data));
+    }
+    
+    function tagend_udf_function_description($attr, $data) 
+    {
+        return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
+    }
+    
+    function tagend_udf_function_proto($attr, $data)
+    {
+        return $this->helper->setProto(trim($data));
+    }
+    
+    
+    function tagend_udf_function_code($attr, $data)
+    {
+        $data = CodeGen_Tools_Indent::linetrim($data);
+        
+        return $this->helper->setCode($data);
+    }
+    
+
+    
+    
+    function tagstart_udf_function_param($attr) 
+    {
+        if (!isset($attr['name'])) {
+            return PEAR::raiseError("name attribut for parameter missing");
+        }
+        
+        if (!isset($attr['type'])) {
+            return PEAR::raiseError("type attribut for parameter missing");
+        }
+        
+        return $this->helper->addParam($attr['name'], $attr['type'], @$attr['optional'], @$attr['default']);
+    }
+
+    function tagstart_udf_function_data($attr) 
+    {
+    }
+    
+    function tagstart_udf_function_data_element($attr) 
+    {
+        if (!isset($attr['name'])) {
+            return PEAR::raiseError("name attribut for data element missing");                
+        }
+        
+        if (!isset($attr['type'])) {
+            return PEAR::raiseError("type attribut for data element missing");                
+        }
+
+        return $this->helper->addDataElement($attr['name'], $attr['type'], @$attr['default']);
+    }
+        
+    function tagend_udf_function_init($attr, $data) 
+    {
+        return $this->helper->setInitCode($data);
+    }
+
+    function tagend_udf_function_deinit($attr, $data) 
+    {
+        return $this->helper->setDeinitCode($data);
+    }
+    
+    function tagend_udf_function($attr, $data) 
+    {
+        //TODO check integrity here
+
+        return $err;
+    }
+
 
     //  ___        __          ____       _                          
     // |_ _|_ __  / _| ___    / ___|  ___| |__   ___ _ __ ___   __ _ 
