@@ -511,7 +511,7 @@ class CodeGen_Drizzle_ExtensionParser
     {
         //TODO check integrity here
 
-        return $err;
+        return $true;
     }
 
 

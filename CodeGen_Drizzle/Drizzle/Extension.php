@@ -522,11 +522,16 @@ This is a Drizzle plugin library generetad using CodeGen_Drizzle <?php echo self
         // Makefile.am
         $makefile = new CodeGen_Tools_Outbuf($this->dirpath."/Makefile.am");
 
+        echo "AM_CPPFLAGS = 		${GLOBAL_CPPFLAGS} -I${top_srcdir}/drizzled\n\n";
+
         echo "EXTRA_LTLIBRARIES = lib{$this->name}.la\n\n";
         echo "pkgplugin_LTLIBRARIES =	@plugin_{$this->name}_shared_target@\n";
 
+        echo "lib{$this->name}_la_CXXFLAGS= $(GLOBAL_CXXFLAGS) -DDRIZZLE_DYNAMIC_PLUGIN\n";
+
         echo "lib{$this->name}_la_LDFLAGS = -module -avoid-version -rpath $(pkgplugindir)\n";
-        echo "lib{$this->name}_la_CPPFLAGS= $(GLOBAL_CPPFLAGS) -DDRIZZLE_DYNAMIC_PLUGIN\n";
+        echo "lib{$this->name}_la_LIBADD = \n"; // TODO add lib dependencies here
+
 
 
         echo "lib{$this->name}_la_SOURCES = {$this->name}.".$this->language;
@@ -546,13 +551,24 @@ This is a Drizzle plugin library generetad using CodeGen_Drizzle <?php echo self
         }
         echo "\n\n";
 
+        echo "EXTRA_LIBRARIES =	lib{$this->name}.a\n";
+        echo "noinst_LIBRARIES = @plugin_{$this->name}_static_target@\n";
+        echo "lib{$this->name}_a_SOURCES=	$(lib{$this->name}_la_SOURCES)\n";
+
         $makefile->write();
     
         
+
+
+
         $file =  new CodeGen_Tools_Outbuf($this->dirpath."/plug.in");
 
         echo "DRIZZLE_PLUGIN({$this->name}, [{$this->name}], [{$this->summary}])\n";
         echo "DRIZZLE_PLUGIN_DYNAMIC({$this->name}, [lib{$this->name}.la])\n";
+
+        // TODO: 
+        echo "DRIZZLE_PLUGIN_STATIC(udf_minimal,   [libudf_minimal.a])\n";
+        echo "DRIZZLE_PLUGIN_MANDATORY(udf_minimal)  dnl Default\n";
 
         return $file->write();
     }
