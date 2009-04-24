@@ -288,7 +288,7 @@ abstract class CodeGen_Drizzle_Element
     function getPluginCode()
     {  
         return "
-static int {$this->name}_plugin_init(PluginRegistry &registry)
+static int {$this->name}_plugin_init(PluginRegistry &registry __attribute((unused)))
 {
 {$this->initPrefix}
 {$this->initCode}
@@ -296,7 +296,7 @@ static int {$this->name}_plugin_init(PluginRegistry &registry)
   return 0;
 }
 
-static int {$this->name}_plugin_deinit(PluginRegistry &registry)
+static int {$this->name}_plugin_deinit(PluginRegistry &registry __attribute((unused)))
 {
 {$this->deinitPrefix}
 {$this->deinitCode}
