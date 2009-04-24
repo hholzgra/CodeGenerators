@@ -27,8 +27,6 @@
 require_once "CodeGen/Element.php";
 require_once "CodeGen/Tools/Indent.php";
 
-require_once "CodeGen/Drizzle/Element/Test.php";
-
 // }}} 
 
 /**
