@@ -75,17 +75,6 @@ class CodeGen_Drizzle_Element_InformationSchema
     $this->code = $code;
   }
 
-    /**
-     * Plugin type specifier is needed for plugin registration
-     *
-     * @param  void
-     * @return string
-     */
-    function getPluginType() 
-    {
-      return "DRIZZLE_INFORMATION_SCHEMA_PLUGIN";
-    }
-
     function getPluginCode()
     {
       $code = "

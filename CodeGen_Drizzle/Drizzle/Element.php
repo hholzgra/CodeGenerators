@@ -180,14 +180,6 @@ abstract class CodeGen_Drizzle_Element
     }
 
     /**
-     * Plugin type specifier is needed for plugin registration
-     *
-     * @param  void
-     * @return string
-     */
-    abstract function getPluginType();
-
-    /**
      * Plugin registration
      *
      * @param  void
@@ -232,7 +224,6 @@ abstract class CodeGen_Drizzle_Element
     function getPluginDeclaration(CodeGen_Drizzle_Extension $ext)
     {
         $name    = $this->name;
-        $type    = $this->getPluginType();
         $desc    = $this->summary;
 
         $authors = array();
@@ -268,7 +259,6 @@ abstract class CodeGen_Drizzle_Element
         $version = $ext->getRelease()->getVersion();
 
         $code = "{
-  $type,
   \"$name\",
   \"$version\",
   \"$authors\",
@@ -298,7 +288,7 @@ abstract class CodeGen_Drizzle_Element
     function getPluginCode()
     {  
         return "
-static int {$this->name}_plugin_init(void *data __attribute((unused)))
+static int {$this->name}_plugin_init(PluginRegistry &registry)
 {
 {$this->initPrefix}
 {$this->initCode}
@@ -306,7 +296,7 @@ static int {$this->name}_plugin_init(void *data __attribute((unused)))
   return 0;
 }
 
-static int {$this->name}_plugin_deinit(void *data __attribute((unused)))
+static int {$this->name}_plugin_deinit(PluginRegistry &registry)
 {
 {$this->deinitPrefix}
 {$this->deinitCode}

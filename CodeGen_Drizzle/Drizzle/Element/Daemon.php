@@ -43,15 +43,5 @@ require_once "CodeGen/Drizzle/Element.php";
 class CodeGen_Drizzle_Element_Daemon
   extends CodeGen_Drizzle_Element
 {
-    /**
-     * Plugin type specifier is needed for plugin registration
-     *
-     * @param  void
-     * @return string
-     */
-    function getPluginType() 
-    {
-      return "DRIZZLE_DAEMON_PLUGIN";
-    }
 
 }

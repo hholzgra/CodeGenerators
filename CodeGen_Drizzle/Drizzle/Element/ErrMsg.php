@@ -46,17 +46,6 @@ class CodeGen_Drizzle_Element_ErrMsg
     protected $initPrefix   = "errmsg_t *errmsg_data = (errmsg_t *) data;\n";
     protected $deinitPrefix = "errmsg_t *errmsg_data = (errmsg_t *) data;\n";
 
-    /**
-     * Plugin type specifier is needed for plugin registration
-     *
-     * @param  void
-     * @return string
-     */
-    function getPluginType() 
-    {
-      return "DRIZZLE_ERRMSG_PLUGIN";
-    }
-
     function getPluginIncludes()
     {
         return "#include <drizzled/plugin_errmsg.h>\n";
