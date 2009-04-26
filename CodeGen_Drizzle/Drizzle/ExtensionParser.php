@@ -232,60 +232,6 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->end_generic_statusvar($attr, $data);
     }
 
-    //     ____                                   
-    //    |  _ \  __ _  ___ _ __ ___   ___  _ __  
-    //    | | | |/ _` |/ _ \ '_ ` _ \ / _ \| '_ \ 
-    //    | |_| | (_| |  __/ | | | | | (_) | | | |
-    //    |____/ \__,_|\___|_| |_| |_|\___/|_| |_|
-
-    
-    // default plugin tags
-
-    function tagstart_extension_daemon($attr)
-    {
-        return $this->start_generic_plugin("Daemon", $attr);
-    }
-
-    function tagend_extension_daemon($attr, $data)
-    {
-        return $this->end_generic_plugin($attr, $data);
-    }
-
-    function tagend_daemon_init($attr, $data)
-    {
-        return $this->end_generic_init($attr, $data);
-    }
-
-    function tagend_daemon_deinit($attr, $data)
-    {
-        return $this->end_generic_deinit($attr, $data);
-    }
-
-    function tagstart_daemon_statusvar($attr)
-    {
-        return $this->start_generic_statusvar($attr);
-    }
-
-    function tagend_daemon_statusvar($attr, $data)
-    {
-        return $this->end_generic_statusvar($attr, $data);
-    }
-
-    function tagstart_daemon_systemvar($attr)
-    {
-        return $this->start_generic_systemvar($attr);
-    }
-
-    function tagend_daemon_systemvar($attr, $data)
-    {
-        return $this->end_generic_systemvar($attr, $data);
-    }
-
-    function tagend_daemon_summary($attr, $data)
-    {
-        return $this->end_generic_summary($attr, $data);
-    }
-
     // ErrMsg
     
     // default plugin tags
