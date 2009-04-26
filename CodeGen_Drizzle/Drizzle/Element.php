@@ -325,16 +325,6 @@ static int {$this->name}_plugin_deinit(PluginRegistry &registry __attribute((unu
         return $code;
     }
 
-    function installStatement($extension) 
-    {
-        return "INSTALL PLUGIN `{$this->name}` SONAME '".$extension->getName().".so';\n";
-    }
-
-    function uninstallStatement($extension) 
-    {
-        return "UNINSTALL PLUGIN `{$this->name}`;\n";
-    }
-
     function isValid()
     {
         return true;
