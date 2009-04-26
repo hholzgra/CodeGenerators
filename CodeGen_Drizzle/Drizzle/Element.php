@@ -63,14 +63,14 @@ abstract class CodeGen_Drizzle_Element
     *
     * @var string
     */
-    protected $initCode = "return 0;";
+    protected $initCode = "";
 
    /**
     * Plugin shutdown code
     *
     * @var string
     */
-    protected $deinitCode = "return 0;";
+    protected $deinitCode = "";
 
     /** 
      * Do we require Drizzle source or can we do with public headers only?
