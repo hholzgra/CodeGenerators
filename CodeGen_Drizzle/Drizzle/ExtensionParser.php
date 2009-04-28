@@ -84,17 +84,47 @@ class CodeGen_Drizzle_ExtensionParser
         return $err;        
     }
 
-    function end_generic_init($attr, $data)
+    function end_generic_summary($attr, $data)
     {
-        return $this->helper->setInitCode($data);
-    }
- 
-    function end_generic_deinit($attr, $data)
-    {
-        return $this->helper->setDeinitCode($data);
+        return $this->helper->setSummary($data);
     }
 
-    function start_generic_statusvar($attr)
+
+    //  ____  _             _         _                  
+    // |  _ \| |_   _  __ _(_)_ __   | |_ __ _  __ _ ___ 
+    // | |_) | | | | |/ _` | | '_ \  | __/ _` |/ _` / __|
+    // |  __/| | |_| | (_| | | | | | | || (_| | (_| \__  \
+    // |_|   |_|\__,_|\__, |_|_| |_|  \__\__,_|\__, |___/
+    //                |___/                    |___/     
+
+    function tagstart_plugin($attr) 
+    {
+        return $this->tagstart_extension($attr);
+    }
+    
+    function tagend_extension_init($attr, $data)
+    {
+        return $this->extension->addInitCode($data);
+    }
+ 
+    function tagend_extension_deinit($attr, $data)
+    {
+        return $this->extension->addDeinitCode($data);
+    }
+
+    function tagend_extension_code($attr, $data) {
+        return $this->tagend_extension_code($attr, $data);
+    }
+
+    function tagend_extension_acinclude($attr, $data) {
+        return $this->tagend_extension_acinclude($attr, $data);
+    }
+
+    function tagend_extension_configure($attr, $data) {
+        return $this->tagend_deps_configm4($attr, $data);
+    }
+
+    function tagstart_extension_statusvar($attr)
     {
         $err = $this->checkAttributes($attr, array("type", "name", "value", "init"));
         if (PEAR::isError($err)) {
@@ -133,14 +163,14 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->pushHelper($var);
     }
 
-    function end_generic_statusvar($attr)
+    function tagend_extension_statusvar($attr)
     {
         $var = $this->helper;
         $this->popHelper();
-        return $this->helper->addStatusVariable($var);
+        return $this->extension->addStatusVariable($var);
     }
 
-    function start_generic_systemvar($attr)
+    function tagstart_extension_systemvar($attr)
     {
         $err = $this->checkAttributes($attr, array("scope", "type", "name", "comment", "min", "max", "default"));
         if (PEAR::isError($err)) {
@@ -187,49 +217,11 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->pushHelper($var);
     }
 
-    function end_generic_systemvar($attr)
+    function tagend_extension_systemvar($attr)
     {
         $var = $this->helper;
         $this->popHelper();
-        return $this->helper->addSystemVariable($var);
-    }
-
-    function end_generic_summary($attr, $data)
-    {
-        return $this->helper->setSummary($data);
-    }
-
-
-    //  ____  _             _         _                  
-    // |  _ \| |_   _  __ _(_)_ __   | |_ __ _  __ _ ___ 
-    // | |_) | | | | |/ _` | | '_ \  | __/ _` |/ _` / __|
-    // |  __/| | |_| | (_| | | | | | | || (_| | (_| \__  \
-    // |_|   |_|\__,_|\__, |_|_| |_|  \__\__,_|\__, |___/
-    //                |___/                    |___/     
-
-    function tagstart_plugin($attr) 
-    {
-        return $this->tagstart_extension($attr);
-    }
-    
-    function tagend_extension_code($attr, $data) {
-        return $this->tagend_extension_code($attr, $data);
-    }
-
-    function tagend_extension_acinclude($attr, $data) {
-        return $this->tagend_extension_acinclude($attr, $data);
-    }
-
-    function tagend_extension_configure($attr, $data) {
-        return $this->tagend_deps_configm4($attr, $data);
-    }
-
-    function tagstart_statusvar_statusvar($attr) {
-        return $this->start_generic_statusvar($attr);
-    }
-
-    function tagend_statusvar_statusvar($attr, $data) {
-        return $this->end_generic_statusvar($attr, $data);
+        return $this->extension->addSystemVariable($var);
     }
 
     // ErrMsg
@@ -244,36 +236,6 @@ class CodeGen_Drizzle_ExtensionParser
     function tagend_extension_errmsg($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
-    }
-
-    function tagend_errmsg_init($attr, $data)
-    {
-        return $this->end_generic_init($attr, $data);
-    }
-
-    function tagend_errmsg_deinit($attr, $data)
-    {
-        return $this->end_generic_deinit($attr, $data);
-    }
-
-    function tagstart_errmsg_statusvar($attr)
-    {
-        return $this->start_generic_statusvar($attr);
-    }
-
-    function tagend_errmsg_statusvar($attr, $data)
-    {
-        return $this->end_generic_statusvar($attr, $data);
-    }
-
-    function tagstart_errmsg_systemvar($attr)
-    {
-        return $this->start_generic_systemvar($attr);
-    }
-
-    function tagend_errmsg_systemvar($attr, $data)
-    {
-        return $this->end_generic_systemvar($attr, $data);
     }
 
     function tagend_errmsg_summary($attr, $data)
@@ -293,36 +255,6 @@ class CodeGen_Drizzle_ExtensionParser
     function tagend_extension_udf($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
-    }
-
-    function tagend_udf_init($attr, $data)
-    {
-        return $this->end_generic_init($attr, $data);
-    }
-
-    function tagend_udf_deinit($attr, $data)
-    {
-        return $this->end_generic_deinit($attr, $data);
-    }
-
-    function tagstart_udf_statusvar($attr)
-    {
-        return $this->start_generic_statusvar($attr);
-    }
-
-    function tagend_udf_statusvar($attr, $data)
-    {
-        return $this->end_generic_statusvar($attr, $data);
-    }
-
-    function tagstart_udf_systemvar($attr)
-    {
-        return $this->start_generic_systemvar($attr);
-    }
-
-    function tagend_udf_systemvar($attr, $data)
-    {
-        return $this->end_generic_systemvar($attr, $data);
     }
 
     function tagend_udf_summary($attr, $data)
@@ -477,36 +409,6 @@ class CodeGen_Drizzle_ExtensionParser
     function tagend_extension_infoschema($attr, $data)
     {
         return $this->end_generic_plugin($attr, $data);
-    }
-
-    function tagend_infoschema_init($attr, $data)
-    {
-        return $this->end_generic_init($attr, $data);
-    }
-
-    function tagend_infoschema_deinit($attr, $data)
-    {
-        return $this->end_generic_deinit($attr, $data);
-    }
-
-    function tagstart_infoschema_statusvar($attr)
-    {
-        return $this->start_generic_statusvar($attr);
-    }
-
-    function tagend_infoschema_statusvar($attr, $data)
-    {
-        return $this->end_generic_statusvar($attr, $data);
-    }
-
-    function tagstart_infoschema_systemvar($attr)
-    {
-        return $this->start_generic_systemvar($attr);
-    }
-
-    function tagend_infoschema_systemvar($attr, $data)
-    {
-        return $this->end_generic_systemvar($attr, $data);
     }
 
     function tagend_infoschema_summary($attr, $data)

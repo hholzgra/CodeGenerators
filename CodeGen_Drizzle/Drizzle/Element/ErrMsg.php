@@ -43,11 +43,8 @@ require_once "CodeGen/Drizzle/Element.php";
 class CodeGen_Drizzle_Element_ErrMsg
   extends CodeGen_Drizzle_Element
 {
-    protected $initPrefix   = "errmsg_t *errmsg_data = (errmsg_t *) data;\n";
-    protected $deinitPrefix = "errmsg_t *errmsg_data = (errmsg_t *) data;\n";
-
     function getPluginIncludes()
     {
-        return "#include <drizzled/plugin_errmsg.h>\n";
+        return "#include <drizzled/errmsg.h>\n";
     }
 }
