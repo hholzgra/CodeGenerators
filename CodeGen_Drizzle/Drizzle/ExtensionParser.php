@@ -389,7 +389,7 @@ class CodeGen_Drizzle_ExtensionParser
     {
         //TODO check integrity here
 
-        return $true;
+        return true;
     }
 
 
