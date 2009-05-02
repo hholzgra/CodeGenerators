@@ -99,6 +99,10 @@ abstract class CodeGen_Drizzle_Element
         return "";
     }
 
+    function regObject()
+    {
+        return false;
+    }
 }
 
 /*

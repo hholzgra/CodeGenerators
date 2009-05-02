@@ -60,11 +60,13 @@ class CodeGen_Drizzle_ExtensionParser
     //  \____|\___|_| |_|\___|_|  |_|\___|  \__\__,_|\__, |___/
     //                                               |___/     
     
-    function start_generic_plugin($classname, $attr)
+    function start_generic_plugin($classname, $attr, $attrnames = array("names"))
     {
-        $err = $this->checkAttributes($attr, array(), array("name"));
-        if (PEAR::isError($err)) {
-            return $err;
+        if (is_array($attrnames)) {
+            $err = $this->checkAttributes($attr, array(), $attrnames);
+            if (PEAR::isError($err)) {
+                return $err;
+            }
         }
 
         $classname = "CodeGen_Drizzle_Element_".$classname;
@@ -249,21 +251,12 @@ class CodeGen_Drizzle_ExtensionParser
 
     function tagstart_extension_udf($attr)
     {
-        return $this->start_generic_plugin("Udf", $attr);
-    }
+        $err = $this->start_generic_plugin("Udf", $attr, false);
 
-    function tagend_extension_udf($attr, $data)
-    {
-        return $this->end_generic_plugin($attr, $data);
-    }
+        if (PEAR::isError($err)) {
+            return $err;
+        }
 
-    function tagend_udf_summary($attr, $data)
-    {
-        return $this->end_generic_summary($attr, $data);
-    }
-
-    function tagstart_udf_function($attr)
-    {
         if (isset($attr["name"])) {
             $err = $this->helper->setName($attr["name"]);
             if (PEAR::isError($err)) {
@@ -316,36 +309,38 @@ class CodeGen_Drizzle_ExtensionParser
             $this->helper->setIfCondition($attr["if"]);
         }
         
-        return true;
     }
 
-    function tagend_udf_function_summary($attr, $data) 
+    function tagend_extension_udf($attr, $data)
+    {
+        //TODO check integrity here
+
+        return $this->end_generic_plugin($attr, $data);
+    }
+
+    function tagend_udf_summary($attr, $data) 
     {
         return $this->helper->setSummary(trim($data));
     }
     
-    function tagend_udf_function_description($attr, $data) 
+    function tagend_udf_description($attr, $data) 
     {
         return $this->helper->setDescription(CodeGen_Tools_Indent::linetrim($data));
     }
     
-    function tagend_udf_function_proto($attr, $data)
+    function tagend_udf_proto($attr, $data)
     {
         return $this->helper->setProto(trim($data));
     }
     
-    
-    function tagend_udf_function_code($attr, $data)
+    function tagend_udf_code($attr, $data)
     {
         $data = CodeGen_Tools_Indent::linetrim($data);
         
         return $this->helper->setCode($data);
     }
     
-
-    
-    
-    function tagstart_udf_function_param($attr) 
+    function tagstart_udf_param($attr) 
     {
         if (!isset($attr['name'])) {
             return PEAR::raiseError("name attribut for parameter missing");
@@ -358,11 +353,11 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->helper->addParam($attr['name'], $attr['type'], @$attr['optional'], @$attr['default']);
     }
 
-    function tagstart_udf_function_data($attr) 
+    function tagstart_udf_data($attr) 
     {
     }
     
-    function tagstart_udf_function_data_element($attr) 
+    function tagstart_udf_data_element($attr) 
     {
         if (!isset($attr['name'])) {
             return PEAR::raiseError("name attribut for data element missing");                
@@ -375,23 +370,17 @@ class CodeGen_Drizzle_ExtensionParser
         return $this->helper->addDataElement($attr['name'], $attr['type'], @$attr['default']);
     }
         
-    function tagend_udf_function_init($attr, $data) 
+    function tagend_udf_init($attr, $data) 
     {
         return $this->helper->setInitCode($data);
     }
 
-    function tagend_udf_function_deinit($attr, $data) 
+    function tagend_udf_deinit($attr, $data) 
     {
         return $this->helper->setDeinitCode($data);
     }
-    
-    function tagend_udf_function($attr, $data) 
-    {
-        //TODO check integrity here
 
-        return true;
-    }
-
+   
 
     //  ___        __          ____       _                          
     // |_ _|_ __  / _| ___    / ___|  ___| |__   ___ _ __ ___   __ _ 
