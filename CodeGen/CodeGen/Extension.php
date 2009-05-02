@@ -530,14 +530,19 @@ abstract class CodeGen_Extension
      * Add toplevel header file dependancy 
      *
      * @var  string  header filename
+	 * @var  bool    check for duplicates?
      */
-    function addHeader(CodeGen_Dependency_Header $header) 
+    function addHeader(CodeGen_Dependency_Header $header, $catchDuplicates = true) 
     {
         $name = $header->getName();
        
         if (isset($this->headers[$name])) {
-            return PEAR::raiseError("header '{$name}' added twice");
-        }
+			if ($catchDuplicates) {
+				return PEAR::raiseError("header '{$name}' added twice");
+			} else {
+				return true;
+			}
+		}
 
         $this->headers[$name] = $header;
 
