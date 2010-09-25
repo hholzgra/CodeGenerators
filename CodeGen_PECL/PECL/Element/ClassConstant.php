@@ -165,32 +165,24 @@ class CodeGen_PECL_Element_ClassConstant
      */
     function minitCode($classptr) 
     {
+        $key     = '"'.$this->name.'"';
+        $key_len = strlen($this->name);
+
+        $code = $this->ifConditionStart();
+            
         switch ($this->type) {
         case "string":
-            $value = 'ZVAL_STRING(tmp, "'.$this->value.'", 0);';
+            $code.= "        zend_declare_class_constant_stringl($classptr, $key, $key_len, \"{$this->value}\", ".strlen($this->value)." TSRMLS_CC );\n";
             break;
         case "int":
-            $value = 'ZVAL_LONG(tmp, '.$this->value.');';
+            $code.= "        zend_declare_class_constant_long($classptr, $key, $key_len, {$this->value} TSRMLS_CC );\n";
             break;
         case "float":
-            $value = 'ZVAL_DOUBLE(tmp, '.$this->value.');';
+            $code.= "        zend_declare_class_constant_double($classptr, $key, $key_len, {$this->value} TSRMLS_CC );\n";
             break;
         default: 
             return "";
         }
-
-        $key     = '"'.$this->name.'"';
-        $key_len = strlen($this->name) + 1;
-
-
-        $code = $this->ifConditionStart();
-            
-        $code.=  "
-        tmp = (zval *) malloc(sizeof(zval));
-        INIT_PZVAL(tmp);
-        $value
-        zend_symtable_update(&({$classptr}->constants_table), $key, $key_len, (void *) &tmp, sizeof(zval *), NULL);
-";
 
         $code.= $this->ifConditionEnd();
 
