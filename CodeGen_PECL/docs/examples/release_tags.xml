@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE extension SYSTEM "../extension.dtd">
-<extension name="release" version="1.0.0">
+<extension name="release_tags" version="1.0.0">
  <summary>release test</summary>
 
  <description>
