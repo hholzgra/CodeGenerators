@@ -6,7 +6,7 @@
 
   <group name="foo2" if="HAVE_FOO2">
     
-   <function name="foo2" if="FOO = 42">
+   <function name="foo2" if="FOO == 42">
     <proto>int foo()</proto>
     <code>
     </code>
