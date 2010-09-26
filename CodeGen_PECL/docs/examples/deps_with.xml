@@ -12,14 +12,14 @@
  <function name="z_version">
   <proto>string z_version(void)</proto>
   <code>
-   RETURN_STRING(zlibVersion(), 1);
+   RETURN_STRING((char *)zlibVersion(), 1);
   </code>
   <test>
    <code>
 echo z_version();
    </code>
-   <result mode="format">
-%d.%d.%d
+   <result mode="regex">
+\d+\.\d+\.\d+(\.\d+)?
    </result>
   </test>
  </function>
