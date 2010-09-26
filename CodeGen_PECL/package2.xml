@@ -68,9 +68,42 @@ PECL extension.
   <dir name="/">
    <dir name="docs">
     <dir name="examples">
-     <file baseinstalldir="/" name="api_functions.xml" role="doc" />
-     <file baseinstalldir="/" name="minimal.xml" role="doc" />
-     <file baseinstalldir="/" name="release_tags.xml" role="doc" />
+     <file baseinstalldir="/" role="doc" name="api_functions.xml" />
+     <file baseinstalldir="/" role="doc" name="class_abstract.xml" />
+     <file baseinstalldir="/" role="doc" name="class_constant.xml" />
+     <file baseinstalldir="/" role="doc" name="class_extends.xml" />
+     <file baseinstalldir="/" role="doc" name="class_methods_abstract.xml" />
+     <file baseinstalldir="/" role="doc" name="class_methods_final.xml" />
+     <file baseinstalldir="/" role="doc" name="class_methods.xml" />
+     <file baseinstalldir="/" role="doc" name="class_minimal.xml" />
+     <file baseinstalldir="/" role="doc" name="class_payload.xml" />
+     <file baseinstalldir="/" role="doc" name="class_properties.xml" />
+     <file baseinstalldir="/" role="doc" name="class_type_hints.xml" />
+     <file baseinstalldir="/" role="doc" name="code_pi.xml" />
+     <file baseinstalldir="/" role="doc" name="conditional_compile.xml" />
+     <file baseinstalldir="/" role="doc" name="constants.xml" />
+     <file baseinstalldir="/" role="doc" name="crossext.xml" />
+     <file baseinstalldir="/" role="doc" name="deps_with.xml" />
+     <file baseinstalldir="/" role="doc" name="function_by_ref.xml" />
+     <file baseinstalldir="/" role="doc" name="function_type_hints.xml" />
+     <file baseinstalldir="/" role="doc" name="globals.xml" />
+     <file baseinstalldir="/" role="doc" name="groups.xml" />
+     <file baseinstalldir="/" role="doc" name="interface_class.xml" />
+     <file baseinstalldir="/" role="doc" name="interface_internal.xml" />
+     <file baseinstalldir="/" role="doc" name="interface_simple.xml" />
+     <file baseinstalldir="/" role="doc" name="license.xml" />
+     <file baseinstalldir="/" role="doc" name="lineno.xml" />
+     <file baseinstalldir="/" role="doc" name="minimal.xml" />
+     <file baseinstalldir="/" role="doc" name="optional_args.xml" />
+     <file baseinstalldir="/" role="doc" name="phpini.xml" />
+     <file baseinstalldir="/" role="doc" name="release_tags.xml" />
+     <file baseinstalldir="/" role="doc" name="resource_cpp.xml" />
+     <file baseinstalldir="/" role="doc" name="resource_old.xml" />
+     <file baseinstalldir="/" role="doc" name="resource.xml" />
+     <file baseinstalldir="/" role="doc" name="return_array.xml" />
+     <file baseinstalldir="/" role="doc" name="syck.xml" />
+     <file baseinstalldir="/" role="doc" name="testcase.xml" />
+     <file baseinstalldir="/" role="doc" name="varargs.xml" />
     </dir> <!-- /docs/examples -->
     <file baseinstalldir="/" name="manual.html" role="doc" />
    </dir> <!-- /docs -->
