@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 <!DOCTYPE extension SYSTEM "../extension.dtd">
 <extension name="function_by_ref" version="1.0.0">
+
+<!-- passing simple scalar types by reference not yet possible
  <function name="int_by_ref">
   <proto>void int_by_ref(int &amp;foo)</proto>
   <code>
@@ -15,6 +17,7 @@
    <result>42</result>
   </test>
  </function>
+-->
 
  <function name="array_by_ref">
   <proto>void array_by_ref(array @foo)</proto>
