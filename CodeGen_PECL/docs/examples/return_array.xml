@@ -1,7 +1,6 @@
 <?xml version="1.0" ?>
 <!DOCTYPE extension SYSTEM "../extension.dtd"> 
 <extension name="return_array" version="1.0.0" >
-<dumbo/>
  <!-- add_next_...() is like $array[] = ...; -->
  <function name="f1">
   <proto>array f1();</proto>
