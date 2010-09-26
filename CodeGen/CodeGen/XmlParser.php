@@ -360,7 +360,7 @@ class CodeGen_XmlParser
         }
 
         $this->data = "";
-        $this->dataLine = 0;
+        $this->dataLine = xml_get_current_line_number($XmlParser);
 
         $method = $this->findHandler("tagstart");
         if ($method) {
@@ -432,9 +432,6 @@ class CodeGen_XmlParser
     protected function cDataHandler($XmlParser, $data)
     {
         $this->data.= $this->verbatim ? htmlspecialchars($data) : $data;
-        if (!$this->dataLine) {
-            $this->dataLine = xml_get_current_line_number($XmlParser);
-        }
     }
 
     /**
