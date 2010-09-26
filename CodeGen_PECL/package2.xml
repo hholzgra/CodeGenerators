@@ -70,7 +70,7 @@ PECL extension.
     <dir name="examples">
      <file baseinstalldir="/" name="api_functions.xml" role="doc" />
      <file baseinstalldir="/" name="minimal.xml" role="doc" />
-     <file baseinstalldir="/" name="release.xml" role="doc" />
+     <file baseinstalldir="/" name="release_tags.xml" role="doc" />
     </dir> <!-- /docs/examples -->
     <file baseinstalldir="/" name="manual.html" role="doc" />
    </dir> <!-- /docs -->
