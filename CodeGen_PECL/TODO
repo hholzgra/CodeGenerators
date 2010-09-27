@@ -5,7 +5,7 @@ milestone 1.1
 
 - add support for pear channels (done)
 
-- implement pass-by-reference for array and mixed parameters (almost done)
+- implement pass-by-reference for array and mixed parameters (done)
 
 - allow addition of files to directories (eg. test) (done)
 
@@ -36,11 +36,15 @@ milestone 1.1
 
 - make standalone docs Makefile more clever
 
-- check #line numbers in generated source with libxml
-  -> error messages with meaningfull line numbers need this
-  (pretty ok by now but not perfect)
+- #line numbers for <code> blocks
 
+  - only for <function><code> so far
 
+  - starting line number seems to be ok for now
+
+  - need to reset #line number to C file after </code>
+
+]]>
 not necessarily 1.1
 -------------------
 
