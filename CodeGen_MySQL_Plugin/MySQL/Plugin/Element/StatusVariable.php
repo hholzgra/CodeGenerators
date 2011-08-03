@@ -132,7 +132,7 @@ class CodeGen_MySQL_Plugin_Element_StatusVariable
       break;
 
     case "INT": 
-      $code = "uint32 $prefix{$this->value}";
+      $code = "int32 $prefix{$this->value}";
       break;
 
     case "LONG":
@@ -141,6 +141,18 @@ class CodeGen_MySQL_Plugin_Element_StatusVariable
 
     case "LONGLONG": 
       $code = "longlong $prefix{$this->value}";
+      break;
+
+    case "UINT": 
+      $code = "uint32 $prefix{$this->value}";
+      break;
+
+    case "ULONG":
+      $code = "ulong $prefix{$this->value}";
+      break;
+
+    case "ULONGLONG": 
+      $code = "ulonglong $prefix{$this->value}";
       break;
 
     case "CHAR": 
