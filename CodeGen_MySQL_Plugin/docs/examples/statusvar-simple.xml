@@ -16,7 +16,7 @@
     </notes>
   </release>
 
- <daemon name="statusvar_simple"">
+ <daemon name="statusvar_simple">
   <summary>Example defining simple scalar status varibles</summary>
 
   <statusvar type="int"      name="dummy_int"      init="42"/>
