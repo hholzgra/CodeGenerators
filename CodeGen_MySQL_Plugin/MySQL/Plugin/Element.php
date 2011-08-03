@@ -231,7 +231,7 @@ abstract class CodeGen_MySQL_Plugin_Element
         return ob_get_clean();
     }
 
-    function getPluginDeclaration(CodeGen_MySQL_Plugin_Extension $ext)
+    function getPluginDeclaration(CodeGen_MySQL_Plugin_Extension $ext, $product = "mysql")
     {
         $name    = $this->name;
         $type    = $this->getPluginType();
@@ -297,8 +297,36 @@ abstract class CodeGen_MySQL_Plugin_Element
             $code.= "  NULL, /* no system variables declared */\n";
         }
 
-        $code .= "  NULL, /* placeholder for command line options, not available yet */\n}\n";
+        switch ($product) {
+        case "mysql":
+            $code .= "  NULL, /* placeholder for command line options, not available yet */\n";
+            break;
+        case "mariadb":
+            $code .= '  "' . $ext->getRelease()->getVersion() . '", /* version string */'."\n";
+            switch ($ext->getRelease()->getState()) {
+            case "devel":
+                $code .= "  MariaDB_PLUGIN_MATURITY_EXPERIMENTAL, /* release state */\n";
+                break;
+            case "alpha":
+                $code .= "  MariaDB_PLUGIN_MATURITY_ALPHA, /* release state */\n";
+                break;
+            case "beta":
+                $code .= "  MariaDB_PLUGIN_MATURITY_BETA, /* release state */\n";
+                break;
+            case "rc":
+                $code .= "  MariaDB_PLUGIN_MATURITY_GAMMA, /* release state */\n";
+                break;
+            case "stable":
+                $code .= "  MariaDB_PLUGIN_MATURITY_STABLE, /* release state */\n";
+                break;
+            default:
+                $code .= "  MariaDB_PLUGIN_MATURITY_UNKNOWN, /* release state */\n";
+                break;                
+            }
+            break;
+        }
 
+        $code .= "}\n";
         return $code;
     }
 

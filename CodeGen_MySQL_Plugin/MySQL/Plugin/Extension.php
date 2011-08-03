@@ -223,12 +223,21 @@ needed for --with-mysql-src builds?
 
         $declarations = array();
         foreach ($this->plugins as $plugin) {
-            $declarations[] = $plugin->getPluginDeclaration($this);
+            $declarations[] = $plugin->getPluginDeclaration($this, "mysql");
         }
         echo "\nmysql_declare_plugin({$this->name})\n";
         echo join(",", $declarations);
         echo "mysql_declare_plugin_end;\n\n";
 
+        echo "#ifdef MARIA_PLUGIN_INTERFACE_VERSION\n";
+        $declarations = array();
+        foreach ($this->plugins as $plugin) {
+            $declarations[] = $plugin->getPluginDeclaration($this, "mariadb");
+        }
+        echo "\nmaria_declare_plugin({$this->name})\n";
+        echo join(",", $declarations);
+        echo "maria_declare_plugin_end;\n\n";
+        echo "#endif";
 
         if (isset($this->code["code"]["bottom"])) {
             foreach ($this->code["code"]["bottom"] as $code) {
