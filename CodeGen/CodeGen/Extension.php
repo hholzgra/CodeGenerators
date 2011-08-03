@@ -786,6 +786,7 @@ config.status
 config.sub
 configure
 configure.in
+configure.ac
 conftest
 conftest.c
 include
