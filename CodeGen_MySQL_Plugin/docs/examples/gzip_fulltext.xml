@@ -37,12 +37,12 @@
         && ((unsigned char)(param->doc[4]) == 0x78) 
         && ((unsigned char)(param->doc[5]) == 0x9C)) {
 	  ulong real_size;
-	  char *real_doc;
+	  unsigned char *real_doc;
 	  int result;
 
       /* calculate the real size and allocate memory */
 	  real_size = uint4korr(&param->length) & 0x3FFFFFFF;
-	  real_doc = malloc(real_size + 1);
+	  real_doc = (unsigned char *)malloc(real_size + 1);
       if (!real_doc) {
           return 1;
       }
@@ -95,7 +95,7 @@ gzip	ACTIVE	FTPARSER	gzip_fulltext.so
    <code>
 --disable_warnings
 DROP TABLE IF EXISTS t1;
---ensable_warnings
+--enable_warnings
 CREATE TABLE t1 (     
   doc CHAR(100) DEFAULT NULL,     
   FULLTEXT KEY `doc` (`doc`) WITH PARSER gzip   
