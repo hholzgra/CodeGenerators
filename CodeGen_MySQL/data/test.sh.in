@@ -13,6 +13,12 @@
 # against
 #
 
+if !ls t/*.test 2>/dev/null
+then
+	echo "no test cases defined"
+	exit 0;
+fi
+
 HERE=.
 DATA=$HERE/var
 SOCK=sock
@@ -39,7 +45,7 @@ mkdir $DATA
 
 mysql_install_db --datadir=$DATA > $DATA/test.err
 
-mysqld --skip-networking --skip-innodb \
+mysqld --skip-networking \
        --datadir=$DATA --socket=$SOCK \
        --loose-plugin-dir=../.libs \
        2>> $DATA/test.err &
