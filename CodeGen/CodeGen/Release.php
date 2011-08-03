@@ -72,8 +72,6 @@ class CodeGen_Release
         return $this->version;
     }
 
-
-
     /**
      * The release date
      *
